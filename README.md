@@ -13,5 +13,5 @@ This is Cal Poly Pomona's Robotics Team for the **UAV BANSHEE** project that is 
 
 ## Companies we are working with: 
 
-**Lockheed Martin**: https://www.lockheedmartin.com/
+**Lockheed Martin**: https://www.lockheedmartin.com/  
 **ROBOTIS**: https://robotis.us/ 
