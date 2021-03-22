@@ -1,2 +1,2 @@
 # Gantt Chart
-[Link to the Gantt Chart](https://livecsupomona-my.sharepoint.com/:x:/r/personal/joellee_cpp_edu/_layouts/15/Doc.aspx?sourcedoc=%7BE7CC3B86-F615-4679-9AE0-F8DB1CA66F45%7D&file=Gantt_Chart_Robotics.xlsx&action=default&mobileredirect=true)
+[Link to the Gantt Chart](https://livecsupomona-my.sharepoint.com/:x:/g/personal/joellee_cpp_edu/EYY7zOcV9nlGmuD42xymb0UBHRLPghRA0884kuA7PkkOKA?e=eFjNcM)
