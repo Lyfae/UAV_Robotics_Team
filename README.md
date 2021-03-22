@@ -11,7 +11,7 @@ This is Cal Poly Pomona's Robotics Team for the **UAV BANSHEE** project that is 
 3. Finish the Project by the end of the Spring Semester -> Second Week of May
 
 
-### Companies we are working with: 
+## Companies we are working with: 
 
 **Lockheed Martin**: https://www.lockheedmartin.com/
 **ROBOTIS**: https://robotis.us/ 
