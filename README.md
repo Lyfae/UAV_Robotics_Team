@@ -16,7 +16,3 @@ This is Cal Poly Pomona's Robotics Team for the **UAV BANSHEE** project that is 
 **Lockheed Martin**: https://www.lockheedmartin.com/  
 **ROBOTIS**: https://robotis.us/ 
 
-```C++
-This is a block of text
-cout<<"This will be fun"<<endl;
-```
