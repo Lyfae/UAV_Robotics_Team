@@ -1,6 +1,6 @@
 # UAV_Robotics_Team
 
-This is Cal Poly Pomona's Robotics Team for the **UAV BANSHEE** project that is funded by *Lockheed Martin*
+This is Cal Poly Pomona's Robotics Team for the **UAV BANSHEE** project that is funded and sponsored by *Lockheed Martin* and *Robotis*
 
 ## Goals for Spring 2021 
 
