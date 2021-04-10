@@ -13,10 +13,10 @@ while(True):
     ret, frame = webcam.read()
 
     # Frame width and height + fps
-    width = webcam.get(3)
-    height = webcam.get(4)
+    width = int(webcam.get(3))
+    height = int(webcam.get(4))
 
-    cv2.putText(frame, "Frame Max (x,y): ({},{})".format(width, height), (frame.shape[0] - 100, 465), cv2.FONT_HERSHEY_SIMPLEX, 0.5, (0, 0, 255), 2)
+    cv2.putText(frame, "Frame Max (x,y): ({},{})".format(width, height), (width - 230, 465), cv2.FONT_HERSHEY_SIMPLEX, 0.5, (0, 0, 255), 2)
 
     # Defining box dimensions
     centerx = 0.0
@@ -32,7 +32,7 @@ while(True):
         centery = y + 0.5 * float(h)
 
     # Text to display dimensions
-    cv2.putText(frame, "x: {}, y: {}".format(centerx, centery), (frame.shape[0] - 70, 30), cv2.FONT_HERSHEY_SIMPLEX, 0.75, (0, 0, 255), 2)
+    cv2.putText(frame, "x: {}, y: {}".format(centerx, centery), (width - 230, 30), cv2.FONT_HERSHEY_SIMPLEX, 0.75, (0, 0, 255), 2)
 
     # Text to display object type
     if not centerx and not centery:
@@ -40,7 +40,7 @@ while(True):
     else:
         object_detect = "Face"
     
-    cv2.putText(frame, "Object: {}".format(object_detect), (frame.shape[0] - 70, 60), cv2.FONT_HERSHEY_SIMPLEX, 0.75, (0, 0, 255), 2)
+    cv2.putText(frame, "Object: {}".format(object_detect), (width - 230, 60), cv2.FONT_HERSHEY_SIMPLEX, 0.75, (0, 0, 255), 2)
 
     # Show frame in seperate box
     cv2.imshow('video', frame)
