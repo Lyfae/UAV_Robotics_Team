@@ -48,6 +48,7 @@ If you have any questions or concerns regarding anything on this project, feel f
 * Modificaitons of the CAD is proceeding to about 50%. Adjustments are being made and should be compelted soon. 
 
 *Overall Summary on the Progress of the Group*
+
 As of right now, the software side is still trying to set up the enviroment and have it run efficiently while the hardware side is still watiing for the parts to be deleivered to them by ROBOTIS. Hopefully by the next update, we will be able to provide more details on how far we managed to get.
 
 [Email](Email here???)
