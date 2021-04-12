@@ -45,7 +45,7 @@ If you have any questions or concerns regarding anything on this project, feel f
 
 *Hardware* 
 * Currently waiting for the Dynamixels to be delivered to the respective members on the Hardware Team. 
-* Modificaitons of the CAD is proceeding to about 50%. Adjustments are being made and should be compelted soon. 
+* Modificaitons of the CAD is proceeding to about 50%. Adjustments are being made and should be completed soon. 
 
 *Overall Summary on the Progress of the Group*
 
