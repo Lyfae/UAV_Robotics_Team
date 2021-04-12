@@ -40,7 +40,7 @@ If you have any questions or concerns regarding anything on this project, feel f
 
 *Software* 
 * As of right now, the software team is trying their best to install CUDA, OpenCV and Tensorflow onto a computer that most of the members are accessing via Team viewer. 
-* We currently have CUDA and OpenCV installed, but we when are running command to test if both are integrated corretly, there seemms to be some issues regardin the path. 
+* We currently have CUDA and OpenCV installed, but we when are running command to test if both are integrated corretly, there seemms to be some issues regarding the path. 
 * Planning to use tensorflow to help with the learning algorithm since it could be integrated with yolov3. More updates on this in the future.
 
 *Hardware* 
