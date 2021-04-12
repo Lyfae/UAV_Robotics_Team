@@ -57,5 +57,5 @@ while(True):
         break
 
 # Safely close all windows
-cap.release()
+webcam.release()
 cv2.destroyAllWindows()
