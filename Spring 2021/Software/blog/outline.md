@@ -19,4 +19,7 @@
 *Overall Summary on the Progress of the Group*
 1. 
 
+
+[Email](Email here???)
+[Github](link here)
 Edited by [P.T] 
