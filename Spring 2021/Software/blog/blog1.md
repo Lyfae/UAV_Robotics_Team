@@ -26,7 +26,8 @@ If you have any questions or concerns regarding anything on this project, feel f
         * Linux - Ubuntu
         * Nvidia Grahpics Card - ()
         * Jetson tx2 
-    * Other Apps that we are using
+    * Other Apps that we are using![image](https://user-images.githubusercontent.com/53202945/114448927-04e6ee00-9b89-11eb-835f-3617d1412611.png)
+
         * Cuda - (version)
         * OpenCV - (version)
         * TensorFlow - ??? (version)
@@ -40,12 +41,12 @@ If you have any questions or concerns regarding anything on this project, feel f
 
 *Software* 
 * As of right now, the software team is trying their best to install CUDA, OpenCV and Tensorflow onto a computer that most of the members are accessing via Team viewer. 
-* We currently have CUDA and OpenCV installed, but we when are running command to test if both are integrated corretly, there seemms to be some issues regarding the path. 
+* We currently have CUDA and OpenCV installed, but we when are running command to test if both are integrated corretly, there seems to be some issues regarding the path. 
 * Planning to use tensorflow to help with the learning algorithm since it could be integrated with yolov3. More updates on this in the future.
 
 *Hardware* 
 * Currently waiting for the Dynamixels to be delivered to the respective members on the Hardware Team. 
-* Modificaitons of the CAD is proceeding to about 50%. Adjustments are being made and should be completed soon. 
+* Modificatons of the CAD is proceeding to about 50%. Adjustments are being made and should be completed soon. 
 
 *Overall Summary on the Progress of the Group*
 
