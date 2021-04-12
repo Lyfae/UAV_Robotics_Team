@@ -26,8 +26,7 @@ If you have any questions or concerns regarding anything on this project, feel f
         * Linux - Ubuntu
         * Nvidia Grahpics Card - ()
         * Jetson tx2 
-    * Other Apps that we are using![image](https://user-images.githubusercontent.com/53202945/114448927-04e6ee00-9b89-11eb-835f-3617d1412611.png)
-
+    * Other Apps that we are using!
         * Cuda - (version)
         * OpenCV - (version)
         * TensorFlow - ??? (version)
