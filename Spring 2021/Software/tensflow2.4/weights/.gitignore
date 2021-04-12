@@ -1,0 +1,2 @@
+# Ignore all .weights files (too large)
+*.weights
