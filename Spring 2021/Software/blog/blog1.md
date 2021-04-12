@@ -4,7 +4,7 @@
 
 Hello, we are Cal Poly Pomona's Robotic Team of a project known as the BANSHE. We have teamed up with Robtis and utilizing their Dynamixels, we are creating a label robot that will take will take a label and apply to a cardboard surface. 
 
-My name is Water and I am going to be trying my best to update our team's progress biweekly. Our group was just formed not too long ago so we are try to work out the kinks and debugg issues that might arise. Granted, this is going to be an ongoing project so we are bound to make mistakes here and there, however I will be fixing things up as wel go. 
+My name is Water and I am going to be trying my best to update our team's progress biweekly. Our group was just formed not too long ago so we are try to work out the kinks and debug issues that might arise. Granted, this is going to be an ongoing project so we are bound to make mistakes here and there, however I will be fixing things up as wel go. 
 
 If you have any questions or concerns regarding anything on this project, feel free to let us know down below and we will try our best to get back to you as soon as we can find an answer to your question. 
 
