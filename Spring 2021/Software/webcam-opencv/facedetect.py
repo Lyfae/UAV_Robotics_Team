@@ -59,7 +59,9 @@ while(True):
 
     # Calculate frames per second
     fps = 1 / seconds
-    print("Estimated frames per second : {0}".format(round(fps,2)))
+
+    # fps display
+    cv2.putText(frame,"FPS: " + str(round(fps,2)), (50,50) ,cv2.FONT_HERSHEY_SIMPLEX, 0.75,(50,150,50),2)
 
     # Show frame in seperate box
     cv2.imshow('video', frame)
