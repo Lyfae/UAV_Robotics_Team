@@ -59,7 +59,7 @@ while(True):
 
     # Calculate frames per second
     fps = 1 / seconds
-    print("Estimated frames per second : {0}".format(fps))
+    print("Estimated frames per second : {0}".format(round(fps,2)))
 
     # Show frame in seperate box
     cv2.imshow('video', frame)
