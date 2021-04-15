@@ -1,6 +1,7 @@
 import numpy as np
 import cv2
 import imutils
+import time
 
 # Define webcam used
 webcam = cv2.VideoCapture(0, cv2.CAP_DSHOW)
@@ -18,6 +19,7 @@ except:
 faceCascade = cv2.CascadeClassifier(cv2.data.haarcascades + "haarcascade_frontalface_default.xml")
 
 while(True):
+    start = time.time()
     # Grabbing frame from webcam
     ret, frame = webcam.read()
 
@@ -50,6 +52,14 @@ while(True):
         object_detect = "Face"
     
     cv2.putText(frame, "Object: {}".format(object_detect), (width - 230, 60), cv2.FONT_HERSHEY_SIMPLEX, 0.75, (0, 0, 255), 2)
+
+    stop = time.time()
+
+    seconds = stop - start
+
+    # Calculate frames per second
+    fps = 1 / seconds
+    print("Estimated frames per second : {0}".format(fps))
 
     # Show frame in seperate box
     cv2.imshow('video', frame)
