@@ -64,7 +64,7 @@ def main():
                 max_output_size_per_class=max_output_size_per_class,
                 iou_threshold=iou_threshold,
                 confidence_threshold=confidence_threshold)
-
+                
             img = draw_outputs(frame, boxes, scores, classes, nums, class_names)
             cv2.imshow(win_name, img)
 

@@ -16,3 +16,9 @@ There are a few ways I can think of to increase the fps of the algorithm:
 https://stackoverflow.com/questions/62796683/how-to-improve-yolov3-detection-time-opencv-python
 
 I'll be working on training my own .weight files just for identifying electronic equipment in the meantime. Tomorrow/Today we will download the code + tensorflow setup onto Michael's linux distribution and see if we can get the basic YOLO algorithm working. [C.L.]
+
+Reminder for myself: C:/Users/Chris/Anaconda3/envs/tensorflow2.4/python.exe (Use this path for python!)
+
+Test if GPU is available for tensorflow: (Should both return true!)
+tf.test.is_gpu_available()
+tf.test.is_built_with_cuda()
