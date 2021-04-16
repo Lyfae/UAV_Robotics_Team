@@ -2,7 +2,7 @@
 
 *Introduction*
 
-Hello, we are Cal Poly Pomona's Robotic Team of a project known as the BANSHE. We have teamed up with Robotis and utilizing their Dynamixels, we are creating a label robot that will take will take a label and apply to a cardboard surface. 
+Hello, we are Cal Poly Pomona's Robotic Team of a project known as the BANSHEE UAV DRONE Project. We have teamed up with Robotis and utilizing their Dynamixels, we are creating a label robot that will take will take a label and apply to a cardboard surface. 
 
 My name is Water and I am going to be trying my best to update our team's progress biweekly. Our group was just formed not too long ago so we are try to work out the kinks and debug issues that might arise. Granted, this is going to be an ongoing project so we are bound to make mistakes here and there, however I will be fixing things up as wel go. 
 
@@ -21,7 +21,6 @@ If you have any questions or concerns regarding anything on this project, feel f
 *Steps on how to accomplish the goals* 
 1. Software
     * For Software, all the intructions how how to set up the enviroment will be posted on our GitHub,
-    (Add path for this in the future before turning in this blog)
     * Brief Summary of Computer Architype that we are using
         * Linux - Ubuntu
         * Nvidia Grahpics Card - GTX 970
@@ -37,6 +36,11 @@ If you have any questions or concerns regarding anything on this project, feel f
     * Mapping out the cad files using this [link](https://docs.google.com/document/d/1f_Ks42D9ClCpHORQOGnGOJ_z8osU-Fam/edit)
     * We are curretly using Solidworks to draw our CAD files, these can be accessed here... (instert things here)
     * Create a script that will test if the motors are wokring, code will be provided in the future once it has been completed, tested, and made sure that is working optimally. 
+    * Hardware Componenets: 
+      * Dynamixel XM430-W350R
+      * Dynamixel Starter Kit (UD2D + U2D2 PHB Set + SMPS 12V 5A PS-10)
+      * Creality Ender 3 3D Printer Fully Open Source with Resume Printing All Metal Frame FDM DIY Printers 220x220x250mm
+      * Webcam - Logitech c920
 
 *Software* 
 * As of right now, the software team is trying their best to install CUDA, OpenCV and Tensorflow onto a computer that most of the members are accessing via Team viewer. 
