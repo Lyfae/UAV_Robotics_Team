@@ -1,4 +1,4 @@
-# Label Robot - Editor: Water
+# Label Robot 
 
 *Introduction*
 
@@ -24,12 +24,12 @@ If you have any questions or concerns regarding anything on this project, feel f
     (Add path for this in the future before turning in this blog)
     * Brief Summary of Computer Architype that we are using
         * Linux - Ubuntu
-        * Nvidia Grahpics Card - ()
+        * Nvidia Grahpics Card - GTX 970
         * Jetson tx2 
     * Other Apps that we are using!
-        * Cuda - (version)
-        * OpenCV - (version)
-        * TensorFlow - ??? (version)
+        * Cuda - v.11.0
+        * OpenCV - v.4.5.1
+        * TensorFlow - v.2.4.0
         * TeamViewer - remote testing
         * Github - storing all of our reserach
 
@@ -52,6 +52,7 @@ If you have any questions or concerns regarding anything on this project, feel f
 As of right now, the software side is still trying to set up the enviroment and have it run efficiently while the hardware side is still watiing for the parts to be deleivered to them by ROBOTIS. Hopefully by the next update, we will be able to provide more details on how far we managed to get.
 
 [Email](Email here???)
+
 [Github](link here)
 
 Edited by [P.T] 
