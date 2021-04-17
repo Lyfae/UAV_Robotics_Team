@@ -21,7 +21,6 @@ My name is Water and I am going to be trying my best to update our team's progre
     * For Software, all the instructions how how to set up the environment will be posted on our GitHub,
     * Brief Summary of Computer Archetype that we are using
         * Linux - Ubuntu
-        * Nvidia Graphics Card - GTX 970
         * Jetson tx2 
     * Other Apps that we are using!
         * CUDA - v.11.0
