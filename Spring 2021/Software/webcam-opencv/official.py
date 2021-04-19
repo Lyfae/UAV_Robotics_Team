@@ -98,6 +98,9 @@ def tkinter():
         global isPointDetecting
         isPointDetecting = True
 
+    def changeState():
+        pass
+
     # BUTTONS
     screenshot_frame = tk.Button(control_canv, text="sc frame", font=('courier new',18,'bold'), command=scFrame, justify='center', padx=40, pady=10, bg='black', fg='#9e8d8f')
     screenshot_frame.place(relx=0.5,rely=0.225,anchor='center')
@@ -107,6 +110,9 @@ def tkinter():
 
     rand_point = tk.Button(control_canv, text="rand point", font=('courier new',18,'bold'), command=rndPoint, justify='center', padx=40, pady=10, bg='black', fg='#9e8d8f')
     rand_point.place(relx=0.5,rely=0.525,anchor='center')
+
+    change_state = tk.Button(control_canv, text="--state--", font=('courier new',18,'bold'), command=changeState, justify='center', padx=40, pady=10, bg='black', fg='#9e8d8f')
+    change_state.place(relx=0.5,rely=0.675,anchor='center')
 
     exitButton = tk.Button(control_canv, text="EXIT", font=('courier new',18,'bold'), command=exit, justify='center', padx=40, pady=10, bg='black', fg='red')
     exitButton.place(relx=0.5,rely=0.9,anchor='center')
@@ -126,6 +132,7 @@ try:
 except:
     print("Webcam Detected First Try.")
 
+# Begin tkinter thread
 thread_tk = threading.Thread(target = tkinter)
 thread_tk.start()
 
@@ -143,7 +150,7 @@ while(True):
     # Create Mask/Threshold
     threshold = cv2.adaptiveThreshold(blur, 255, cv2.ADAPTIVE_THRESH_GAUSSIAN_C, cv2.THRESH_BINARY_INV, 23, 3)
 
-    # Find largest contour
+    # Find contours
     contours = cv2.findContours(threshold, cv2.RETR_EXTERNAL, cv2.CHAIN_APPROX_SIMPLE)
     contours = imutils.grab_contours(contours)
     
@@ -164,10 +171,10 @@ while(True):
             cv2.drawContours(frame, [c], -1, (0, 255, 0), 2)
             cv2.circle(frame, (cX, cY), 7, (0,0,0), -1)
             cv2.putText(frame, "center", (cX - 23, cY - 20), cv2.FONT_HERSHEY_SIMPLEX, 0.5, (0,0,0), 2)
-            cv2.putText(frame, "Location: ({}, {})".format(cX, cY), (450, 450), cv2.FONT_HERSHEY_SIMPLEX, 0.5, (0,0,0), 2)
+            cv2.putText(frame, "Location: ({}, {})".format(cX, cY), (450, 450), cv2.FONT_HERSHEY_SIMPLEX, 0.5, (255,255,255), 2)
 
     # Display number of contours detected
-    cv2.putText(frame, "# of contours: {}".format(contnum), (450, 425), cv2.FONT_HERSHEY_SIMPLEX, 0.5, (0,0,0), 2)
+    cv2.putText(frame, "# of contours: {}".format(contnum), (450, 425), cv2.FONT_HERSHEY_SIMPLEX, 0.5, (255,255,255), 2)
 
     stop = time.time()
 
@@ -191,7 +198,6 @@ while(True):
             cv2.putText(frame, "Target Location: ({}, {})".format(pX, pY), (25, 450), cv2.FONT_HERSHEY_SIMPLEX, 0.5, (255,0,0), 2)
             
             print("CONSOLE: \t dX = {} \t dY = {}".format(dX, dY))
-            data['dX'] = dX
 
             if dX < 25 and dX > -25 and dY < 25 and dY > -25:
                 print("Target Successfully Aquired.")
