@@ -156,10 +156,11 @@ while(True):
     
     # Loop for all contours
     contnum = 0
+    objectID = 0
     for c in contours:
         area = cv2.contourArea(c)
         # Only display contour for those having an area threshold of > 1000
-        if area > 1000:
+        if area > 2500:
             contnum += 1
             M = cv2.moments(c)
             try:
@@ -170,8 +171,10 @@ while(True):
 
             cv2.drawContours(frame, [c], -1, (0, 255, 0), 2)
             cv2.circle(frame, (cX, cY), 7, (0,0,0), -1)
-            cv2.putText(frame, "center", (cX - 23, cY - 20), cv2.FONT_HERSHEY_SIMPLEX, 0.5, (0,0,0), 2)
+            cv2.putText(frame, "ID: " + str(objectID), (cX - 23, cY - 20), cv2.FONT_HERSHEY_SIMPLEX, 0.5, (0,0,0), 2)
             cv2.putText(frame, "Location: ({}, {})".format(cX, cY), (450, 450), cv2.FONT_HERSHEY_SIMPLEX, 0.5, (255,255,255), 2)
+
+            objectID += 1
 
     # Display number of contours detected
     cv2.putText(frame, "# of contours: {}".format(contnum), (450, 425), cv2.FONT_HERSHEY_SIMPLEX, 0.5, (255,255,255), 2)
