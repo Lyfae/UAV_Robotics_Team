@@ -34,7 +34,7 @@ while(True):
     hsv = cv2.cvtColor(frame, cv2.COLOR_BGR2HSV)
 
     # reading the color range
-    low_range = np.array([0,130,146])
+    low_range = np.array([0,157,157])
     high_range = np.array([179,255,255])
 
     # Create Mask/Threshold 
