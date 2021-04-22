@@ -32,6 +32,7 @@ global isScMask
 global isPointDetecting
 global isBye
 global isBye2
+global isBye3
 
 # DEFAULT CONSTRUCTORS
 pX = 0
@@ -45,7 +46,7 @@ isPointDetecting = False
 isTargetReached = True
 isBye = True
 isBye2 = True
-
+isBye3 = True
 
 def saveFile(image):
     path = 'C:/Users/Chris/Documents/GitHub/UAV_Robotics_Team/Spring 2021/Software/webcam-opencv/data/images'
@@ -104,8 +105,7 @@ def tkinter():
         isPointDetecting = True
 
     def changeState():
-        global isState
-        isState = True
+        pass
     
     # OFF BUTTONS
     def bye():
@@ -116,6 +116,9 @@ def tkinter():
         global isBye2
         isBye2=False
 
+    def bye3():
+        global isBye3
+        isBye2=False
    
 
     # BUTTONS
@@ -134,6 +137,8 @@ def tkinter():
     change_state = tk.Button(control_canv, text="--state--", font=('courier new',18,'bold'), command=changeState, justify='center', padx=40, pady=10, bg='black', fg='#9e8d8f')
     change_state.place(relx=0.5,rely=0.6,anchor='center')
 
+    close_state=tk.Button(control_canv, text="close state", font=('courier new',18,'bold'), command=bye3, justify='center', padx=20, pady=5, bg='black', fg='#9e8d8f')
+    close_state.place(relx=0.5,rely=0.675,anchor='center')
     
     rand_point = tk.Button(control_canv, text="rand point", font=('courier new',18,'bold'), command=rndPoint, justify='center', padx=40, pady=10, bg='black', fg='#9e8d8f')
     rand_point.place(relx=0.5,rely=0.8,anchor='center')
@@ -177,6 +182,28 @@ while(True):
     # Find contours
     contours = cv2.findContours(threshold, cv2.RETR_EXTERNAL, cv2.CHAIN_APPROX_SIMPLE)
     contours = imutils.grab_contours(contours)
+    
+    # Loop for all contours
+    contnum = 0
+    for c in contours:
+        area = cv2.contourArea(c)
+        # Only display contour for those having an area threshold of > 1000
+        if area > 1000:
+            contnum += 1
+            M = cv2.moments(c)
+            try:
+                cX = int(M["m10"] / M["m00"])
+                cY = int(M["m01"] / M["m00"])
+            except:
+                print("Contour not found!")
+
+            cv2.drawContours(frame, [c], -1, (0, 255, 0), 2)
+            cv2.circle(frame, (cX, cY), 7, (0,0,0), -1)
+            cv2.putText(frame, "center", (cX - 23, cY - 20), cv2.FONT_HERSHEY_SIMPLEX, 0.5, (0,0,0), 2)
+            cv2.putText(frame, "Location: ({}, {})".format(cX, cY), (450, 450), cv2.FONT_HERSHEY_SIMPLEX, 0.5, (255,255,255), 2)
+
+    # Display number of contours detected
+    cv2.putText(frame, "# of contours: {}".format(contnum), (450, 425), cv2.FONT_HERSHEY_SIMPLEX, 0.5, (255,255,255), 2)
 
     stop = time.time()
 
@@ -214,28 +241,6 @@ while(True):
             
     # Turning on and off the webcam
     if isScFrame == True:
-
-        # Loop for all contours
-        contnum = 0
-        for c in contours:
-            area = cv2.contourArea(c)
-            # Only display contour for those having an area threshold of > 1000
-            if area > 1000:
-                contnum += 1
-                M = cv2.moments(c)
-                try:
-                    cX = int(M["m10"] / M["m00"])
-                    cY = int(M["m01"] / M["m00"])
-                except:
-                    print("Contour not found!")
-
-                cv2.drawContours(frame, [c], -1, (0, 255, 0), 2)
-                cv2.circle(frame, (cX, cY), 7, (0,0,0), -1)
-                cv2.putText(frame, "center", (cX - 23, cY - 20), cv2.FONT_HERSHEY_SIMPLEX, 0.5, (0,0,0), 2)
-                cv2.putText(frame, "Location: ({}, {})".format(cX, cY), (450, 450), cv2.FONT_HERSHEY_SIMPLEX, 0.5, (255,255,255), 2)
-
-        # Display number of contours detected
-        cv2.putText(frame, "# of contours: {}".format(contnum), (450, 425), cv2.FONT_HERSHEY_SIMPLEX, 0.5, (255,255,255), 2)
         cv2.imshow('webcam', frame)
     if isBye == False:
         print("hit1")
