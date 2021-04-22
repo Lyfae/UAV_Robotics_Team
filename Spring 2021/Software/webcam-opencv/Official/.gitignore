@@ -1,5 +1,0 @@
-# Ignore all .weights files (too large)
-data/*
-
-# exception
-!datas/.gitkeep
