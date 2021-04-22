@@ -125,7 +125,7 @@ webcam = cv2.VideoCapture(0, cv2.CAP_DSHOW)
 
 # Check for compatibility. If not, force search webcam
 _, frame = webcam.read()
-# print(frame)
+print(frame)
 try:
     if frame == None:
         webcam = cv2.VideoCapture(-1)
