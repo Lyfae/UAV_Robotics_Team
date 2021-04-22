@@ -2,7 +2,7 @@
 
 My next step would be to set up live detection using a combination of the code in both folders, as well as running the program with the included default weights (person, cell phone, common objects like these) and begin to train the algorithm to recognize basic electrical components I currently own (PCBs, DIPs, etc) [C.L.]
 
-**update 4/10/2021**: I figured out that my pip install opencv version was not working with CUDA support using the cv2.cuda.getCudaEnabledDeviceCount() python command. I spent about 4 hours today working with CMake and the raw source code from the open soruce opencv github repository to get a fresh version of opencv-gpu support on my computer. I'm keeping in mind that every software step I make will have to be mirrored on Michael's computer and then the jetson(?) afterwards. [C.L.]
+**update 4/10/2021**: I figured out that my pip install opencv version was not working with CUDA support using the cv2.cuda.getCudaEnabledDeviceCount() python command. I spent about 4 hours today working with CMake and the raw source code from the open souece opencv github repository to get a fresh version of opencv-gpu support on my computer. I'm keeping in mind that every software step I make will have to be mirrored on Michael's computer and then the jetson(?) afterwards. [C.L.]
 
 **update 4/11/2021**: Meeting with Paul tomorrow morning to figure out more progress stuff. Current target goal is to get opencv to collab with tensorflow, which uses GPU, to detect COCO (common objects in context) images in real time. I'm about 60% of the way there, I just need a bit more info from Paul and a lotta bug testing. I'll be continuously updating my branch in GitHub with code, and pushing it to Michael's computer whenever I get the chance. [C.L.]
 
@@ -22,3 +22,22 @@ Reminder for myself: C:/Users/Chris/Anaconda3/envs/tensorflow2.4/python.exe (Use
 Test if GPU is available for tensorflow: (Should both return true!)
 tf.test.is_gpu_available()
 tf.test.is_built_with_cuda()
+
+**update 4/21/2021**: Meeting with Chris and Paul
+- Create the buttons that close the frame, mask, and trackbars and have a button that closes the program when pressed. 
+- Implemented the color mask and created an HSV trackbar to find the low and high HSV ranges to detect a specific color
+- Talked about toggle logic and turning a button on and off, using global and local variables to run a sequence one time in a infinite while loop
+- Talked about multi-threading, created `officialv3.py` to save progress and act as a checkpoint
+
+**update 4/22/2021**: Meeting with Chris and Paul
+*Goals*
+- [x] Reconfigure and update files on Michael's Computer.
+- [x] Run the ``officialv3.py`` and see if everything is working as intended
+- [ ] Merge from Chris_lai to main on Github
+*Extra*
+- [ ] Refactor (implement the toggle buttons) and pretty up the code if time permits.  
+- [ ] Create officialv4.py and have all the updated code in there.
+*Future Goals*
+- [ ] Automation???
+*last step*
+- [ ] Header Files + Code Simplification
