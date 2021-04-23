@@ -27,16 +27,20 @@ tf.test.is_built_with_cuda()
 - Create the buttons that close the frame, mask, and trackbars and have a button that closes the program when pressed. 
 - Implemented the color mask and created an HSV trackbar to find the low and high HSV ranges to detect a specific color
 - Talked about toggle logic and turning a button on and off, using global and local variables to run a sequence one time in a infinite while loop
-- Talked about multi-threading, created `officialv3.py` to save progress and act as a checkpoint
+- Talked about multi-threading, created `officialv3.py` to save progress and act as a checkpoint [C.L.] + [P.T.]
 
 **update 4/22/2021**: Meeting with Chris and Paul
 *Goals*
 - [x] Reconfigure and update files on Michael's Computer.
 - [x] Run the ``officialv3.py`` and see if everything is working as intended
-- [ ] Merge from Chris_lai to main on Github
+- [x] Merge from Chris_lai to main on Github
 *Extra*
-- [ ] Refactor (implement the toggle buttons) and pretty up the code if time permits.  
-- [ ] Create officialv4.py and have all the updated code in there.
+- [x] Refactor (implement the toggle buttons) and pretty up the code if time permits.  
+- [x] Create officialv4.py and have all the updated code in there.
+
+**Update: ALL Goals were Met for today, we are going to take a break now... xD** 
+* [C.L.] + [P.T.]
+
 *Future Goals*
 - [ ] Automation???
 *last step*
