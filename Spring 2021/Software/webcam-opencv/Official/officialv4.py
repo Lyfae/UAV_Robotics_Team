@@ -111,7 +111,7 @@ def tkinter():
     control_canv.place(x=60, y=60, anchor='nw') 
 
     # LABEL
-    title = tk.Label(main_canv, text="Bob", font=('courier new',24,'bold italic'), justify='center', bg=BGCOLOR, fg='#E556E6')
+    title = tk.Label(main_canv, text="LabelBot2000", font=('courier new',24,'bold italic'), justify='center', bg=BGCOLOR, fg='#E556E6')
     title.place(relx=0.5,rely=0.085,anchor='center')
 
     subtitle = tk.Label(main_canv, text="Remote Control", font=('courier new',20,'bold'), justify='center', bg=BGCOLOR, fg='#914FA6')
@@ -326,8 +326,8 @@ while(True):
                 pX = 0
                 pY = 0     
         elif isRandBtnPressed == True and isTargetReached == True:
-            pX = random.randint(0,640)
-            pY = random.randint(0,480)
+            pX = random.randint(50,600)
+            pY = random.randint(50,430)
             isTargetReached = False
 
     # Toggle Frame
