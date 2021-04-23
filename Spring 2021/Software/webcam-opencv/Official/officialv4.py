@@ -81,12 +81,14 @@ def tkinter():
     # TKINTER DEFAULT VARIABLES
     HEIGHT = 900
     WIDTH = 360
+    BGCOLOR = '#3BDCED'
+    BTCOLOR = '#DCE8E9'
 
     # INITIALIZATION
     # Creation of the program window (root)
     root = tk.Tk()
     root.resizable(False, False)
-    main_canv = tk.Canvas(root, height=HEIGHT, width=WIDTH, bg='black', highlightthickness=0)
+    main_canv = tk.Canvas(root, height=HEIGHT, width=WIDTH, bg=BGCOLOR, highlightthickness=0)
     main_canv.pack()
 
     # GLOBAL VARIABLES
@@ -105,14 +107,14 @@ def tkinter():
     workflow_icon = tk.PhotoImage(file='icons\\testrun.png')
 
     # CANVAS
-    control_canv = tk.Canvas(main_canv, width=240, height=800, highlightthickness=0, bg='black')   
+    control_canv = tk.Canvas(main_canv, width=240, height=800, highlightthickness=0, bg=BGCOLOR)   
     control_canv.place(x=60, y=60, anchor='nw') 
 
     # LABEL
-    title = tk.Label(main_canv, text="ROBOTIS", font=('courier new',24,'bold italic'), justify='center', bg='black', fg='#FF8242')
+    title = tk.Label(main_canv, text="Bob", font=('courier new',24,'bold italic'), justify='center', bg=BGCOLOR, fg='#E556E6')
     title.place(relx=0.5,rely=0.085,anchor='center')
 
-    subtitle = tk.Label(main_canv, text="Remote Control", font=('courier new',20,'bold'), justify='center', bg='black', fg='#914FA6')
+    subtitle = tk.Label(main_canv, text="Remote Control", font=('courier new',20,'bold'), justify='center', bg=BGCOLOR, fg='#914FA6')
     subtitle.place(relx=0.5,rely=0.125,anchor='center')
 
     # BUTTON FUNCTIONS
@@ -138,28 +140,32 @@ def tkinter():
 
     def rndPoint():
         global isRandBtnPressed
-        isRandBtnPressed = True
+        global isFrameOpen
+        if isFrameOpen:
+            isRandBtnPressed = True
+        else:
+            print("[WARNING]: Frame is not detected. Please open frame before continuing.")
 
     # BUTTONS
-    display_frame = tk.Button(control_canv, image = camera_icon, command=toggleFrame, justify='center', padx=10, pady=10, bg='black', fg='#9e8d8f')
+    display_frame = tk.Button(control_canv, image = camera_icon, command=toggleFrame, justify='center', padx=10, pady=10, bg=BTCOLOR, fg='#9e8d8f')
     display_frame.place(relx=0.5,rely=0.167,anchor='center')
     
-    display_mask = tk.Button(control_canv, image = frame_icon, command=toggleMask, justify='center', padx=40, pady=10, bg='black', fg='#9e8d8f')
+    display_mask = tk.Button(control_canv, image = frame_icon, command=toggleMask, justify='center', padx=40, pady=10, bg=BTCOLOR, fg='#9e8d8f')
     display_mask.place(relx=0.5,rely=0.333,anchor='center')
 
-    change_maskalg = tk.Button(control_canv, image = mask_icon, command=toggleMaskAlg, justify='center', padx=40, pady=10, bg='black', fg='#9e8d8f')
+    change_maskalg = tk.Button(control_canv, image = mask_icon, command=toggleMaskAlg, justify='center', padx=40, pady=10, bg=BTCOLOR, fg='#9e8d8f')
     change_maskalg.place(relx=0.3,rely=0.5,anchor='center')
 
-    display_contour = tk.Button(control_canv, image = contour_icon, command=toggleContour, justify='center', padx=40, pady=10, bg='black', fg='#9e8d8f')
+    display_contour = tk.Button(control_canv, image = contour_icon, command=toggleContour, justify='center', padx=40, pady=10, bg=BTCOLOR, fg='#9e8d8f')
     display_contour.place(relx=0.7,rely=0.5,anchor='center')
 
-    display_trackbar = tk.Button(control_canv, image = trackbar_icon, command=toggleTrackbar, justify='center', padx=40, pady=10, bg='black', fg='#9e8d8f')
+    display_trackbar = tk.Button(control_canv, image = trackbar_icon, command=toggleTrackbar, justify='center', padx=40, pady=10, bg=BTCOLOR, fg='#9e8d8f')
     display_trackbar.place(relx=0.5,rely=0.667,anchor='center')
     
-    rand_point = tk.Button(control_canv, image = target_icon, command=rndPoint, justify='center', padx=40, pady=10, bg='black', fg='#9e8d8f')
+    rand_point = tk.Button(control_canv, image = target_icon, command=rndPoint, justify='center', padx=40, pady=10, bg=BTCOLOR, fg='#9e8d8f')
     rand_point.place(relx=0.5,rely=0.833,anchor='center')
 
-    exitButton = tk.Button(control_canv, text="EXIT", font=('courier new',18,'bold'), command=exit, justify='center', padx=40, pady=10, bg='black', fg='red')
+    exitButton = tk.Button(control_canv, text="EXIT", font=('courier new',18,'bold'), command=exit, justify='center', padx=40, pady=10, bg='#D55C8D', fg='white')
     exitButton.place(relx=0.5,rely=.95,anchor='center')
 
     # LOOP
@@ -252,30 +258,74 @@ while(True):
         contours = imutils.grab_contours(contours)
         # Loop for all contours
         contnum = 0
+        # Dictionary for all contour information
+        contdict = {}
         for c in contours:
             area = cv2.contourArea(c)
             # Only display contour for those having an area threshold of > 1000
             if area > 1000:
-                contnum += 1
                 M = cv2.moments(c)
                 try:
                     cX = int(M["m10"] / M["m00"])
                     cY = int(M["m01"] / M["m00"])
                 except:
                     print("Contour not found!")
+                
+                contdict[str(contnum)] = {}
+                contdict[str(contnum)]['ID'] = contnum
+                contdict[str(contnum)]['area'] = area
+                contdict[str(contnum)]['cX'] = cX
+                contdict[str(contnum)]['cY'] = cY
 
                 cv2.drawContours(frame, [c], -1, (0, 255, 0), 2)
                 cv2.circle(frame, (cX, cY), 7, (0,0,0), -1)
-                cv2.putText(frame, "center", (cX - 23, cY - 20), cv2.FONT_HERSHEY_SIMPLEX, 0.5, (0,0,0), 2)
-                cv2.putText(frame, "Location: ({}, {})".format(cX, cY), (450, 450), cv2.FONT_HERSHEY_SIMPLEX, 0.5, (255,255,255), 2)        
+                cv2.putText(frame, "ID: {}".format(contnum), (cX - 23, cY - 20), cv2.FONT_HERSHEY_SIMPLEX, 0.5, (0,0,0), 2)
+                cv2.putText(frame, "Location: ({}, {})".format(cX, cY), (450, 450), cv2.FONT_HERSHEY_SIMPLEX, 0.5, (255,255,255), 2)
+                contnum += 1        
+        # Find smallest contour in dictionary and get its cX and cY value
+        tempsize = 123456789
+        location = 0
+        for i in range(0, contnum):
+            local_area = contdict[str(i)]['area']
+            if local_area < tempsize:
+                location = i
+        cX = contdict[str(location)]['cX']
+        cY = contdict[str(location)]['cY']
         # Display number of contours detected
         cv2.putText(frame, "# of contours: {}".format(contnum), (450, 425), cv2.FONT_HERSHEY_SIMPLEX, 0.5, (255,255,255), 2)
+        cv2.putText(frame, "Currently Tracking ID {}".format(contdict[str(location)]['ID']), (450, 400), cv2.FONT_HERSHEY_SIMPLEX, 0.5, (255,255,255), 2)
 
     # Stop fps counter, calculate, and show fps
     stop = time.time()
     seconds = stop - start
-    fps = 1 / seconds
+    try:
+        fps = 1 / seconds
+    except:
+        print("FPS Counter attempted to divide by 0!")
     cv2.putText(frame,"FPS: " + str(round(fps,2)), (25,40) ,cv2.FONT_HERSHEY_SIMPLEX, 0.75,(50,200,50),2)
+
+    # Begin Random Point Test
+    if isRandBtnPressed:
+        if not isTargetReached:
+            dX = pX - cX
+            dY = pY - cY
+            
+            cv2.circle(frame, (pX, pY), 7, (0,0,255), -1)
+            cv2.putText(frame, "Target", (pX - 23, pY - 20), cv2.FONT_HERSHEY_SIMPLEX, 0.5, (0,0,255), 2)
+            cv2.putText(frame, "Target Location: ({}, {})".format(pX, pY), (25, 450), cv2.FONT_HERSHEY_SIMPLEX, 0.5, (255,0,0), 2)
+            
+            print("CONSOLE: \t dX = {} \t dY = {}".format(dX, dY))
+
+            if dX < 25 and dX > -25 and dY < 25 and dY > -25:
+                print("Target Successfully Acquired.")
+                isTargetReached = True
+                isRandBtnPressed = False
+                pX = 0
+                pY = 0     
+        elif isRandBtnPressed == True and isTargetReached == True:
+            pX = random.randint(0,640)
+            pY = random.randint(0,480)
+            isTargetReached = False
 
     # Toggle Frame
     if isFrameBtnPressed:
