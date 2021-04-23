@@ -1,0 +1,5 @@
+# Ignore all .mp4 files (too large)
+recordings/*
+
+# exception
+!weights/.gitkeep
