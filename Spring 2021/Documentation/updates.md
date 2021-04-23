@@ -41,6 +41,7 @@ tf.test.is_built_with_cuda()
 **Update: ALL Goals were Met for today, we are going to take a break now... xD** 
 * [C.L.] + [P.T.]
 
+
 *Future Goals*
 - [ ] Automation???
 *last step*
