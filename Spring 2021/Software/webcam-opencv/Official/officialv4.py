@@ -36,8 +36,6 @@ l_v = 132
 u_h = 255
 u_s = 255
 u_v = 255
-l_range_hsv = np.array([l_h, l_s, l_v])
-u_range_hsv = np.array([u_h, u_s, u_v])
 
 # Default Variables for Position
 pX = 0
@@ -194,6 +192,40 @@ while(True):
     # Apply Gaussian Blur
     blur = cv2.GaussianBlur(grayscale, (9,9), 0)
 
+    # Toggle Taskbars
+    if isTBarBtnPressed:
+        if not isTBarOpen:
+            isTBarOpen = True
+        else:
+            cv2.destroyWindow('Trackbars')
+            firstTimeTrackbar = True
+            isTBarOpen = False
+        isTBarBtnPressed = False
+    if isTBarOpen:
+        if firstTimeTrackbar:
+            # Create a window named trackbars.
+            cv2.namedWindow("Trackbars")
+
+            # Now create 6 trackbars that will control the lower and upper range of 
+            # H,S and V channels. The Arguments are like this: Name of trackbar, 
+            # window name, range,callback function. For Hue the range is 0-179 and
+            # for S,V its 0-255.
+            cv2.createTrackbar("L - H", "Trackbars", 0, 179, nothing)
+            cv2.createTrackbar("L - S", "Trackbars", 0, 255, nothing)
+            cv2.createTrackbar("L - V", "Trackbars", 0, 255, nothing)
+            cv2.createTrackbar("U - H", "Trackbars", 179, 179, nothing)
+            cv2.createTrackbar("U - S", "Trackbars", 255, 255, nothing)
+            cv2.createTrackbar("U - V", "Trackbars", 255, 255, nothing)
+            firstTimeTrackbar = False
+
+        # Get the new values of the trackbar in real time as the user changes them
+        l_h = cv2.getTrackbarPos("L - H", "Trackbars")
+        l_s = cv2.getTrackbarPos("L - S", "Trackbars")
+        l_v = cv2.getTrackbarPos("L - V", "Trackbars")
+        u_h = cv2.getTrackbarPos("U - H", "Trackbars")
+        u_s = cv2.getTrackbarPos("U - S", "Trackbars")
+        u_v = cv2.getTrackbarPos("U - V", "Trackbars")
+
     # Decide on which mask algorithm to use based on button [0 = AdaptiveThreshold, 1 = HSV Color Isolation]
     if isMAlgBtnPressed:
         if maskAlg == 0: maskAlg = 1 
@@ -202,6 +234,8 @@ while(True):
     if maskAlg == 0:
         mask = cv2.adaptiveThreshold(blur, 255, cv2.ADAPTIVE_THRESH_GAUSSIAN_C, cv2.THRESH_BINARY_INV, 23, 3)
     else:
+        l_range_hsv = np.array([l_h, l_s, l_v])
+        u_range_hsv = np.array([u_h, u_s, u_v])
         hsv = cv2.cvtColor(frame, cv2.COLOR_BGR2HSV)
         mask = cv2.inRange(hsv, l_range_hsv, u_range_hsv)
 
@@ -242,7 +276,7 @@ while(True):
     seconds = stop - start
     fps = 1 / seconds
     cv2.putText(frame,"FPS: " + str(round(fps,2)), (25,40) ,cv2.FONT_HERSHEY_SIMPLEX, 0.75,(50,200,50),2)
-    
+
     # Toggle Frame
     if isFrameBtnPressed:
         if not isFrameOpen:
