@@ -57,7 +57,7 @@ isMAlgBtnPressed = False
 maskAlg = 0 # Adaptive Threshold Alg by default
 
 global isContourBtnPressed
-isContourBtnPressed = True
+isContourBtnPressed = False
 isContourShowing = False
 
 global isRandBtnPressed
@@ -176,7 +176,9 @@ webcam = cv2.VideoCapture(0, cv2.CAP_DSHOW)
 
 # Check for compatibility. If not, force search webcam
 _, frame = webcam.read()
-# print(frame)
+webcam.set(3, 640)
+webcam.set(4, 480)
+
 try:
     if frame == None:
         webcam = cv2.VideoCapture(-1)
@@ -289,6 +291,7 @@ while(True):
             local_area = contdict[str(i)]['area']
             if local_area < tempsize:
                 location = i
+                tempsize = local_area
         cX = contdict[str(location)]['cX']
         cY = contdict[str(location)]['cY']
         # Display number of contours detected
@@ -335,7 +338,8 @@ while(True):
             cv2.destroyWindow('Frame')
             isFrameOpen = False
         isFrameBtnPressed = False
-    if isFrameOpen: cv2.imshow('Frame', frame)
+    if isFrameOpen: 
+        cv2.imshow('Frame', frame)
 
     # Toggle Mask
     if isMaskBtnPressed:
