@@ -21,8 +21,8 @@ from PIL import Image, ImageTk
 from _thread import *
 import threading
 
-# PORT = 8009
-# IP = 127.0.0.1
+PORT = '8009'
+IP = '127.0.0.1'
 
 # GLOBAL VARIABLES
 global pX
@@ -80,7 +80,7 @@ def nothing(f):
     pass
 
 def saveFile(image, typeI):
-    path = 'data\\images\\'
+    path = 'data/images/'
     filename = typeI + "_" + datetime.datetime.now().strftime("%m.%d.%Y_%I.%M.%S%p")
     cv2.imwrite(path + filename + '.jpg', image)
 
@@ -105,14 +105,14 @@ def tkinter():
     global dY
 
     # ICONS (Courtesy of Icons8.com)
-    camera_icon = tk.PhotoImage(file='icons\\camera.png')
-    frame_icon = tk.PhotoImage(file='icons\\frame.png')
-    record_icon = tk.PhotoImage(file='icons\\record.png')
-    mask_icon = tk.PhotoImage(file='icons\\switch-maskalg.png')
-    contour_icon = tk.PhotoImage(file='icons\\contour.png')
-    target_icon = tk.PhotoImage(file='icons\\rand-point.png')
-    trackbar_icon = tk.PhotoImage(file='icons\\trackbar.png')
-    workflow_icon = tk.PhotoImage(file='icons\\testrun.png')
+    camera_icon = tk.PhotoImage(file='icons/camera.png')
+    frame_icon = tk.PhotoImage(file='icons/frame.png')
+    record_icon = tk.PhotoImage(file='icons/record.png')
+    mask_icon = tk.PhotoImage(file='icons/switch-maskalg.png')
+    contour_icon = tk.PhotoImage(file='icons/contour.png')
+    target_icon = tk.PhotoImage(file='icons/rand-point.png')
+    trackbar_icon = tk.PhotoImage(file='icons/trackbar.png')
+    workflow_icon = tk.PhotoImage(file='icons/testrun.png')
 
     # CANVAS
     control_canv = tk.Canvas(main_canv, width=240, height=800, highlightthickness=0, bg=BGCOLOR)   
