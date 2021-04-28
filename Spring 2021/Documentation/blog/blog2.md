@@ -4,12 +4,12 @@
 
 *Summary*
 
-Hello Everyone! Water here! Here is an update on our project for these two weeks! We have made great progress on the software aspect in terms of changing the state to view the objects and toggle between them. On the hardware side, our members have finally gotten hold of the *Dynamixel XM430-W350R* and are working in getting the environment situated and setup. 
+Hello Everyone! Water here! Here is an update on our project for these two weeks! We have made great progress on the software aspect in terms of changing the state to view the objects and toggle between them. On the hardware side, our members have just received the *Dynamixel XM430-W350R* and are working in getting the environment situated and setup. 
 
 For the next update, our team will try our best to post what we have on time. This is primarily due to finals coming up and so we will most likely take the finals week off to focus on finals before coming back together to work on the project. 
 
 *Hardware Updates*
-* The hardware team has just recently got their *Dynamixel XM430-W350R* and most of the members are already tinkering with it. Currently, there aren't any updates but, hopefully next update we can give you more insight on what they were able to find. 
+* The hardware team has just recently got their *Dynamixel XM430-W350R* and are understanding how to integrate the U2D2 to interact with the Dynamixel. Currently, there aren't any updates but hopefully by next blog update we can give you more insight on what they were able to find. 
 
 *Software Updates* 
 * The software team has made great progress with their code and toggling between different states, creating the GUI, and testing the random point when the center of an object has reached its designated position. 
