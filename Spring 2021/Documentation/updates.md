@@ -46,3 +46,11 @@ tf.test.is_built_with_cuda()
 - [ ] Automation???
 *last step*
 - [ ] Header Files + Code Simplification
+
+**Update: 4/29/2021**:
+ - Chris and I met today to talk about some things for the Robotis Meeting
+    * Chris will add the pictures and some text regarding the project and Paul will do the beautifying. 
+    * Will only present up to officialv3.py, we are planning to save the rest of the future meetings. 
+    * Other Chris's Json file will be implemented tonight by Chris Lai, but will not be mentioned during the meeting tomorrow (save this for later meeting). 
+    * Will work on documentation when we have time... finals are coming up and the members are currently busy with the last minute things that comes up. 
+- Signed: [P.T] [C.L]
