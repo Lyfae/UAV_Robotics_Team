@@ -23,6 +23,8 @@ For the next update, our team will try our best to post what we have on time. Th
 
  * Here is the path for the `officialv3.py` and `officialv4.py` : `UAV_Robotics_Team > Spring 20201 > Software > webcam-opencv > Official `
 
+ * To run the file, type ```python3 officialv3.py``` into the terminal window once you are in the correct directory
+
 
  *Goals* 
  * Hardware:
