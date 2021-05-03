@@ -17,7 +17,7 @@ For the next update, our team will try our best to post what we have on time. Th
     * If you would like to visit our GitHub page . . . click [Here](https://github.com/Lyfae/UAV_Robotics_Team)
 
 * If you would like to see some of our test images, you can follow this path here:
- `UAV_Robotics_Team > Spring 20201 > Software > webcam-opencv > Official > data > images `.
+ `UAV_Robotics_Team > Spring 2021 > Software > webcam-opencv > Official > data > images `.
 
  * Another thing that we created was the `GUI` for our remote control. This remote control in ``officialv3.py`` will allow the user to toggle between the different states and in ```officialv4.py``` we modified it so you would only need to toggle to open the close the windows for the different states. We also included a trackbar that would enable the users to change the `HSV` (Hue Saturation and Value) so the webcam can pick up a distinct color at a time. By allowing the user to change the `HSV` we are able to detect different colored objects and fade out the colors that we don't want the webcam to pick up.
 
@@ -25,6 +25,7 @@ For the next update, our team will try our best to post what we have on time. Th
 
  * To run the file, type ```python3 officialv3.py``` into the terminal window once you are in the correct directory
 
+ * To view the demonstration video for this version of the project, please click [Here](https://youtu.be/xjETe-UMvQ4)
 
  *Goals* 
  * Hardware:
