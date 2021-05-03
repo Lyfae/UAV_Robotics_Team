@@ -54,3 +54,12 @@ tf.test.is_built_with_cuda()
     * Other Chris's Json file will be implemented tonight by Chris Lai, but will not be mentioned during the meeting tomorrow (save this for later meeting). 
     * Will work on documentation when we have time... finals are coming up and the members are currently busy with the last minute things that comes up. 
 - Signed: [P.T] [C.L]
+
+**Update: 5/03/2021**:
+ - Chris and I met today to talk about some things regarding documentation on Overleaf and things we will be adding/fixing moving forward
+    * Goal is to try and finish up the majority of the documentation this week (before Mother's Day)
+    * Thinking about trying to automate the trackbars once the camera has detected the object and verified the image (optional)
+    * Create a download package for all the new members that will be joining the project in the future (future after documentation)
+    * Fix the terminal for rand point, for some reason, once we press the EXIT button on the GUI, the random point code is still running inside the terminal.
+        * Make sure that when EXIT button is pressed, everything is stopped successfully. 
+- Signed: [P.T] [C.L]
