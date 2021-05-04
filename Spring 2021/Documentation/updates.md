@@ -63,3 +63,10 @@ tf.test.is_built_with_cuda()
     * Fix the terminal for rand point, for some reason, once we press the EXIT button on the GUI, the random point code is still running inside the terminal.
         * Make sure that when EXIT button is pressed, everything is stopped successfully. 
 - Signed: [P.T] [C.L]
+
+**Update: 5/03/2021**:
+- Chris and I met today and we finished documenting the Documentation for the project.
+    * We were able to get up to the 5th version and look to improve on the image detection if we have the time
+    * We are going to try and get the server test code up and running the week of May 3rd... hopefully.
+    * Future goal is to create the installation package for the new members. 
+- Signed: [P.T] [C.L]
