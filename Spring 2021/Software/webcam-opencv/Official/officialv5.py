@@ -21,8 +21,11 @@ from PIL import Image, ImageTk
 from _thread import *
 import threading
 
-PORT = '8009'
-IP = '127.0.0.1'
+HOST = '127.0.0.1'
+PORT = 8009
+
+s = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
+s.connect((HOST, PORT))
 
 # GLOBAL VARIABLES
 global pX
@@ -103,6 +106,8 @@ def tkinter():
     global pY
     global dX
     global dY
+    global rndpt_start
+    rndpt_start = 0
 
     # ICONS (Courtesy of Icons8.com)
     camera_icon = tk.PhotoImage(file='icons/camera.png')
@@ -177,10 +182,11 @@ def tkinter():
     def rndPoint():
         global isRandBtnPressed
         global isFrameOpen
-        if isFrameOpen:
+        global isContourShowing
+        if isFrameOpen and isContourShowing:
             isRandBtnPressed = True
         else:
-            print("[WARNING]: Frame is not detected. Please open frame before continuing.")
+            print("[WARNING]: Frame or Contours are not detected. Please open frame/contours before continuing.")
 
     # BUTTONS
     display_frame = tk.Button(control_canv, image = camera_icon, command=toggleFrame, justify='center', padx=10, pady=10, bg=BTCOLOR, fg='#9e8d8f')
@@ -354,34 +360,15 @@ while(True):
 
     # Begin Random Point Test
     if isRandBtnPressed:
-        keys = ['date', 'time', 'version', 'pX', 'pY', 'cX', 'cY', 'dX', 'dY', 'Time Elapsed']
+        keys = ['date', 'time', 'version', 'pX', 'pY', 'cX', 'cY', 'dX', 'dY', 'Time Elapsed', 'Run Status']
         data = dict.fromkeys(keys)
         
         data['date'] = datetime.datetime.now().strftime("%m.%d.%Y")
         data['time'] = datetime.datetime.now().strftime("%I.%M.%S%p")
         data['version'] = VERSION
-        # randpt_start = time.time()
+        data['Run Status'] = True
 
         if not isTargetReached:
-            dX = pX - cX
-            dY = pY - cY
-
-            cv2.circle(frame, (pX, pY), 7, (0,0,255), -1)
-            cv2.putText(frame, "Target", (pX - 23, pY - 20), cv2.FONT_HERSHEY_SIMPLEX, 0.5, (0,0,255), 2)
-            cv2.putText(frame, "Target Location: ({}, {})".format(pX, pY), (25, 450), cv2.FONT_HERSHEY_SIMPLEX, 0.5, (255,0,0), 2)
-            
-            print("CONSOLE: \t dX = {} \t dY = {}".format(dX, dY))
-
-            if dX < 25 and dX > -25 and dY < 25 and dY > -25:
-                print("Target Successfully Acquired.")
-                isTargetReached = True
-                isRandBtnPressed = False
-                pX = 0
-                pY = 0     
-        elif isRandBtnPressed == True and isTargetReached == True:
-            pX = random.randint(50,600)
-            pY = random.randint(50,430)
-
             dX = pX - cX
             dY = pY - cY
 
@@ -391,11 +378,38 @@ while(True):
             data['cY'] = cY
             data['dX'] = dX
             data['dY'] = dY
+            data['Time Elapsed'] = str(round(time.time() - rndpt_start, 2))
 
-            filename = "randpt_" + datetime.datetime.now().strftime("%m.%d.%Y_%I.%M.%S%p")
-            with open("data/JSON/" + filename + ".json", 'w') as f:
-                json.dump(data, f, indent = 2)
-            print("Random Point Test Data Recording Complete.")
+            cv2.circle(frame, (pX, pY), 7, (0,0,255), -1)
+            cv2.putText(frame, "Target", (pX - 23, pY - 20), cv2.FONT_HERSHEY_SIMPLEX, 0.5, (0,0,255), 2)
+            cv2.putText(frame, "Target Location: ({}, {})".format(pX, pY), (25, 450), cv2.FONT_HERSHEY_SIMPLEX, 0.5, (255,0,0), 2)
+            
+            print("CONSOLE: \t dX = {} \t dY = {}".format(dX, dY))
+
+            try:
+                s.sendall(bytes(json.dumps(data), encoding='utf-8'))
+            except:
+                print("Server Not Found!")
+
+            if dX < 25 and dX > -25 and dY < 25 and dY > -25:
+                print("Target Successfully Acquired.")
+                isTargetReached = True
+                isRandBtnPressed = False
+                data['Run Status'] = False
+                print("Random Point Test Data Recording Complete.")
+                
+                try:
+                    s.sendall(bytes(json.dumps(data), encoding='utf-8'))
+                except:
+                    print("Server Not Found!")
+
+                pX = 0
+                pY = 0     
+        elif isRandBtnPressed == True and isTargetReached == True:
+            pX = random.randint(50,600)
+            pY = random.randint(50,430)
+
+            rndpt_start = time.time()
 
             isTargetReached = False
 
