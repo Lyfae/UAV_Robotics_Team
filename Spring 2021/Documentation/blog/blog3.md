@@ -4,7 +4,7 @@
 
 *Summary*
 
-Hello Everyone! Water here! Sorry for being gone for a couple of weeks. The team had finals and so we decided to but the brakes on this project in order to focus on our finals. Now that finals are down and we don't have any more distractions, we are going full speed ahead! Since the team took a break to focus on finals, there wasn't much that was done during this time but we did manage to progress a little in both the hardware and software team.  
+Hello Everyone! Water here! Sorry for being gone for a couple of weeks. The team had finals and so we decided to put the brakes on this project in order to focus on our finals. Now that finals are done and we don't have any more distractions, we are going full speed ahead! Since the team took a break to focus on finals, there wasn't much that was done during this time but we did manage to progress a little in both the hardware and software team.  
 
 For the next update, it will be consistent or every two weeks since we won't have anything that will keep up us from posting on time. If there is something that should arise, I wil let you know!
 
