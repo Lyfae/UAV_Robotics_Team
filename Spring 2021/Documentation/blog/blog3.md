@@ -35,11 +35,11 @@ For the next update, it will be consistent or every two weeks since we won't hav
 
  *Goals* 
  * Hardware:
-    * The goal for the hardware team in the next coming weeks it to play around with the *Dynamixel XM430-W350R* and calculate the measurements for it so we can slowly incorporate it with the software. 
+    * The goal for the hardware team in the next coming weeks is to finish with the CAD programs and start assembling the arm. More updates will be given next week. 
 
 * Software: 
-    * The goal for the software is trying to create a server so we can send the commands that the webcam picks up to the server which will give directions to the hardware - telling it how it should move. We are also planning to automate the entire process so we don't have to manually use the remote control to manually input directions. 
+    * The goal for the software team is to clean up the code and document everything. We will be working on the integration prcoess once the arm has been printed and everything is ready to be assembled. The automation process of the software is still underdevopement and has been put on hold due to finals, but we will resume progress on that. 
 
-This is what I have for this week! See you next time!
+This is what I have for this update! See you next time!
 
 Edited by [P.T]
