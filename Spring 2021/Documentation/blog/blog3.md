@@ -4,7 +4,7 @@
 
 *Summary*
 
-Hello Everyone! Water here! Sorry for being gone for a couple of weeks. The team had finals and so we decided to but the brakes on this project in order to focus on our finals. Now that finals are down and we don't have any more distractions, we are going full speed ahead! Since the team took a break to focus on finals, there wasn't much that was done during this time but we did manage to progress a little in both the hardware and software team.  
+Hello Everyone! Water here! Sorry for being gone for a couple of weeks. The team had finals and so we decided to put the brakes on this project in order to focus on our finals. Now that finals are done and we don't have any more distractions, we are going full speed ahead! Since the team took a break to focus on finals, there wasn't much that was done during this time but we did manage to progress a little in both the hardware and software team.  
 
 For the next update, it will be consistent or every two weeks since we won't have anything that will keep up us from posting on time. If there is something that should arise, I wil let you know!
 
@@ -36,11 +36,11 @@ For the next update, it will be consistent or every two weeks since we won't hav
 
  *Goals* 
  * Hardware:
-    * The goal for the hardware team in the next coming weeks it to play around with the *Dynamixel XM430-W350R* and calculate the measurements for it so we can slowly incorporate it with the software. 
+    * The goal for the hardware team in the next coming weeks is to finish with the CAD programs and start assembling the arm. More updates will be given next week. 
 
 * Software: 
-    * The goal for the software is trying to create a server so we can send the commands that the webcam picks up to the server which will give directions to the hardware - telling it how it should move. We are also planning to automate the entire process so we don't have to manually use the remote control to manually input directions. 
+    * The goal for the software team is to clean up the code and document everything. We will be working on the integration prcoess once the arm has been printed and everything is ready to be assembled. The automation process of the software is still underdevopement and has been put on hold due to finals, but we will resume progress on that. 
 
-This is what I have for this week! See you next time!
+This is what I have for this update! See you next time!
 
 Edited by [P.T]
