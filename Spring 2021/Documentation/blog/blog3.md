@@ -28,10 +28,11 @@ For the next update, it will be consistent or every two weeks since we won't hav
 
     * If you would like to visit our GitHub page . . . click [Here](https://github.com/Lyfae/UAV_Robotics_Team)
 
-* If you would like to see some of our test images, you can follow this path here:
- `UAV_Robotics_Team > Spring 2021 > Software > webcam-opencv > Official > data > images `.
+* If you would like to see some of our test images, you can follow this path here:`UAV_Robotics_Team > Spring 2021 > Software > webcam-opencv > Official > data > images `.
 
  * Here is the path for the `officialv4.py` : `UAV_Robotics_Team > Spring 20201 > Software > webcam-opencv > Official `
+
+ * If you would like to use access the `Tag link` to our fourth version, please click [Here](https://github.com/Lyfae/UAV_Robotics_Team/releases/tag/v0.4)
 
  *Goals* 
  * Hardware:

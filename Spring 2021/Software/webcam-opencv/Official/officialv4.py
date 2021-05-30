@@ -72,10 +72,10 @@ firstTimeTrackbar = True
 def nothing(f):
     pass
 
-def saveFile(image):
-    path = 'C:/Users/Chris/Documents/GitHub/UAV_Robotics_Team/Spring 2021/Software/webcam-opencv/data/images'
-    filename = datetime.datetime.now().strftime("%m.%d.%Y_%I.%M.%S%p")
-    cv2.imwrite(os.path.join(path, filename + '.jpg'), image)
+# def saveFile(image):
+#     path = 'C:/Users/Chris/Documents/GitHub/UAV_Robotics_Team/Spring 2021/Software/webcam-opencv/data/images'
+#     filename = datetime.datetime.now().strftime("%m.%d.%Y_%I.%M.%S%p")
+#     cv2.imwrite(os.path.join(path, filename + '.jpg'), image)
 
 def tkinter():
     # TKINTER DEFAULT VARIABLES
