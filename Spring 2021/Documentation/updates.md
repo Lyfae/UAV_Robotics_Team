@@ -41,32 +41,77 @@ tf.test.is_built_with_cuda()
 **Update: ALL Goals were Met for today, we are going to take a break now... xD** 
 * [C.L.] + [P.T.]
 
-
 *Future Goals*
 - [ ] Automation???
 *last step*
 - [ ] Header Files + Code Simplification
 
-**Update: 4/29/2021**:
- - Chris and I met today to talk about some things for the Robotis Meeting
-    * Chris will add the pictures and some text regarding the project and Paul will do the beautifying. 
-    * Will only present up to officialv3.py, we are planning to save the rest of the future meetings. 
-    * Other Chris's Json file will be implemented tonight by Chris Lai, but will not be mentioned during the meeting tomorrow (save this for later meeting). 
-    * Will work on documentation when we have time... finals are coming up and the members are currently busy with the last minute things that comes up. 
-- Signed: [P.T] [C.L]
+**update 4/23/2021**: 
+ - [ ] 
+ - [ ] 
+ - [ ] 
+ - [ ] 
 
-**Update: 5/03/2021**:
- - Chris and I met today to talk about some things regarding documentation on Overleaf and things we will be adding/fixing moving forward
-    * Goal is to try and finish up the majority of the documentation this week (before Mother's Day)
-    * Thinking about trying to automate the trackbars once the camera has detected the object and verified the image (optional)
-    * Create a download package for all the new members that will be joining the project in the future (future after documentation)
-    * Fix the terminal for rand point, for some reason, once we press the EXIT button on the GUI, the random point code is still running inside the terminal.
-        * Make sure that when EXIT button is pressed, everything is stopped successfully. 
-- Signed: [P.T] [C.L]
+ **update 06/04/2021 Unofficial Meeting**:
 
-**Update: 5/03/2021**:
-- Chris and I met today and we finished documenting the Documentation for the project.
-    * We were able to get up to the 5th version and look to improve on the image detection if we have the time
-    * We are going to try and get the server test code up and running the week of May 3rd... hopefully.
-    * Future goal is to create the installation package for the new members. 
-- Signed: [P.T] [C.L]
+ Members that attended: 
+  - Chris W
+  - Chris L
+  - Matteo D
+  - Michael 
+  - Dominic
+  - Nick C
+  - Paul T
+
+  Notes that we are going over: 
+
+
+
+-The Dynamixel SDK will contain a library that will take the differentials from the webcam and turn it into angles
+
+-Chris equations for bicep arm: 200 mm * cos(angle of left/top motor)  
+-Chris equations for base motor: arctangent(x/y)
+-Equations are based on polar coordinates
+-To make the end effector straight, the angle between the elbow and bicep needs to be 90 degrees
+-The middle motor controls the triangle of the arm and rotation of shoulder
+Expand
+6-4_Meeting_Notes.txt
+3 KB
+
+    -The Dynamixel SDK will contain a library that will take the differentials from the webcam and turn it into angles
+    -Chris equations for bicep arm: 200 mm * cos(angle of left/top motor)  
+    -Chris equations for base motor: arctangent(x/y)
+    -Equations are based on polar coordinates
+    -To make the end effector straight, the angle between the elbow and bicep needs to be 90 degrees
+    -The middle motor controls the triangle of the arm and rotation of shoulder
+    -End effector is in parallel to orange piece
+    -Hardware team will need to individually create an equation for the forearm, bicep, and elbow and compare notes
+    -Software team will work on v6
+    -The arm is double jointed
+    -The triangle of the arm is fixed and moves relative to the arm
+    -The left/top motor controls the bicep movement
+    -The right motor controls the forearm or blue portion of the arm
+    -The x and y differentials will need to be scaled into measurements (mm, in, ft, etc)
+    -A calibration test would be a test that creates two circles and calculate the distance between
+    the circles with a scaled measurement to determine how far the change is in x-y differential
+    -Camera will be fixed to avoid re-calibration every time
+    -A global variable might be overwritten during implementation, so a static library value may work best
+    -The codes created don't listen for a z-axis sensor, but the framework for that is present if needed for the future
+    -The codes created will take the x-y differential and place them into a library for use
+    -If the code continously updates while the arm is moving, it won't be able to compensate for the amount of directions given
+
+	-Will need to slow the updates to match the speed of the arm
+	-Process will be camera gives info, motors get info, arm moves, camera checks arm position
+	-Chris W will be focused on code that sends info to the camera
+	-Chris L will be focused on code that sends info to the arm
+	-Chris L will also modify the random point test to send the initial differential info to the server
+		-Code would not update until after the arm reaches the point to drop the label
+
+-Nick has created a code for the motor that asks the user what angle they want the motor to move to
+
+	-While the motor moves, the code will output it's current position, it's goal position, current degrees, goal degrees
+	-This code can be used to take the information from the server, but will need to be modified to take 3 angles for 3 motors
+	-Will need to be modified to return a value of 1 if it is sucessful or a value of 0 if not successful
+	-The values will need to be assigned so that the server can take that information
+-For automation, the things that need to be automated needs to be the HSV adapative threshold and sensing of boxes
+-A goal to finish building the arm, server, and camera by the 25th of June
