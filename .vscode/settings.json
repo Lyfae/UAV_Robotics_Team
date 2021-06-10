@@ -3,6 +3,7 @@
         "cuda",
         "dynamixel",
         "dynamixels",
+        "Mbps",
         "robotis",
         "tensorflow"
     ]
