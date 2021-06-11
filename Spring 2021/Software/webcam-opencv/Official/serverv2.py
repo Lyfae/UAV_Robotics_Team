@@ -158,6 +158,7 @@ def read_async(connIn, addr):
                 #grab_load()
                 state=4
         armStatus["code"] = 2
+        connIn.sendall(json.dumps(armStatus).encode('utf-8')) # encode the dict to JSON
         # except:
             # print(f"Packet receive attempt to {addr} failed. Closing connection.")
             # connIn.close()
