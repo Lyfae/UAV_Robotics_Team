@@ -19,7 +19,7 @@ SENSOR_COUNT=1
 def init_globes():
     armStatus = {"arm_name":"Arm1", "code":2}
     cameraInput = {
-        "camera":"Camera1", 
+        "name":"Camera1", 
         "command":3,
         "dX":0, 
         "dY":0}
@@ -100,7 +100,7 @@ def tkinter(conn, addr):
 def load_data(data_recv):
     #Validate data
     if(armStatus['code']==2):
-        if(data_recv["camera"]==cameraInput["camera"]):
+        if(data_recv["name"]==cameraInput["name"]):
             cameraInput["command"] = data_recv["command"]
             cameraInput["dX"] = data_recv["dX"]
             cameraInput["dY"] = data_recv["dY"]
@@ -117,7 +117,7 @@ def read_async(connIn, addr):
         try:
             data_recv = connIn.recv(BUFFER_SIZE).decode('utf-8')
             data_recv = json.loads(data_recv)
-            print("Recieved: {data_recv}, attempting load...")
+            print(f"Recieved: {data_recv}, attempting load...")
             load_data(data_recv)
             if(newData):
                 armStatus["code"] = 1
