@@ -17,6 +17,10 @@ TIME_OUT = 5
 SENSOR_COUNT=1
 
 def init_globes():
+    global armStatus
+    global cameraInput
+    global newData
+    global state
     armStatus = {"arm_name":"Arm1", "code":2}
     cameraInput = {
         "name":"Camera1", 
@@ -99,6 +103,7 @@ def tkinter(conn, addr):
 
 def load_data(data_recv):
     #Validate data
+    global newData
     if(armStatus['code']==2):
         if(data_recv["name"]==cameraInput["name"]):
             cameraInput["command"] = data_recv["command"]
@@ -113,47 +118,50 @@ def load_data(data_recv):
 
 def read_async(connIn, addr): 
     print(f"[NEW CONNECTION] {addr} connected to r-w-a thread.")
+    global armStatus
+    global cameraInput
+    global newData
+    global state
     while True:
-        try:
-            data_recv = connIn.recv(BUFFER_SIZE).decode('utf-8')
-            data_recv = json.loads(data_recv)
-            print(f"Recieved: {data_recv}, attempting load...")
-            load_data(data_recv)
-            if(newData):
-                armStatus["code"] = 1
-                print("Data loaded, initiating command.")
-                newData = False
-                if(cameraInput["command"]==3):
-                    print("Home command, processing.")
-                    if(state == 1):
-                        print("Dropping load.")
-                        #drop_load()
-                    print("Going home.")
-                    #set_Location(home)
-                    state = 3
-                elif(cameraInput["command"]==1):
-                    print("Move command, processing.")
-                    if(state == 3):
-                        print("Grabbing load.")
-                        #grab_load()
-                    #new_location=translate_diff(cameraInput)
-                    #set_location(new_location)
-                    print("Going to differential location.")
-                    state = 1
-                elif(cameraInput["command"]==2):
+        # try:
+        data_recv = connIn.recv(BUFFER_SIZE).decode('utf-8')
+        data_recv = json.loads(data_recv)
+        print(f"Recieved: {data_recv}, attempting load...")
+        load_data(data_recv)
+        if newData:
+            armStatus["code"] = 1
+            print("Data loaded, initiating command.")
+            newData = False
+            if cameraInput["command"]==3:
+                print("Home command, processing.")
+                if state == 1:
                     print("Dropping load.")
                     #drop_load()
-                    state=2 
-                elif(cameraInput["command"]==4):
+                print("Going home.")
+                #set_Location(home)
+                state = 3
+            elif cameraInput["command"]==1:
+                print("Move command, processing.")
+                if state == 3:
                     print("Grabbing load.")
                     #grab_load()
-                    state=4
-            armStatus["code"] = 2
-
-        except:
-            print(f"Packet receive attempt to {addr} failed. Closing connection.")
-            connIn.close()
-            break
+                #new_location=translate_diff(cameraInput)
+                #set_location(new_location)
+                print("Going to differential location.")
+                state = 1
+            elif cameraInput["command"]==2:
+                print("Dropping load.")
+                #drop_load()
+                state=2 
+            elif cameraInput["command"]==4:
+                print("Grabbing load.")
+                #grab_load()
+                state=4
+        armStatus["code"] = 2
+        # except:
+            # print(f"Packet receive attempt to {addr} failed. Closing connection.")
+            # connIn.close()
+            # break
             
 s = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
 s.bind((HOST, PORT)) #Bind system socket
@@ -169,7 +177,7 @@ while True:
         read_thread = threading.Thread(target = read_async, args = (conn, addr))
         read_thread.start()
         # Begin tkinter thread
-        thread_tk = threading.Thread(target = tkinter, args = (conn, addr))
-        thread_tk.start()
+        # thread_tk = threading.Thread(target = tkinter, args = (conn, addr))
+        # thread_tk.start()
     except:
         pass
