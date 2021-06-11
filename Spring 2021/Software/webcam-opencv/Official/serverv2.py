@@ -117,7 +117,7 @@ def read_async(connIn, addr):
         try:
             data_recv = connIn.recv(BUFFER_SIZE).decode('utf-8')
             data_recv = json.loads(data_recv)
-            print("Recieved: {data_recv}, attempting load...")
+            print(f"Recieved: {data_recv}, attempting load...")
             load_data(data_recv)
             if(newData):
                 armStatus["code"] = 1

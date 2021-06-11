@@ -1,4 +1,5 @@
 # Official script [officialv5.py]
+# WORKING VERSION WITH [serverv2.py]
 VERSION = 'officialv5.py'
 
 # Import Libraries
@@ -361,7 +362,7 @@ while(True):
     # Begin Random Point Test
     if isRandBtnPressed:
         # keys = ['date', 'time', 'version', 'pX', 'pY', 'cX', 'cY', 'dX', 'dY', 'Time Elapsed', 'Run Status']
-        keys = ['dX', 'dY', 'state']
+        keys = ['name','dX', 'dY', 'command']
         data = dict.fromkeys(keys)
         
         # data['date'] = datetime.datetime.now().strftime("%m.%d.%Y")
@@ -407,6 +408,7 @@ while(True):
             dX = pX - cX
             dY = pY - cY
 
+            data['name'] = "Camera1"
             data['dX'] = dX
             data['dY'] = dY
             data['command'] = 1
