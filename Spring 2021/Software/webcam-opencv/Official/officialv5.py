@@ -360,46 +360,41 @@ while(True):
 
     # Begin Random Point Test
     if isRandBtnPressed:
-        keys = ['date', 'time', 'version', 'pX', 'pY', 'cX', 'cY', 'dX', 'dY', 'Time Elapsed', 'Run Status']
+        # keys = ['date', 'time', 'version', 'pX', 'pY', 'cX', 'cY', 'dX', 'dY', 'Time Elapsed', 'Run Status']
+        keys = ['dX', 'dY', 'state']
         data = dict.fromkeys(keys)
         
-        data['date'] = datetime.datetime.now().strftime("%m.%d.%Y")
-        data['time'] = datetime.datetime.now().strftime("%I.%M.%S%p")
-        data['version'] = VERSION
-        data['Run Status'] = True
+        # data['date'] = datetime.datetime.now().strftime("%m.%d.%Y")
+        # data['time'] = datetime.datetime.now().strftime("%I.%M.%S%p")
+        # data['version'] = VERSION
+        # data['Run Status'] = True
 
         if not isTargetReached:
             dX = pX - cX
             dY = pY - cY
 
-            data['pX'] = pX
-            data['pY'] = pY
-            data['cX'] = cX
-            data['cY'] = cY
-            data['dX'] = dX
-            data['dY'] = dY
-            data['Time Elapsed'] = str(round(time.time() - rndpt_start, 2))
-
             cv2.circle(frame, (pX, pY), 7, (0,0,255), -1)
             cv2.putText(frame, "Target", (pX - 23, pY - 20), cv2.FONT_HERSHEY_SIMPLEX, 0.5, (0,0,255), 2)
             cv2.putText(frame, "Target Location: ({}, {})".format(pX, pY), (25, 450), cv2.FONT_HERSHEY_SIMPLEX, 0.5, (255,0,0), 2)
             
-            print("CONSOLE: \t dX = {} \t dY = {}".format(dX, dY))
-
-            try:
-                s.sendall(bytes(json.dumps(data), encoding='utf-8'))
-            except:
-                print("Server Not Found!")
+            # print("CONSOLE: \t dX = {} \t dY = {}".format(dX, dY))
 
             if dX < 25 and dX > -25 and dY < 25 and dY > -25:
                 print("Target Successfully Acquired.")
                 isTargetReached = True
                 isRandBtnPressed = False
-                data['Run Status'] = False
+                # data['Run Status'] = False
+
+                data['dX'] = dX
+                data['dY'] = dY
+                data['command'] = 3
+
                 print("Random Point Test Data Recording Complete.")
                 
                 try:
                     s.sendall(bytes(json.dumps(data), encoding='utf-8'))
+                    data_recv = s.recv(8162).decode('utf-8')
+                    print(f"Recieved: {data_recv}")
                 except:
                     print("Server Not Found!")
 
@@ -408,6 +403,20 @@ while(True):
         elif isRandBtnPressed == True and isTargetReached == True:
             pX = random.randint(50,600)
             pY = random.randint(50,430)
+
+            dX = pX - cX
+            dY = pY - cY
+
+            data['dX'] = dX
+            data['dY'] = dY
+            data['command'] = 1
+
+            try:
+                s.sendall(bytes(json.dumps(data), encoding='utf-8'))
+                data_recv = s.recv(8162).decode('utf-8')
+                print(f"Recieved: {data_recv}")
+            except:
+                print("Server Not Found!")
 
             rndpt_start = time.time()
 
