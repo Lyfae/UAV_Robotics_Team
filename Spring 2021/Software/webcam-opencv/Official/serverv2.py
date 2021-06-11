@@ -123,46 +123,46 @@ def read_async(connIn, addr):
     global newData
     global state
     while True:
-        # try:
-        data_recv = connIn.recv(BUFFER_SIZE).decode('utf-8')
-        data_recv = json.loads(data_recv)
-        print(f"Recieved: {data_recv}, attempting load...")
-        load_data(data_recv)
-        if newData:
-            armStatus["code"] = 1
-            print("Data loaded, initiating command.")
-            newData = False
-            if cameraInput["command"]==3:
-                print("Home command, processing.")
-                if state == 1:
+        try:
+            data_recv = connIn.recv(BUFFER_SIZE).decode('utf-8')
+            data_recv = json.loads(data_recv)
+            print(f"Recieved: {data_recv}, attempting load...")
+            load_data(data_recv)
+            if newData:
+                armStatus["code"] = 1
+                print("Data loaded, initiating command.")
+                newData = False
+                if cameraInput["command"]==3:
+                    print("Home command, processing.")
+                    if state == 1:
+                        print("Dropping load.")
+                        #drop_load()
+                    print("Going home.")
+                    #set_Location(home)
+                    state = 3
+                elif cameraInput["command"]==1:
+                    print("Move command, processing.")
+                    if state == 3:
+                        print("Grabbing load.")
+                        #grab_load()
+                    #new_location=translate_diff(cameraInput)
+                    #set_location(new_location)
+                    print("Going to differential location.")
+                    state = 1
+                elif cameraInput["command"]==2:
                     print("Dropping load.")
                     #drop_load()
-                print("Going home.")
-                #set_Location(home)
-                state = 3
-            elif cameraInput["command"]==1:
-                print("Move command, processing.")
-                if state == 3:
+                    state=2 
+                elif cameraInput["command"]==4:
                     print("Grabbing load.")
                     #grab_load()
-                #new_location=translate_diff(cameraInput)
-                #set_location(new_location)
-                print("Going to differential location.")
-                state = 1
-            elif cameraInput["command"]==2:
-                print("Dropping load.")
-                #drop_load()
-                state=2 
-            elif cameraInput["command"]==4:
-                print("Grabbing load.")
-                #grab_load()
-                state=4
-        armStatus["code"] = 2
-        connIn.sendall(json.dumps(armStatus).encode('utf-8')) # encode the dict to JSON
-        # except:
-            # print(f"Packet receive attempt to {addr} failed. Closing connection.")
-            # connIn.close()
-            # break
+                    state=4
+            armStatus["code"] = 2
+            connIn.sendall(json.dumps(armStatus).encode('utf-8')) # encode the dict to JSON
+        except:
+            print(f"Packet receive attempt to {addr} failed. Closing connection.")
+            connIn.close()
+            break
             
 s = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
 s.bind((HOST, PORT)) #Bind system socket

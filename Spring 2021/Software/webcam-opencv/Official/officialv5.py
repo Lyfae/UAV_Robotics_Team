@@ -386,6 +386,7 @@ while(True):
                 isRandBtnPressed = False
                 # data['Run Status'] = False
 
+                data['name'] = "Camera1"
                 data['dX'] = dX
                 data['dY'] = dY
                 data['command'] = 3
