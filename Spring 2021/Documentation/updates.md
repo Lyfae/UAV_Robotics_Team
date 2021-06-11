@@ -27,17 +27,91 @@ tf.test.is_built_with_cuda()
 - Create the buttons that close the frame, mask, and trackbars and have a button that closes the program when pressed. 
 - Implemented the color mask and created an HSV trackbar to find the low and high HSV ranges to detect a specific color
 - Talked about toggle logic and turning a button on and off, using global and local variables to run a sequence one time in a infinite while loop
-- Talked about multi-threading, created `officialv3.py` to save progress and act as a checkpoint
+- Talked about multi-threading, created `officialv3.py` to save progress and act as a checkpoint [C.L.] + [P.T.]
 
 **update 4/22/2021**: Meeting with Chris and Paul
 *Goals*
 - [x] Reconfigure and update files on Michael's Computer.
 - [x] Run the ``officialv3.py`` and see if everything is working as intended
-- [ ] Merge from Chris_lai to main on Github
+- [x] Merge from Chris_lai to main on Github
 *Extra*
-- [ ] Refactor (implement the toggle buttons) and pretty up the code if time permits.  
-- [ ] Create officialv4.py and have all the updated code in there.
+- [x] Refactor (implement the toggle buttons) and pretty up the code if time permits.  
+- [x] Create officialv4.py and have all the updated code in there.
+
+**Update: ALL Goals were Met for today, we are going to take a break now... xD** 
+* [C.L.] + [P.T.]
+
 *Future Goals*
 - [ ] Automation???
 *last step*
 - [ ] Header Files + Code Simplification
+
+**update 4/23/2021**: 
+ - [ ] 
+ - [ ] 
+ - [ ] 
+ - [ ] 
+
+ **update 06/04/2021 Unofficial Meeting**:
+
+ Members that attended: 
+  - Chris W
+  - Chris L
+  - Matteo D
+  - Michael 
+  - Dominic
+  - Nick C
+  - Paul T
+
+  Notes that we are going over: 
+
+
+
+-The Dynamixel SDK will contain a library that will take the differentials from the webcam and turn it into angles
+
+-Chris equations for bicep arm: 200 mm * cos(angle of left/top motor)  
+-Chris equations for base motor: arctangent(x/y)
+-Equations are based on polar coordinates
+-To make the end effector straight, the angle between the elbow and bicep needs to be 90 degrees
+-The middle motor controls the triangle of the arm and rotation of shoulder
+Expand
+6-4_Meeting_Notes.txt
+3 KB
+
+    -The Dynamixel SDK will contain a library that will take the differentials from the webcam and turn it into angles
+    -Chris equations for bicep arm: 200 mm * cos(angle of left/top motor)  
+    -Chris equations for base motor: arctangent(x/y)
+    -Equations are based on polar coordinates
+    -To make the end effector straight, the angle between the elbow and bicep needs to be 90 degrees
+    -The middle motor controls the triangle of the arm and rotation of shoulder
+    -End effector is in parallel to orange piece
+    -Hardware team will need to individually create an equation for the forearm, bicep, and elbow and compare notes
+    -Software team will work on v6
+    -The arm is double jointed
+    -The triangle of the arm is fixed and moves relative to the arm
+    -The left/top motor controls the bicep movement
+    -The right motor controls the forearm or blue portion of the arm
+    -The x and y differentials will need to be scaled into measurements (mm, in, ft, etc)
+    -A calibration test would be a test that creates two circles and calculate the distance between
+    the circles with a scaled measurement to determine how far the change is in x-y differential
+    -Camera will be fixed to avoid re-calibration every time
+    -A global variable might be overwritten during implementation, so a static library value may work best
+    -The codes created don't listen for a z-axis sensor, but the framework for that is present if needed for the future
+    -The codes created will take the x-y differential and place them into a library for use
+    -If the code continously updates while the arm is moving, it won't be able to compensate for the amount of directions given
+
+	-Will need to slow the updates to match the speed of the arm
+	-Process will be camera gives info, motors get info, arm moves, camera checks arm position
+	-Chris W will be focused on code that sends info to the camera
+	-Chris L will be focused on code that sends info to the arm
+	-Chris L will also modify the random point test to send the initial differential info to the server
+		-Code would not update until after the arm reaches the point to drop the label
+
+-Nick has created a code for the motor that asks the user what angle they want the motor to move to
+
+	-While the motor moves, the code will output it's current position, it's goal position, current degrees, goal degrees
+	-This code can be used to take the information from the server, but will need to be modified to take 3 angles for 3 motors
+	-Will need to be modified to return a value of 1 if it is sucessful or a value of 0 if not successful
+	-The values will need to be assigned so that the server can take that information
+-For automation, the things that need to be automated needs to be the HSV adapative threshold and sensing of boxes
+-A goal to finish building the arm, server, and camera by the 25th of June

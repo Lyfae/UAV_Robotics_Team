@@ -1,4 +1,6 @@
-# Official script [officialv4.py]
+# Official script [officialv5.py]
+# WORKING VERSION WITH [serverv2.py]
+VERSION = 'officialv5.py'
 
 # Import Libraries
 import numpy as np
@@ -20,8 +22,11 @@ from PIL import Image, ImageTk
 from _thread import *
 import threading
 
-# PORT = 8009
-# IP = 127.0.0.1
+HOST = '127.0.0.1'
+PORT = 8009
+
+s = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
+s.connect((HOST, PORT))
 
 # GLOBAL VARIABLES
 global pX
@@ -48,9 +53,15 @@ global isFrameBtnPressed
 isFrameBtnPressed = False
 isFrameOpen = False
 
+global isFrameRcdBtnPressed
+isFrameRcdBtnPressed = False
+
 global isMaskBtnPressed
 isMaskBtnPressed = False
 isMaskOpen = False
+
+global isMaskRcdButtonPressed
+isMaskRcdButtonPressed = False
 
 global isMAlgBtnPressed
 isMAlgBtnPressed = False
@@ -72,10 +83,10 @@ firstTimeTrackbar = True
 def nothing(f):
     pass
 
-# def saveFile(image):
-#     path = 'C:/Users/Chris/Documents/GitHub/UAV_Robotics_Team/Spring 2021/Software/webcam-opencv/data/images'
-#     filename = datetime.datetime.now().strftime("%m.%d.%Y_%I.%M.%S%p")
-#     cv2.imwrite(os.path.join(path, filename + '.jpg'), image)
+def saveFile(image, typeI):
+    path = 'data/images/'
+    filename = typeI + "_" + datetime.datetime.now().strftime("%m.%d.%Y_%I.%M.%S%p")
+    cv2.imwrite(path + filename + '.jpg', image)
 
 def tkinter():
     # TKINTER DEFAULT VARIABLES
@@ -96,15 +107,18 @@ def tkinter():
     global pY
     global dX
     global dY
+    global rndpt_start
+    rndpt_start = 0
 
     # ICONS (Courtesy of Icons8.com)
-    camera_icon = tk.PhotoImage(file='icons\\camera.png')
-    frame_icon = tk.PhotoImage(file='icons\\frame.png')
-    mask_icon = tk.PhotoImage(file='icons\\switch-maskalg.png')
-    contour_icon = tk.PhotoImage(file='icons\\contour.png')
-    target_icon = tk.PhotoImage(file='icons\\rand-point.png')
-    trackbar_icon = tk.PhotoImage(file='icons\\trackbar.png')
-    workflow_icon = tk.PhotoImage(file='icons\\testrun.png')
+    camera_icon = tk.PhotoImage(file='icons/camera.png')
+    frame_icon = tk.PhotoImage(file='icons/frame.png')
+    record_icon = tk.PhotoImage(file='icons/record.png')
+    mask_icon = tk.PhotoImage(file='icons/switch-maskalg.png')
+    contour_icon = tk.PhotoImage(file='icons/contour.png')
+    target_icon = tk.PhotoImage(file='icons/rand-point.png')
+    trackbar_icon = tk.PhotoImage(file='icons/trackbar.png')
+    workflow_icon = tk.PhotoImage(file='icons/testrun.png')
 
     # CANVAS
     control_canv = tk.Canvas(main_canv, width=240, height=800, highlightthickness=0, bg=BGCOLOR)   
@@ -122,47 +136,82 @@ def tkinter():
         global isFrameBtnPressed
         isFrameBtnPressed = True
 
+    def scFrame():
+        global isFrameRcdBtnPressed
+        global isFrameOpen
+        if isFrameOpen:
+            isFrameRcdBtnPressed = True
+        else:
+            print("[WARNING]: Frame is not detected. Please open frame before continuing.")
+
     def toggleMask():
         global isMaskBtnPressed
         isMaskBtnPressed = True
-        
+
+    def scMask():
+        global isMaskRcdButtonPressed
+        global isMaskOpen
+        if isMaskOpen:
+            isMaskRcdButtonPressed = True
+        else:
+            print("[WARNING]: Mask is not detected. Please open frame before continuing.")
+
     def toggleMaskAlg():
         global isMAlgBtnPressed
-        isMAlgBtnPressed = True
+        global isMaskOpen
+        if isMaskOpen:
+            isMAlgBtnPressed = True
+        else:
+            print("[WARNING]: No changes are shown. Please open mask to use this button!")
 
     def toggleContour():
         global isContourBtnPressed
-        isContourBtnPressed = True
+        global isFrameOpen
+        if isFrameOpen:
+            isContourBtnPressed = True
+        else:
+            print("[WARNING]: No changes are shown. Please open frame to use this button!")
 
     def toggleTrackbar():
         global isTBarBtnPressed
-        isTBarBtnPressed = True
+        global isMaskOpen
+        if isMaskOpen:
+            isTBarBtnPressed = True
+        else:
+            print("[WARNING]: The trackbar option is currently disabled. Please open mask to use this button!")
 
     def rndPoint():
         global isRandBtnPressed
         global isFrameOpen
-        if isFrameOpen:
+        global isContourShowing
+        if isFrameOpen and isContourShowing:
             isRandBtnPressed = True
         else:
-            print("[WARNING]: Frame is not detected. Please open frame before continuing.")
+            print("[WARNING]: Frame or Contours are not detected. Please open frame/contours before continuing.")
 
     # BUTTONS
     display_frame = tk.Button(control_canv, image = camera_icon, command=toggleFrame, justify='center', padx=10, pady=10, bg=BTCOLOR, fg='#9e8d8f')
-    display_frame.place(relx=0.5,rely=0.167,anchor='center')
+    display_frame.place(relx=0.3,rely=0.167,anchor='center')
     
-    display_mask = tk.Button(control_canv, image = frame_icon, command=toggleMask, justify='center', padx=40, pady=10, bg=BTCOLOR, fg='#9e8d8f')
-    display_mask.place(relx=0.5,rely=0.333,anchor='center')
+    sc_frame = tk.Button(control_canv, image = record_icon, command=scFrame, justify='center', padx=10, pady=10, bg=BTCOLOR, fg='#9e8d8f')
+    sc_frame.place(relx=0.7,rely=0.167,anchor='center')
 
-    change_maskalg = tk.Button(control_canv, image = mask_icon, command=toggleMaskAlg, justify='center', padx=40, pady=10, bg=BTCOLOR, fg='#9e8d8f')
+    display_mask = tk.Button(control_canv, image = frame_icon, command=toggleMask, justify='center', padx=10, pady=10, bg=BTCOLOR, fg='#9e8d8f')
+    display_mask.place(relx=0.3,rely=0.333,anchor='center')
+
+    sc_mask = tk.Button(control_canv, image = record_icon, command=scMask, justify='center', padx=10, pady=10, bg=BTCOLOR, fg='#9e8d8f')
+    sc_mask.place(relx=0.7,rely=0.333,anchor='center')
+
+    change_maskalg = tk.Button(control_canv, image = mask_icon, command=toggleMaskAlg, justify='center', padx=10, pady=10, bg=BTCOLOR, fg='#9e8d8f')
     change_maskalg.place(relx=0.3,rely=0.5,anchor='center')
 
-    display_contour = tk.Button(control_canv, image = contour_icon, command=toggleContour, justify='center', padx=40, pady=10, bg=BTCOLOR, fg='#9e8d8f')
+    display_contour = tk.Button(control_canv, image = contour_icon, command=toggleContour, justify='center', padx=10, pady=10, bg=BTCOLOR, fg='#9e8d8f')
     display_contour.place(relx=0.7,rely=0.5,anchor='center')
 
-    display_trackbar = tk.Button(control_canv, image = trackbar_icon, command=toggleTrackbar, justify='center', padx=40, pady=10, bg=BTCOLOR, fg='#9e8d8f')
+    display_trackbar = tk.Button(control_canv, image = trackbar_icon, command=toggleTrackbar, justify='center', padx=10, pady=10, bg=BTCOLOR, fg='#9e8d8f')
     display_trackbar.place(relx=0.5,rely=0.667,anchor='center')
     
-    rand_point = tk.Button(control_canv, image = target_icon, command=rndPoint, justify='center', padx=40, pady=10, bg=BTCOLOR, fg='#9e8d8f')
+    rand_point = tk.Button(control_canv, image = target_icon, command=rndPoint, justify='center', padx=10, pady=10, bg=BTCOLOR, fg='#9e8d8f')
     rand_point.place(relx=0.5,rely=0.833,anchor='center')
 
     exitButton = tk.Button(control_canv, text="EXIT", font=('courier new',18,'bold'), command=exit, justify='center', padx=40, pady=10, bg='#D55C8D', fg='white')
@@ -292,8 +341,11 @@ while(True):
             if local_area < tempsize:
                 location = i
                 tempsize = local_area
-        cX = contdict[str(location)]['cX']
-        cY = contdict[str(location)]['cY']
+        try:
+            cX = contdict[str(location)]['cX']
+            cY = contdict[str(location)]['cY']
+        except:
+            print("cX/cY dict sync error")
         # Display number of contours detected
         cv2.putText(frame, "# of contours: {}".format(contnum), (450, 425), cv2.FONT_HERSHEY_SIMPLEX, 0.5, (255,255,255), 2)
         cv2.putText(frame, "Currently Tracking ID {}".format(contdict[str(location)]['ID']), (450, 400), cv2.FONT_HERSHEY_SIMPLEX, 0.5, (255,255,255), 2)
@@ -309,25 +361,68 @@ while(True):
 
     # Begin Random Point Test
     if isRandBtnPressed:
+        # keys = ['date', 'time', 'version', 'pX', 'pY', 'cX', 'cY', 'dX', 'dY', 'Time Elapsed', 'Run Status']
+        keys = ['name','dX', 'dY', 'command']
+        data = dict.fromkeys(keys)
+        
+        # data['date'] = datetime.datetime.now().strftime("%m.%d.%Y")
+        # data['time'] = datetime.datetime.now().strftime("%I.%M.%S%p")
+        # data['version'] = VERSION
+        # data['Run Status'] = True
+
         if not isTargetReached:
             dX = pX - cX
             dY = pY - cY
-            
+
             cv2.circle(frame, (pX, pY), 7, (0,0,255), -1)
             cv2.putText(frame, "Target", (pX - 23, pY - 20), cv2.FONT_HERSHEY_SIMPLEX, 0.5, (0,0,255), 2)
             cv2.putText(frame, "Target Location: ({}, {})".format(pX, pY), (25, 450), cv2.FONT_HERSHEY_SIMPLEX, 0.5, (255,0,0), 2)
             
-            print("CONSOLE: \t dX = {} \t dY = {}".format(dX, dY))
+            # print("CONSOLE: \t dX = {} \t dY = {}".format(dX, dY))
 
             if dX < 25 and dX > -25 and dY < 25 and dY > -25:
                 print("Target Successfully Acquired.")
                 isTargetReached = True
                 isRandBtnPressed = False
+                # data['Run Status'] = False
+
+                data['name'] = "Camera1"
+                data['dX'] = dX
+                data['dY'] = dY
+                data['command'] = 3
+
+                print("Random Point Test Data Recording Complete.")
+                
+                try:
+                    s.sendall(bytes(json.dumps(data), encoding='utf-8'))
+                    data_recv = s.recv(8162).decode('utf-8')
+                    print(f"Recieved: {data_recv}")
+                except:
+                    print("Server Not Found!")
+
                 pX = 0
                 pY = 0     
         elif isRandBtnPressed == True and isTargetReached == True:
             pX = random.randint(50,600)
             pY = random.randint(50,430)
+
+            dX = pX - cX
+            dY = pY - cY
+
+            data['name'] = "Camera1"
+            data['dX'] = dX
+            data['dY'] = dY
+            data['command'] = 1
+
+            try:
+                s.sendall(bytes(json.dumps(data), encoding='utf-8'))
+                data_recv = s.recv(8162).decode('utf-8')
+                print(f"Recieved: {data_recv}")
+            except:
+                print("Server Not Found!")
+
+            rndpt_start = time.time()
+
             isTargetReached = False
 
     # Toggle Frame
@@ -353,6 +448,14 @@ while(True):
 
     if cv2.waitKey(1) & 0xFF == ord('q'):
         break
+
+    # Screenshots for Frame and Mask
+    if isFrameRcdBtnPressed:
+        saveFile(frame, "FRAME")
+        isFrameRcdBtnPressed = False
+    if isMaskRcdButtonPressed:
+        saveFile(mask, "MASK")
+        isMaskRcdButtonPressed = False
 
 # Safely close all windows
 webcam.release()
