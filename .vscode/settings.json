@@ -6,5 +6,6 @@
         "Mbps",
         "robotis",
         "tensorflow"
-    ]
+    ],
+    "python.pythonPath": "C:\\Users\\Chris\\anaconda3\\envs\\tensorflow2.4\\python.exe"
 }
