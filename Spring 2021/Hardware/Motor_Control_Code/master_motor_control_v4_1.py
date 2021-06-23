@@ -143,27 +143,27 @@ def portTermination():
     portHandler.closePort()
 
 
-def dxlPresAngle(motor_index):
+def dxlPresAngle():
     ADDR_PRESENT_POSITION = 132
-    dxl_present_position, dxl_comm_result, dxl_error = packetHandler.read4ByteTxRx(
-        portHandler, DXL_ID[motor_index], ADDR_PRESENT_POSITION)
+    dxl_present_position = [0, 0, 0]
+    dxl_present_angle = [0, 0, 0]
 
-    if dxl_comm_result != COMM_SUCCESS:
-        print("%s" % packetHandler.getTxRxResult(dxl_comm_result))
-    elif dxl_error != 0:
-        print("%s" % packetHandler.getRxPacketError(dxl_error))
+    device_index = 0
+    while device_index <= 2:
+        dxl_present_position[device_index], dxl_comm_result, dxl_error = packetHandler.read4ByteTxRx(
+            portHandler, DXL_ID[device_index], ADDR_PRESENT_POSITION)
+        if dxl_comm_result != COMM_SUCCESS:
+            print("%s" % packetHandler.getTxRxResult(dxl_comm_result))
+        elif dxl_error != 0:
+            print("%s" % packetHandler.getRxPacketError(dxl_error))
 
-    if motor_index == 0:
-        print("Base motor's present angle is being read.")
-    elif motor_index == 1:
-        print("Bicep motor's present angle is being read.")
-    else:
-        print("Forearm motor's present angle is being read.")
+        dxl_present_angle[device_index] = _map(dxl_present_position[device_index], 0, 4095, 0, 360)
 
-    dxl_present_angle = _map(dxl_present_position, 0, 4095, 0, 360)
-    print("[ID:%03d] PresPos:%03d  PresDeg:%03d" %
-          (DXL_ID[motor_index], dxl_present_position, dxl_present_angle))
-    return dxl_present_angle
+        print("[ID:%03d] PresPos:%03d  PresDeg:%03d" %
+            (DXL_ID[device_index], dxl_present_position[device_index], dxl_present_angle[device_index]))
+        
+        device_index += 1
+    return (dxl_present_angle)
 
 
 def motorRunWithInputs():
@@ -275,14 +275,12 @@ def motorRunWithInputs():
 portInitialization('/dev/ttyUSB0', 1000000, 0, 1, 2)
 
 
-dxlPresAngle(0)
-dxlPresAngle(1)
-dxlPresAngle(2)
+angles_before = dxlPresAngle()
+print(angles_before)
 
 motorRunWithInputs()
 
-dxlPresAngle(0)
-dxlPresAngle(1)
-dxlPresAngle(2)
+angles_after = dxlPresAngle()
+print(angles_after)
 
 portTermination()
