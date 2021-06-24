@@ -165,6 +165,20 @@ def dxlPresAngle():
         device_index += 1
     return (dxl_present_angle)
 
+def dxlSetVelo(vel_array):
+    global ADDR_PROFILE_VELOCITY
+    ADDR_PROFILE_VELOCITY = 112
+    device_index = 0
+    while device_index <= 2:
+        dxl_comm_result, dxl_error = packetHandler.write4ByteTxRx(
+        portHandler, DXL_ID[device_index], ADDR_PROFILE_VELOCITY, vel_array[device_index])
+        if dxl_comm_result != COMM_SUCCESS:
+            print("%s" % packetHandler.getTxRxResult(dxl_comm_result))
+        elif dxl_error != 0:
+            print("%s" % packetHandler.getRxPacketError(dxl_error))
+        else:
+            print('DXL ID %03d is sucessfully set to %03d' % (DXL_ID[device_index], vel_array[device_index]))
+        device_index += 1
 
 def motorRunWithInputs():
     ADDR_GOAL_POSITION = 116
@@ -271,9 +285,11 @@ def motorRunWithInputs():
         # ------------------------------------------------------------------------------------------------------------------------------------------------------
 
 
+#'/dev/ttyUSB0' or 'COM8'
 # portInitialization(portname, baudrate, baseID, bicepID, forearmID):
-portInitialization('/dev/ttyUSB0', 1000000, 0, 1, 2)
+portInitialization('COM8', 1000000, 4, 4, 4)
 
+dxlSetVelo([0,0,0])
 
 angles_before = dxlPresAngle()
 print(angles_before)
