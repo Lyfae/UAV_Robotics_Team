@@ -80,6 +80,11 @@ isTBarBtnPressed = False
 isTBarOpen = False
 firstTimeTrackbar = True
 
+# Conversion Variables
+# 23in/584.2mm height
+global pixelToMmRatio
+pixelToMmRatio = 0.0
+
 def nothing(f):
     pass
 
