@@ -156,14 +156,72 @@ def dxlPresAngle():
             print("%s" % packetHandler.getTxRxResult(dxl_comm_result))
         elif dxl_error != 0:
             print("%s" % packetHandler.getRxPacketError(dxl_error))
+        else:
+            dxl_present_angle[device_index] = _map(dxl_present_position[device_index], 0, 4095, 0, 360)
 
-        dxl_present_angle[device_index] = _map(dxl_present_position[device_index], 0, 4095, 0, 360)
-
-        print("[ID:%03d] PresPos:%03d  PresDeg:%03d" %
-            (DXL_ID[device_index], dxl_present_position[device_index], dxl_present_angle[device_index]))
+            print("[ID:%03d] PresPos:%03d  PresDeg:%03d" %
+                (DXL_ID[device_index], dxl_present_position[device_index], dxl_present_angle[device_index]))
         
         device_index += 1
     return (dxl_present_angle)
+
+def dxlSetVelo(vel_array):
+    global ADDR_PROFILE_VELOCITY
+    ADDR_PROFILE_VELOCITY = 112
+
+    device_index = 0
+    while device_index <= 2:
+        dxl_comm_result, dxl_error = packetHandler.write4ByteTxRx(
+        portHandler, DXL_ID[device_index], ADDR_PROFILE_VELOCITY, vel_array[device_index])
+        if dxl_comm_result != COMM_SUCCESS:
+            print("%s" % packetHandler.getTxRxResult(dxl_comm_result))
+        elif dxl_error != 0:
+            print("%s" % packetHandler.getRxPacketError(dxl_error))
+        else:
+            if device_index == 0:
+                #print('The velocity of base DXL with ID %03d is sucessfully set to %03d' % (DXL_ID[device_index], vel_array[device_index]))
+                print("[ID:%03d]  Base Velocity Sucessfully Set To: %03d" %
+                    (DXL_ID[device_index], vel_array[device_index]))
+            elif device_index == 1:
+                #print('The velocity of bicep DXL with ID %03d is sucessfully set to %03d' % (DXL_ID[device_index], vel_array[device_index]))
+                print("[ID:%03d]  Bicep Velocity Sucessfully Set To: %03d" %
+                    (DXL_ID[device_index], vel_array[device_index]))
+            else:
+                #print('The velocity of forearm DXL with ID %03d is sucessfully set to %03d' % (DXL_ID[device_index], vel_array[device_index]))
+                print("[ID:%03d]  Bicep Velocity Sucessfully Set To: %03d" %
+                    (DXL_ID[device_index], vel_array[device_index]))
+        device_index += 1
+
+
+def dxlGetVelo():
+    global ADDR_PROFILE_VELOCITY
+    ADDR_PROFILE_VELOCITY = 112
+    dxl_present_velocity = [0, 0, 0]
+
+    device_index = 0
+    while device_index <= 2:
+        dxl_present_velocity[device_index], dxl_comm_result, dxl_error = packetHandler.read4ByteTxRx(
+            portHandler, DXL_ID[device_index], ADDR_PROFILE_VELOCITY)
+        if dxl_comm_result != COMM_SUCCESS:
+            print("%s" % packetHandler.getTxRxResult(dxl_comm_result))
+        elif dxl_error != 0:
+            print("%s" % packetHandler.getRxPacketError(dxl_error))
+        else:
+            if device_index == 0:
+                #print('The current velocity of base DXL with ID %03d is: %03d' % (DXL_ID[device_index], dxl_present_velocity[device_index]))
+                print("[ID:%03d]  Current Base Velocity: %03d" %
+                    (DXL_ID[device_index], dxl_present_velocity[device_index]))
+            elif device_index == 1:
+                #print('The current velocity of bicep DXL with ID %03d is: %03d' % (DXL_ID[device_index], dxl_present_velocity[device_index]))
+                print("[ID:%03d]  Current Bicep Velocity: %03d" %
+                    (DXL_ID[device_index], dxl_present_velocity[device_index]))
+            else:
+                #print('The current velocity of forearm DXL with ID %03d is: %03d' % (DXL_ID[device_index], dxl_present_velocity[device_index]))
+                print("[ID:%03d]  Current Forearm Velocity: %03d" %
+                    (DXL_ID[device_index], dxl_present_velocity[device_index]))
+        
+        device_index += 1
+    return (dxl_present_velocity)
 
 
 def motorRunWithInputs():
@@ -271,9 +329,12 @@ def motorRunWithInputs():
         # ------------------------------------------------------------------------------------------------------------------------------------------------------
 
 
+#'/dev/ttyUSB0' or 'COM8'
 # portInitialization(portname, baudrate, baseID, bicepID, forearmID):
-portInitialization('/dev/ttyUSB0', 1000000, 0, 1, 2)
+portInitialization('COM8', 1000000, 0, 1, 2)
 
+dxlSetVelo([0,0,0])
+dxlGetVelo()
 
 angles_before = dxlPresAngle()
 print(angles_before)
