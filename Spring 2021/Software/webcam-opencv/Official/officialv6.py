@@ -1,6 +1,6 @@
-# Official script [officialv5.py]
+# Official script [officialv6.py]
 # WORKING VERSION WITH [serverv2.py]
-VERSION = 'officialv5.py'
+VERSION = 'officialv6.py'
 
 # Import Libraries
 import numpy as np
@@ -21,6 +21,8 @@ from PIL import Image, ImageTk
 
 from _thread import *
 import threading
+
+import calibration
 
 HOST = '127.0.0.1'
 PORT = 8009
@@ -80,10 +82,14 @@ isTBarBtnPressed = False
 isTBarOpen = False
 firstTimeTrackbar = True
 
+global isCalibrateBtnPressed
+isCalibrateBtnPressed = False
+isCalibrateStateReached = False
+
 # Conversion Variables
-# 23in/584.2mm height
-global pixelToMmRatio
-pixelToMmRatio = 0.0
+global MmtoPixelRatio
+MmtoPixelRatio = 1.7
+global H
 
 def nothing(f):
     pass
@@ -123,7 +129,7 @@ def tkinter():
     contour_icon = tk.PhotoImage(file='icons/contour.png')
     target_icon = tk.PhotoImage(file='icons/rand-point.png')
     trackbar_icon = tk.PhotoImage(file='icons/trackbar.png')
-    workflow_icon = tk.PhotoImage(file='icons/testrun.png')
+    testrun_icon = tk.PhotoImage(file='icons/testrun.png')
 
     # CANVAS
     control_canv = tk.Canvas(main_canv, width=240, height=800, highlightthickness=0, bg=BGCOLOR)   
@@ -194,6 +200,15 @@ def tkinter():
         else:
             print("[WARNING]: Frame or Contours are not detected. Please open frame/contours before continuing.")
 
+    def calibrate():
+        global isCalibrateBtnPressed
+        global isFrameOpen
+        global isContourShowing
+        if not isMaskOpen:
+            isCalibrateBtnPressed = True
+        else:
+            print("[WARNING]: Mask is OPEN!!! Please close mask before continuing.")
+
     # BUTTONS
     display_frame = tk.Button(control_canv, image = camera_icon, command=toggleFrame, justify='center', padx=10, pady=10, bg=BTCOLOR, fg='#9e8d8f')
     display_frame.place(relx=0.3,rely=0.167,anchor='center')
@@ -214,10 +229,13 @@ def tkinter():
     display_contour.place(relx=0.7,rely=0.5,anchor='center')
 
     display_trackbar = tk.Button(control_canv, image = trackbar_icon, command=toggleTrackbar, justify='center', padx=10, pady=10, bg=BTCOLOR, fg='#9e8d8f')
-    display_trackbar.place(relx=0.5,rely=0.667,anchor='center')
+    display_trackbar.place(relx=0.3,rely=0.667,anchor='center')
     
     rand_point = tk.Button(control_canv, image = target_icon, command=rndPoint, justify='center', padx=10, pady=10, bg=BTCOLOR, fg='#9e8d8f')
     rand_point.place(relx=0.5,rely=0.833,anchor='center')
+
+    calibrate = tk.Button(control_canv, image = testrun_icon, command=calibrate, justify='center', padx=10, pady=10, bg=BTCOLOR, fg='#9e8d8f')
+    calibrate.place(relx=0.7,rely=0.667,anchor='center')
 
     exitButton = tk.Button(control_canv, text="EXIT", font=('courier new',18,'bold'), command=exit, justify='center', padx=40, pady=10, bg='#D55C8D', fg='white')
     exitButton.place(relx=0.5,rely=.95,anchor='center')
@@ -243,6 +261,11 @@ except:
 thread_tk = threading.Thread(target = tkinter)
 thread_tk.start()
 
+# Initial Test for H Matrix (Homography calibration)
+corners = calibration.corner_detect(frame)
+destination = calibration.get_destination_points(MmtoPixelRatio, 0, 0)
+H, _= cv2.findHomography(np.float32(corners), np.float32(destination), cv2.RANSAC, 3.0)
+
 while(True):
     start = time.time()
     # Grabbing frame from webcam
@@ -253,6 +276,24 @@ while(True):
 
     # Apply Gaussian Blur
     blur = cv2.GaussianBlur(grayscale, (9,9), 0)
+
+    # Apply H-Matrix
+    unwarp = calibration.unwarp_frame(frame, corners, destination, H)
+
+    # Check if calibration button is pressed
+    if isCalibrateBtnPressed:
+        if not isCalibrateStateReached:
+            isCalibrateStateReached = True
+        else:
+            cv2.destroyWindow('unskewed')
+            isCalibrateStateReached = False
+        isCalibrateBtnPressed = False
+
+    if isCalibrateStateReached: 
+        corners = calibration.corner_detect(frame)
+        destination = calibration.get_destination_points(MmtoPixelRatio, 0, 0)
+        H, _= cv2.findHomography(np.float32(corners), np.float32(destination), cv2.RANSAC, 3.0)
+        cv2.imshow('unskewed', unwarp)
 
     # Toggle Taskbars
     if isTBarBtnPressed:
@@ -411,11 +452,8 @@ while(True):
                 pX = 0
                 pY = 0     
         elif isRandBtnPressed == True and isTargetReached == True:
-            # pX = random.randint(50,600) UNCOMMENT THIS OUT LATER!!!
-            # pY = random.randint(50,430)
-
-            pX = 250
-            pY = 250
+            pX = random.randint(50,600)
+            pY = random.randint(50,430)
 
             dX = pX - cX
             dY = pY - cY
