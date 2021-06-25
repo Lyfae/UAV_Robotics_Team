@@ -40,7 +40,7 @@ def corner_detect(frame):
     # plt.show()
     return corners
 
-def get_destination_points(corners):
+def get_destination_points():
     w = 215
     h = 280
     scale = 1.7 # VALUE
@@ -62,20 +62,24 @@ def get_destination_points(corners):
     # print(f"\nDimensions of Original Image Mapped (Ratio):\nHeight: {h}\tWidth: {w}")
     return destination_corners, scale
 
-def unwarp_frame(frame, corners, destination):
+def unwarp_frame(frame, corners, destination, H):
     h, w = frame.shape[:2]
-    H, _= cv2.findHomography(np.float32(corners), np.float32(destination), cv2.RANSAC, 3.0)
-    # print("\nHomography Matrix:\n", H)
+    print("\nHomography Matrix:\n", H)
     unwarp = cv2.warpPerspective(frame, H, (w,h), flags=cv2.INTER_LINEAR)
     return unwarp
+
+corners = corner_detect(frame)
+destination, scale = get_destination_points()
+H, _= cv2.findHomography(np.float32(corners), np.float32(destination), cv2.RANSAC, 3.0)
 
 while(True):
     # Grabbing frame from webcam
     ret, frame = webcam.read()
-
-    corners = corner_detect(frame)
-    destination, scale = get_destination_points(corners)
-    unwarp = unwarp_frame(frame, corners, destination)
+    
+    # corners = corner_detect(frame)
+    # destination, scale = get_destination_points()
+    # H, _= cv2.findHomography(np.float32(corners), np.float32(destination), cv2.RANSAC, 3.0)    
+    unwarp = unwarp_frame(frame, corners, destination, H)
 
     print(f"Using Ratio: 1mm = {scale}px")
 
