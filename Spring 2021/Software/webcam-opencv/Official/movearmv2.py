@@ -92,12 +92,12 @@ def do_shutdown():
 
 #gets locations from arm
 #Takes no arguments
-#Returns and array in the order listed
-# 0-base,1-bicep,2-forearm
-def get_location():
-    #gets current motor angles from w/e as an array of 3
-    results = dxlPresAngle()
-    print(results)
+#Returns assumed X-Y-Z as array in that order
+def get_XYZ_location():
+    #gets current motor angles from motors as an array of 3
+    # 0-base,1-bicep,2-forearm
+    angles = dxlPresAngle()
+    results = getXYZ(math.radians(angles[0]),math.radians(angles[1]), math.radians(angles[2]))
     return results
 
 #takes coordinates and sends angles to motors
@@ -123,7 +123,7 @@ def set_location(xyzdict):
         thetaBicepN=calcBicepTheta(pideal+scrollTest,0)[0]
         thetaForearmN=calcForearmTheta(Zn,thetaBicepN)[0]
         tempPZ = getPZ(thetaBicepN,thetaForearmN)
-        countcycles = 0
+        #countcycles = 0
         while not(pideal-TOLERANCE)<tempPZ[0]<(pideal+TOLERANCE):
             if tempPZ[0]>(pideal+1):
                 thetaBicepN = thetaBicepN+R_INCREMENT
@@ -131,7 +131,7 @@ def set_location(xyzdict):
                 thetaBicepN = thetaBicepN-R_INCREMENT
             thetaForearmN=calcForearmTheta(Zn,thetaBicepN)[0]
             tempPZ = getPZ(thetaBicepN,thetaForearmN)
-            countcycles += 1
+            #countcycles += 1
 
         thetaBicepND = math.degrees(thetaBicepN)    
         thetaForearmND = math.degrees(thetaForearmN)
@@ -139,30 +139,41 @@ def set_location(xyzdict):
         print('BASE ANGLE = ' + str(thetaBaseND))
         print('BICEP ANGLE = ' + str(thetaBicepND))
         print('FOREARM ANGLE = ' + str(thetaForearmND))
-        print('Number of Cycles For Answer = ' + str(countcycles))
-        XYZtemp = getXYZ(thetaBaseN[0], thetaBicepN, thetaForearmN)
-        print('XYZ Value:'+str(XYZtemp))
+        # print('Number of Cycles For Answer = ' + str(countcycles))
+        # XYZtemp = getXYZ(thetaBaseN[0], thetaBicepN, thetaForearmN)
+        # print('XYZ Value:'+str(XYZtemp))
 
         if not(BICEP_L_DOWN<thetaBicepND<BICEP_L_UP):
             print("BICEP Can't Rotate That Far, Current Limits are:"+str(BICEP_L_DOWN)+"-"+str(BICEP_L_UP))
         elif not(FOREARM_L_DOWN<thetaForearmND<FOREARM_L_UP):
             print("FOREARM Can't Rotate That Far, Current Limits are:"+str(FOREARM_L_DOWN)+"-"+str(FOREARM_L_UP))
         else:
+            calcSpeedDiff(thetaBicepND, thetaForearmND)
             moveresults = motorRunWithInputs([thetaBaseND,thetaBicepND,thetaForearmND])
-            print('Arm Move Successful= ' + str(moveresults))
+            print('Arm Move Successful = ' + str(moveresults))
     else:
         print('BASE ANGLE = ' + str(thetaBaseN[1]))
         print("Base Can't Rotate That Far, Current Limits are:"+str(BASE_L_DOWN)+"-"+str(BASE_L_UP))
 
 #takes camera x/y diff and turn to coodinates
-def translate_diff():
-    print("translate_diff not implemented")
-
+#accepts a dictionary of X, Y, Z values 
+#Returns a dictionary with new coordinates in overall system
+def translate_diff(xyzdiffdict):
+    Xd = xyzdiffdict["X"]
+    Yd = xyzdiffdict["Y"]
+    Zd = xyzdiffdict["Z"]
+    curLocation = get_XYZ_location()
+    newdict = {"X":curLocation[0]+Xd,
+            "Y":curLocation[1]+Yd,
+            "Z":curLocation[2]+Zd}
+    
 #predefined locations for z down
+#TO DO
 def drop_load():  
     print("drop_load not implemented")
 
 #predefined locations for x-y-z up
+#TO DO
 def grab_load():
     print("grab_load not implemented")
 
@@ -175,6 +186,9 @@ def getPZ(ThetaBi, ThetaFo):
     return([P, Z])
 
 #this method returns the theoretical X-Y-Z based on P and Z
+#Input is the degrees in radians
+#Output is an array of the X-Y-Z location in mm.
+# 0-base,1-bicep,2-forearm
 def getXYZ(ThetaBa, ThetaBi, ThetaFo):
     ThetaXYPlane = ThetaBa - math.radians(90) - BASE_OFFSET
     tempPZ = getPZ(ThetaBi, ThetaFo)
@@ -206,6 +220,18 @@ def calcForearmTheta(Z,thetaBicep):
     thetaForearmR=-1*math.asin((Z-BASE_HEIGHT+END_DEPTH+END_BIT-BICEP_LENGTH*math.sin(thetaBicep-BICEP_OFFSET))/FOREARM_LENGTH)+FOREARM_OFFSET
     thetaForearmD=math.degrees(thetaForearmR)
     return ([thetaForearmR,thetaForearmD])
+
+#This method calculates the new speed of the bicep and forearm and sets the motor speeds
+# It takes the arguements of theta bicep and Theta forearm 
+# It returns nothing
+def calcSpeedDiff(ThetaBi, ThetaFo):
+    BicepNew = ARM_S_MAX
+    ForearmNew = ARM_S_MAX
+    if ThetaBi > ThetaFo:
+        ForearmNew = (ThetaFo/ThetaBi)*ARM_S_MAX
+    else:
+        BicepNew = (ThetaBi/ThetaFo)*ARM_S_MAX
+    dxlSetVelo([ARM_S_MAX,BicepNew,ForearmNew])
 
 #******MOTOR DRIVE FUNCTIONS*******
 #this is where we will put hardware team functions
