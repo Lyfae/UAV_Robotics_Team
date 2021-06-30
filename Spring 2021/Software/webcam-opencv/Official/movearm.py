@@ -63,6 +63,7 @@ def set_location(xyzdict):
     thetaBaseN = calcBaseTheta(Xn,Yn)
 
     if BASE_L_DOWN <= thetaBaseN[1] <= BASE_L_UP :
+        #scroll test is an optimization variable that helps reduce the number of cycles.
         scrollTest = 1
         if pideal< FOREARM_LENGTH:
             scrollTest = -1
@@ -98,9 +99,6 @@ def set_location(xyzdict):
     else:
         print('BASE ANGLE = ' + str(thetaBaseN[1]))
         print("Base Can't Rotate That Far, Current Limits are:"+str(BASE_L_DOWN)+"-"+str(BASE_L_UP))
-
-
-
 
 
 #takes camera x/y diff and turn to coodinates
