@@ -6,7 +6,7 @@ import struct
 import time
 from _thread import *
 import threading
-import movearm as arm #Library for arm movement defined commands
+import movearmv2 as arm #Library for arm movement defined commands
 import tkinter as tk
 from datetime import datetime
 
@@ -34,6 +34,11 @@ def init_globes():
 home = {"x":170,
         "y":0,
         "z":170}
+
+#this is for the set home location
+home = {"x":170,
+        "y":170,
+        "z":190}
 
 #GLOBAL VARIABLES
 #this is for the main visual detection controller
