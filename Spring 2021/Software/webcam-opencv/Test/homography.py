@@ -64,13 +64,13 @@ def get_destination_points():
 
 def unwarp_frame(frame, corners, destination, H):
     h, w = frame.shape[:2]
-    # print("\nHomography Matrix:\n", H)
     unwarp = cv2.warpPerspective(frame, H, (w,h), flags=cv2.INTER_LINEAR)
     return unwarp
 
 corners = corner_detect(frame)
 destination, scale = get_destination_points()
 H, _= cv2.findHomography(np.float32(corners), np.float32(destination), cv2.RANSAC, 3.0)
+print("\nHomography Matrix:\n", H)
 
 while(True):
     # Grabbing frame from webcam
