@@ -6,7 +6,7 @@ import struct
 import time
 from _thread import *
 import threading
-import movearmv2 as arm #Library for arm movement defined commands
+# import movearmv2 as arm #Library for arm movement defined commands
 import tkinter as tk
 from datetime import datetime
 

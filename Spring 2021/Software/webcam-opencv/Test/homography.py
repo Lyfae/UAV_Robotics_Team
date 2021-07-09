@@ -64,7 +64,7 @@ def get_destination_points():
 
 def unwarp_frame(frame, corners, destination, H):
     h, w = frame.shape[:2]
-    print("\nHomography Matrix:\n", H)
+    # print("\nHomography Matrix:\n", H)
     unwarp = cv2.warpPerspective(frame, H, (w,h), flags=cv2.INTER_LINEAR)
     return unwarp
 
