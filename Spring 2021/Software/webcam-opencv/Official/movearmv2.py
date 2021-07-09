@@ -110,20 +110,17 @@ def set_location(xyzdict):
     Zn = xyzdict["Z"]
 
     #Calculate the ideal projection on the x-y plane
-    pideal = math.sqrt((Xn**2)+(Yn**2))
+    pideal = calcDist(Xn,Yn)
 
     #calculate the theta for the base
     thetaBaseN = calcBaseTheta(Xn,Yn)
 
     if BASE_L_DOWN <= thetaBaseN[1] <= BASE_L_UP :
-        #scroll test is an optimization variable that helps reduce the number of cycles.
-        scrollTest = 1
-        if pideal< FOREARM_LENGTH:
-            scrollTest = -1
-        thetaBicepN=calcBicepTheta(pideal+scrollTest,0)[0]
+        #guessBicepFromTriangles is an optimization variable that helps reduce the number of cycles.
+        thetaBicepN=guessBicepFromTriangles(Xn,Yn,Zn)
         thetaForearmN=calcForearmTheta(Zn,thetaBicepN)[0]
         tempPZ = getPZ(thetaBicepN,thetaForearmN)
-        #countcycles = 0
+        countcycles = 0
         while not(pideal-TOLERANCE)<tempPZ[0]<(pideal+TOLERANCE):
             if tempPZ[0]>(pideal+1):
                 thetaBicepN = thetaBicepN+R_INCREMENT
@@ -131,7 +128,7 @@ def set_location(xyzdict):
                 thetaBicepN = thetaBicepN-R_INCREMENT
             thetaForearmN=calcForearmTheta(Zn,thetaBicepN)[0]
             tempPZ = getPZ(thetaBicepN,thetaForearmN)
-            #countcycles += 1
+            countcycles += 1
 
         thetaBicepND = math.degrees(thetaBicepN)    
         thetaForearmND = math.degrees(thetaForearmN)
@@ -139,7 +136,7 @@ def set_location(xyzdict):
         print('BASE ANGLE = ' + str(thetaBaseND))
         print('BICEP ANGLE = ' + str(thetaBicepND))
         print('FOREARM ANGLE = ' + str(thetaForearmND))
-        # print('Number of Cycles For Answer = ' + str(countcycles))
+        print('Number of Cycles For Answer = ' + str(countcycles))
         # XYZtemp = getXYZ(thetaBaseN[0], thetaBicepN, thetaForearmN)
         # print('XYZ Value:'+str(XYZtemp))
 
@@ -147,7 +144,7 @@ def set_location(xyzdict):
             print("BICEP Can't Rotate That Far, Current Limits are:"+str(BICEP_L_DOWN)+"-"+str(BICEP_L_UP))
         elif not(FOREARM_L_DOWN<thetaForearmND<FOREARM_L_UP):
             print("FOREARM Can't Rotate That Far, Current Limits are:"+str(FOREARM_L_DOWN)+"-"+str(FOREARM_L_UP))
-        else:
+        #else:
             calcSpeedDiff(thetaBicepND, thetaForearmND)
             moveresults = motorRunWithInputs([thetaBaseND,thetaBicepND,thetaForearmND])
             print('Arm Move Successful = ' + str(moveresults))
@@ -231,7 +228,37 @@ def calcSpeedDiff(ThetaBi, ThetaFo):
         ForearmNew = (ThetaFo/ThetaBi)*ARM_S_MAX
     else:
         BicepNew = (ThetaBi/ThetaFo)*ARM_S_MAX
-    dxlSetVelo([ARM_S_MAX,BicepNew,ForearmNew])
+    #dxlSetVelo([ARM_S_MAX,BicepNew,ForearmNew])
+
+#This method gives a close approximation for the bicep angle
+# It takes the arguements of X, Y, Z
+# It returns the angle of the bicep
+def guessBicepFromTriangles(X,Y,Z):
+    Ztemp = Z - BASE_HEIGHT+ END_DEPTH + END_BIT
+    Ptemp = calcDist(X,Y)
+    refthetaCorrection = 1
+    if Ztemp<0:
+        refthetaCorrection = -1
+        Ztemp = abs(Ztemp)
+    aside = FOREARM_LENGTH+END_LENGTH
+    bside = BICEP_LENGTH
+    cside = calcDist(Ptemp,Ztemp)
+    thetaA = findATriangleAngle(aside,bside,cside)
+    thetaRef = math.atan(Ztemp/Ptemp)
+    return thetaA + refthetaCorrection*thetaRef
+    
+#This method calculates the projection of distance on the X Y plane given an X and Y
+# It takes the arguments of X and Y in mm
+# It Returns P
+def calcDist(X,Y):
+    return  math.sqrt((X**2)+(Y**2))
+
+#this method calculates the angle opposed to side A
+# It takes the arguments of A,B,C the sides of the triangle in mm
+# It returns the angle of the opposed to A
+def findATriangleAngle(A,B,C):
+    thetaA = math.acos((B**2+C**2-A**2)/(2*B*C))
+    return thetaA
 
 #******MOTOR DRIVE FUNCTIONS*******
 #this is where we will put hardware team functions
@@ -590,6 +617,9 @@ def check_position(motor_threshold):
         status_motor = 0
     return status_motor
 
+
+
+##Old Test Cases
 # portInitialization(portname, baudrate, baseID, bicepID, forearmID):
 # portInitialization('COM3', 1000000, 1, 3, 1)
 
