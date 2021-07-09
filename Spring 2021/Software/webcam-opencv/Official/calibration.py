@@ -43,7 +43,7 @@ def get_destination_points(scale, w_scr, h_scr):
     # print(f"\nDimensions of Original Image Mapped (Ratio):\nHeight: {h}\tWidth: {w}")
     return destination_corners
 
-def unwarp_frame(frame, corners, destination, H):
+def unwarp_frame(frame, H):
     h, w = frame.shape[:2]
     # print("\nHomography Matrix:\n", H)
     unwarp = cv2.warpPerspective(frame, H, (w,h), flags=cv2.INTER_LINEAR)

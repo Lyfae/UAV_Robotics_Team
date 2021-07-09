@@ -81,7 +81,7 @@ while(True):
     # H, _= cv2.findHomography(np.float32(corners), np.float32(destination), cv2.RANSAC, 3.0)    
     unwarp = unwarp_frame(frame, corners, destination, H)
 
-    print(f"Using Ratio: 1mm = {scale}px")
+    # print(f"Using Ratio: 1mm = {scale}px")
 
     # Show frame in seperate box
     cv2.imshow('original', frame)

@@ -1,5 +1,5 @@
 # Official script [officialv6.py]
-# WORKING VERSION WITH [serverv2.py]
+# WORKING VERSION WITH [serverv3.py]
 VERSION = 'officialv6.py'
 
 # Import Libraries
@@ -85,6 +85,10 @@ firstTimeTrackbar = True
 global isCalibrateBtnPressed
 isCalibrateBtnPressed = False
 isCalibrateStateReached = False
+firstTimeHomography = True
+
+global isSendPacketBtnPressed
+isSendPacketBtnPressed = False
 
 # Conversion Variables
 global MmtoPixelRatio
@@ -102,9 +106,12 @@ def saveFile(image, typeI):
 def tkinter():
     # TKINTER DEFAULT VARIABLES
     HEIGHT = 900
-    WIDTH = 360
+    WIDTH = 1500
     BGCOLOR = '#3BDCED'
     BTCOLOR = '#DCE8E9'
+    TITLECOLOR = '#E556E6'
+    SUBTITLECOLOR = '#914FA6'
+    BTNLABELCOLOR = '#9132a8'
 
     # INITIALIZATION
     # Creation of the program window (root)
@@ -130,17 +137,82 @@ def tkinter():
     target_icon = tk.PhotoImage(file='icons/rand-point.png')
     trackbar_icon = tk.PhotoImage(file='icons/trackbar.png')
     testrun_icon = tk.PhotoImage(file='icons/testrun.png')
+    pinpoint_icon = tk.PhotoImage(file='icons/pinpoint.png')
 
     # CANVAS
-    control_canv = tk.Canvas(main_canv, width=240, height=800, highlightthickness=0, bg=BGCOLOR)   
-    control_canv.place(x=60, y=60, anchor='nw') 
+    control_canv = tk.Canvas(main_canv, width=300, height=800, highlightthickness=0, bg=BGCOLOR)   
+    control_canv.place(x=60, y=60, anchor='nw')
+
+    contour_canv = tk.Canvas(main_canv, width=300, height=800, highlightthickness=0, bg=BGCOLOR)   
+    contour_canv.place(x=420, y=60, anchor='nw')
+
+    calibration_canv = tk.Canvas(main_canv, width=300, height=800, highlightthickness=0, bg=BGCOLOR)   
+    calibration_canv.place(x=780, y=60, anchor='nw')
+
+    testing_canv = tk.Canvas(main_canv, width=300, height=800, highlightthickness=0, bg=BGCOLOR)   
+    testing_canv.place(x=1140, y=60, anchor='nw')
 
     # LABEL
-    title = tk.Label(main_canv, text="LabelBot2000", font=('courier new',24,'bold italic'), justify='center', bg=BGCOLOR, fg='#E556E6')
-    title.place(relx=0.5,rely=0.085,anchor='center')
+    title = tk.Label(main_canv, text="LabelBot2000", font=('courier new',24,'bold italic'), justify='center', bg=BGCOLOR, fg=TITLECOLOR)
+    title.place(relx=0.5,rely=0.055,anchor='center')
 
-    subtitle = tk.Label(main_canv, text="Remote Control", font=('courier new',20,'bold'), justify='center', bg=BGCOLOR, fg='#914FA6')
-    subtitle.place(relx=0.5,rely=0.125,anchor='center')
+    subtitle = tk.Label(main_canv, text="Remote Control", font=('courier new',20,'bold'), justify='center', bg=BGCOLOR, fg=SUBTITLECOLOR)
+    subtitle.place(relx=0.5,rely=0.095,anchor='center')
+
+    control_title = tk.Label(control_canv, text="Control Center", font=('courier new',20,'bold'), justify='center', bg=BGCOLOR, fg=TITLECOLOR)
+    control_title.place(relx=0.5,rely=0.1,anchor='center')
+
+    control_subtitle = tk.Label(control_canv, text="Frame and Mask Display", font=('courier new',12,'bold'), justify='center', bg=BGCOLOR, fg=SUBTITLECOLOR)
+    control_subtitle.place(relx=0.5,rely=0.145,anchor='center')
+
+    contour_title = tk.Label(contour_canv, text="Contour Toggle", font=('courier new',20,'bold'), justify='center', bg=BGCOLOR, fg=TITLECOLOR)
+    contour_title.place(relx=0.5,rely=0.1,anchor='center')
+
+    contour_subtitle = tk.Label(contour_canv, text="Changing Detection Methods", font=('courier new',12,'bold'), justify='center', bg=BGCOLOR, fg=SUBTITLECOLOR)
+    contour_subtitle.place(relx=0.5,rely=0.145,anchor='center')
+
+    calibration_title = tk.Label(calibration_canv, text="Calibration", font=('courier new',20,'bold'), justify='center', bg=BGCOLOR, fg=TITLECOLOR)
+    calibration_title.place(relx=0.5,rely=0.1,anchor='center')
+
+    calibration_subtitle = tk.Label(calibration_canv, text="Situational Accomodation", font=('courier new',12,'bold'), justify='center', bg=BGCOLOR, fg=SUBTITLECOLOR)
+    calibration_subtitle.place(relx=0.5,rely=0.145,anchor='center')
+
+    testing_title = tk.Label(testing_canv, text="Testing", font=('courier new',20,'bold'), justify='center', bg=BGCOLOR, fg=TITLECOLOR)
+    testing_title.place(relx=0.5,rely=0.1,anchor='center')
+
+    testing_subtitle = tk.Label(testing_canv, text="Data & Results", font=('courier new',12,'bold'), justify='center', bg=BGCOLOR, fg=SUBTITLECOLOR)
+    testing_subtitle.place(relx=0.5,rely=0.145,anchor='center')
+
+    # BUTTON LABELS
+    frame_label = tk.Label(control_canv, text="Display Frame", font=('courier new',12,'bold'), justify='left', bg=BGCOLOR, fg=BTNLABELCOLOR)
+    frame_label.place(relx=0.35,rely=0.25,anchor='w')
+
+    rec_frame_label = tk.Label(control_canv, text="Screenshot Frame", font=('courier new',12,'bold'), justify='left', bg=BGCOLOR, fg=BTNLABELCOLOR)
+    rec_frame_label.place(relx=0.35,rely=0.4,anchor='w')
+
+    frame_label = tk.Label(control_canv, text="Display Mask", font=('courier new',12,'bold'), justify='left', bg=BGCOLOR, fg=BTNLABELCOLOR)
+    frame_label.place(relx=0.35,rely=0.55,anchor='w')
+
+    rec_frame_label = tk.Label(control_canv, text="Screenshot Mask", font=('courier new',12,'bold'), justify='left', bg=BGCOLOR, fg=BTNLABELCOLOR)
+    rec_frame_label.place(relx=0.35,rely=0.7,anchor='w')
+
+    mask_alg_label = tk.Label(contour_canv, text="Detection Algorithm\nAdaptive/HSV", font=('courier new',12,'bold'), justify='left', bg=BGCOLOR, fg=BTNLABELCOLOR)
+    mask_alg_label.place(relx=0.35,rely=0.25,anchor='w')
+
+    contour_label = tk.Label(contour_canv, text="Toggle Contour", font=('courier new',12,'bold'), justify='left', bg=BGCOLOR, fg=BTNLABELCOLOR)
+    contour_label.place(relx=0.35,rely=0.4,anchor='w')
+
+    calib_hsv_label = tk.Label(calibration_canv, text="HSV Trackbars", font=('courier new',12,'bold'), justify='left', bg=BGCOLOR, fg=BTNLABELCOLOR)
+    calib_hsv_label.place(relx=0.35,rely=0.25,anchor='w')
+
+    homography_label = tk.Label(calibration_canv, text="Correct Distortion\nHomography Alg.", font=('courier new',12,'bold'), justify='left', bg=BGCOLOR, fg=BTNLABELCOLOR)
+    homography_label.place(relx=0.35,rely=0.4,anchor='w')
+
+    rpt_label = tk.Label(testing_canv, text="Random Point Test", font=('courier new',12,'bold'), justify='left', bg=BGCOLOR, fg=BTNLABELCOLOR)
+    rpt_label.place(relx=0.35,rely=0.25,anchor='w')
+
+    send_packet_label = tk.Label(testing_canv, text="Send Test Packet", font=('courier new',12,'bold'), justify='left', bg=BGCOLOR, fg=BTNLABELCOLOR)
+    send_packet_label.place(relx=0.35,rely=0.4,anchor='w')
 
     # BUTTON FUNCTIONS
     def toggleFrame():
@@ -200,6 +272,16 @@ def tkinter():
         else:
             print("[WARNING]: Frame or Contours are not detected. Please open frame/contours before continuing.")
 
+    def sndPacket():
+        global isRandBtnPressed
+        global isFrameOpen
+        global isContourShowing
+        global isSendPacketBtnPressed
+        if isFrameOpen and isContourShowing:
+            isSendPacketBtnPressed = True
+        else:
+            print("[WARNING]: Frame or Contours are not detected. Please open frame/contours before continuing.")
+
     def calibrate():
         global isCalibrateBtnPressed
         global isFrameOpen
@@ -209,35 +291,43 @@ def tkinter():
         else:
             print("[WARNING]: Mask is OPEN!!! Please close mask before continuing.")
 
-    # BUTTONS
+    # BUTTON DECLARATIONS
+    # Control Buttons
     display_frame = tk.Button(control_canv, image = camera_icon, command=toggleFrame, justify='center', padx=10, pady=10, bg=BTCOLOR, fg='#9e8d8f')
-    display_frame.place(relx=0.3,rely=0.167,anchor='center')
+    display_frame.place(relx=0.2,rely=0.25,anchor='center')
     
     sc_frame = tk.Button(control_canv, image = record_icon, command=scFrame, justify='center', padx=10, pady=10, bg=BTCOLOR, fg='#9e8d8f')
-    sc_frame.place(relx=0.7,rely=0.167,anchor='center')
+    sc_frame.place(relx=0.2,rely=0.4,anchor='center')
 
     display_mask = tk.Button(control_canv, image = frame_icon, command=toggleMask, justify='center', padx=10, pady=10, bg=BTCOLOR, fg='#9e8d8f')
-    display_mask.place(relx=0.3,rely=0.333,anchor='center')
+    display_mask.place(relx=0.2,rely=0.55,anchor='center')
 
     sc_mask = tk.Button(control_canv, image = record_icon, command=scMask, justify='center', padx=10, pady=10, bg=BTCOLOR, fg='#9e8d8f')
-    sc_mask.place(relx=0.7,rely=0.333,anchor='center')
+    sc_mask.place(relx=0.2,rely=0.7,anchor='center')
 
-    change_maskalg = tk.Button(control_canv, image = mask_icon, command=toggleMaskAlg, justify='center', padx=10, pady=10, bg=BTCOLOR, fg='#9e8d8f')
-    change_maskalg.place(relx=0.3,rely=0.5,anchor='center')
+    # Contour Buttons
+    change_maskalg = tk.Button(contour_canv, image = mask_icon, command=toggleMaskAlg, justify='center', padx=10, pady=10, bg=BTCOLOR, fg='#9e8d8f')
+    change_maskalg.place(relx=0.2,rely=0.25,anchor='center')
 
-    display_contour = tk.Button(control_canv, image = contour_icon, command=toggleContour, justify='center', padx=10, pady=10, bg=BTCOLOR, fg='#9e8d8f')
-    display_contour.place(relx=0.7,rely=0.5,anchor='center')
+    display_contour = tk.Button(contour_canv, image = contour_icon, command=toggleContour, justify='center', padx=10, pady=10, bg=BTCOLOR, fg='#9e8d8f')
+    display_contour.place(relx=0.2,rely=0.4,anchor='center')
 
-    display_trackbar = tk.Button(control_canv, image = trackbar_icon, command=toggleTrackbar, justify='center', padx=10, pady=10, bg=BTCOLOR, fg='#9e8d8f')
-    display_trackbar.place(relx=0.3,rely=0.667,anchor='center')
+    # Calibration Buttons
+    display_trackbar = tk.Button(calibration_canv, image = trackbar_icon, command=toggleTrackbar, justify='center', padx=10, pady=10, bg=BTCOLOR, fg='#9e8d8f')
+    display_trackbar.place(relx=0.2,rely=0.25,anchor='center')
     
-    rand_point = tk.Button(control_canv, image = target_icon, command=rndPoint, justify='center', padx=10, pady=10, bg=BTCOLOR, fg='#9e8d8f')
-    rand_point.place(relx=0.5,rely=0.833,anchor='center')
+    calibratebtn = tk.Button(calibration_canv, image = target_icon, command=calibrate, justify='center', padx=10, pady=10, bg=BTCOLOR, fg='#9e8d8f')
+    calibratebtn.place(relx=0.2,rely=0.4,anchor='center')
 
-    calibrate = tk.Button(control_canv, image = testrun_icon, command=calibrate, justify='center', padx=10, pady=10, bg=BTCOLOR, fg='#9e8d8f')
-    calibrate.place(relx=0.7,rely=0.667,anchor='center')
+    # Testing Buttons
+    rand_point = tk.Button(testing_canv, image = testrun_icon, command=rndPoint, justify='center', padx=10, pady=10, bg=BTCOLOR, fg='#9e8d8f')
+    rand_point.place(relx=0.2,rely=0.25,anchor='center')
 
-    exitButton = tk.Button(control_canv, text="EXIT", font=('courier new',18,'bold'), command=exit, justify='center', padx=40, pady=10, bg='#D55C8D', fg='white')
+    send_packet = tk.Button(testing_canv, image = pinpoint_icon, command=sndPacket, justify='center', padx=10, pady=10, bg=BTCOLOR, fg='#9e8d8f')
+    send_packet.place(relx=0.2,rely=0.4,anchor='center')
+
+    # Exit Button
+    exitButton = tk.Button(main_canv, text="EXIT", font=('courier new',18,'bold'), command=exit, justify='center', padx=40, pady=10, bg='#D55C8D', fg='white')
     exitButton.place(relx=0.5,rely=.95,anchor='center')
 
     # LOOP
@@ -271,14 +361,15 @@ while(True):
     # Grabbing frame from webcam
     _, frame = webcam.read()
 
+    if not firstTimeHomography:
+        # Apply H-Matrix
+        frame = calibration.unwarp_frame(frame, H)
+
     # Apply Grayscale
     grayscale = cv2.cvtColor(frame, cv2.COLOR_BGR2GRAY)
 
     # Apply Gaussian Blur
     blur = cv2.GaussianBlur(grayscale, (9,9), 0)
-
-    # Apply H-Matrix
-    unwarp = calibration.unwarp_frame(frame, corners, destination, H)
 
     # Check if calibration button is pressed
     if isCalibrateBtnPressed:
@@ -287,12 +378,14 @@ while(True):
         else:
             cv2.destroyWindow('unskewed')
             isCalibrateStateReached = False
+            firstTimeHomography = False
         isCalibrateBtnPressed = False
 
     if isCalibrateStateReached: 
         corners = calibration.corner_detect(frame)
         destination = calibration.get_destination_points(MmtoPixelRatio, 0, 0)
         H, _= cv2.findHomography(np.float32(corners), np.float32(destination), cv2.RANSAC, 3.0)
+        unwarp = calibration.unwarp_frame(frame, H)
         cv2.imshow('unskewed', unwarp)
 
     # Toggle Taskbars
@@ -395,9 +488,11 @@ while(True):
                 cv2.putText(frame, "# of contours: {}".format(contnum), (450, 425), cv2.FONT_HERSHEY_SIMPLEX, 0.5, (255,255,255), 2)
                 cv2.putText(frame, "Currently Tracking ID {}".format(contdict[str(location)]['ID']), (450, 400), cv2.FONT_HERSHEY_SIMPLEX, 0.5, (255,255,255), 2)
             except:
-                print("No Contours Detected.")
+                # print("No Contours Detected.")
+                pass
         else:
-            print("No Contours Detected.")
+            # print("No Contours Detected.")
+            pass
 
     # Stop fps counter, calculate, and show fps
     stop = time.time()
@@ -436,8 +531,8 @@ while(True):
                 # data['Run Status'] = False
 
                 data['name'] = "Camera1"
-                data['dX'] = dX
-                data['dY'] = dY
+                data['dX'] = dX * MmtoPixelRatio # WILL SEND DIFFERENTIAL DATA IN MILLIMETERS!!!
+                data['dY'] = dY * MmtoPixelRatio # WILL SEND DIFFERENTIAL DATA IN MILLIMETERS!!!
                 data['command'] = 3
 
                 print("Random Point Test Data Recording Complete.")
@@ -473,6 +568,25 @@ while(True):
             rndpt_start = time.time()
 
             isTargetReached = False
+
+    # Send a single test packet to the server WITH REAL MEASUREMENTS (Send Packet Command)
+    if isSendPacketBtnPressed:
+        keys = ['name','dX', 'dY', 'command']
+        data = dict.fromkeys(keys)
+        
+        data['name'] = "Camera1"
+        data['dX'] = cX * MmtoPixelRatio # Converts pixels to mm (real life measurement)
+        data['dY'] = cY * MmtoPixelRatio # Converts pixels to mm (real life measurement)
+        data['command'] = 1
+
+        try:
+            s.sendall(bytes(json.dumps(data), encoding='utf-8'))
+            data_recv = s.recv(8162).decode('utf-8')
+            print(f"Recieved: {data_recv}")
+        except:
+            print("Server Not Found!")
+
+        isSendPacketBtnPressed = False
 
     # Toggle Frame
     if isFrameBtnPressed:
