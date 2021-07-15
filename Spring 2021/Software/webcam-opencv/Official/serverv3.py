@@ -6,7 +6,7 @@ import struct
 import time
 from _thread import *
 import threading
-# import movearmv2 as arm #Library for arm movement defined commands
+import movearmv2 as arm #Library for arm movement defined commands
 import tkinter as tk
 from datetime import datetime
 
@@ -142,7 +142,7 @@ def read_async(connIn, addr):
                     print("Home command, processing.")
                     if state == 1:
                         print("Dropping load.")
-                        arm.drop_load()
+                        #arm.drop_load()
                     print("Going home.")
                     arm.set_Location(home)
                     state = 3
@@ -150,18 +150,18 @@ def read_async(connIn, addr):
                     print("Move command, processing.")
                     if state == 3:
                         print("Grabbing load.")
-                        arm.grab_load()
+                        #arm.grab_load()
                     new_location=arm.translate_diff(cameraInput)
                     arm.set_location(new_location)
                     print("Going to differential location.")
                     state = 1
                 elif cameraInput["command"]==2:
                     print("Dropping load.")
-                    arm.drop_load()
+                    #arm.drop_load()
                     state=2 
                 elif cameraInput["command"]==4:
                     print("Grabbing load.")
-                    arm.grab_load()
+                    #arm.grab_load()
                     state=4
             armStatus["code"] = 2
             connIn.sendall(json.dumps(armStatus).encode('utf-8')) # encode the dict to JSON
