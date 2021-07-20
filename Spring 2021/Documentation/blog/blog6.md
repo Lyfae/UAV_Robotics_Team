@@ -27,27 +27,30 @@ Hello Everyone! Lyfae here! Back with another week of updates! We apologize for 
 
 *Software Updates* 
 
-* The software team is still working on *officialv5.py* and *officialv6.py* as it proves to be many bugs when interfacing with our official.py code with the server. Currently, the team is working on bug fixing them, so more information can be provided next week and we get more information regarding the progress of the fixes. 
+* The software team was able to fix all the bugs and created the code for calibration and arm movement. 
 
-* Inside of the software team, one group is responsible for handling the computer vision and contour detection while another group is responsible for the arm movement server. While the computer vision team is trying to debug the bugs in the previous versions of *official.py* the server team was able to come up with in-depth findings regarding trigonometric angles can be used to move the robot efficiently. As such, when the computer vision team finishes fixing all the bugs, they can integrate the trigonometric functions that the server team derived in order for the robotic arm to move exactly how we would want it to and perform the necessary tasks as efficiently as possible. 
+  * Calibraton: 
+    * To correct for any camera positioning errors, the software team has integrated an image-straightening homography. Homography, in projective geometry, is an isomorphism of       projective spaces, induced by an isomorphism of the vector spaces from which the projective spaces derive. Basically it maps images of points which lie on a world plane         from one camera view to another which in our case, allows for us to turn an uneven terrain, flat. 
+    * Integrated an anti-distortion feature using the ChArUco boards, which is a planar board where the markers are placed inside the white squares of a chessboard.
+    * Developed process for automatic calibration inside the GUI for both HSV and Camera properties.
+  * Gui
+    * Revamped Gui and expanded the design to allow for more room and keep everyything spacious. 
+    * Buttons on the remote control will now displayay texts when hovered over - will be towards the right of the button. 
+    * Functions of the arm will be split into 4 regions: Control, Contour Display, Calibration, and Testing. Curently, this is what we will have, more will be added in the             future.
+  * Testing / Bug Fixes
+    * Created a new testing method called "Send Packet" which will send a packet of data containing the real life measurement (in mm) of the location of the smallest contour on       the frame. 
+    * Fixed the bugs that previously caused the code to crash whenever it does not see a contour.
+    * Improved connections to the server, will not randomly drop packets anymore and retains a secure connection for the entire time both server & client are running                   simultaneously.
 
-* The `Tag Link` and the packet for *officialv5.py* and *officialv6.py* are still under development and bug testing so there won't be any files shared this update, but by next update we should have something that everyone can access. 
+  * Goals for Sofware: 
+    * Refine the remote control when new additons are impleted -> depends on what hardware wants
+    * Work with hardare to rid the bugs and create a smoother movement for the arm.
+    * Documentation of the entire Summer 2021 progress. 
 
 *Helpful Links*
 
 * If you would like to visit our GitHub page . . . click [Here](https://github.com/Lyfae/UAV_Robotics_Team)
 
-* If you would like to see some of our test images, you can follow this path here:
-`UAV_Robotics_Team > Spring 2021 > Software > webcam-opencv > Official > data > images `.
-
-
-
- *Goals* 
- * Hardware:
-    * The goal for the hardware team is to take their big chunk of code that controlls the robotic arm's movement and reorganize it into functions. 
-    *
-* Software: 
-    * The goal for the software team is work on fixing the bugs because there is a lot of them. 
 
 This is what I have for this week! See you next time!
 
