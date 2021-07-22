@@ -103,6 +103,14 @@ def saveFile(image, typeI):
     filename = typeI + "_" + datetime.datetime.now().strftime("%m.%d.%Y_%I.%M.%S%p")
     cv2.imwrite(path + filename + '.jpg', image)
 
+def findArucoMarkers(img, markerSize = 4, totalMarkers=50, draw=True):
+    gray = cv2.cvtColor(img, cv2.COLOR_BGR2GRAY)
+    key = getattr(cv2.aruco, f'DICT_{markerSize}X{markerSize}_{totalMarkers}')
+    arucoDict = cv2.aruco.Dictionary_get(key)
+    arucoParam = cv2.aruco.DetectorParameters_create()
+    corners, ids, rejected = cv2.aruco.detectMarkers(gray, arucoDict, parameters = arucoParam)
+    return corners, ids
+
 def tkinter():
     # TKINTER DEFAULT VARIABLES
     HEIGHT = 900
@@ -493,6 +501,37 @@ while(True):
                 cv2.putText(frame, "Currently Tracking ID {}".format(contdict[str(location)]['ID']), (450, 400), cv2.FONT_HERSHEY_SIMPLEX, 0.5, (255,255,255), 2)
             except:
                 # print("No Contours Detected.")
+                pass
+
+            # find ArUco markers
+            corners, ids =  findArucoMarkers(frame)
+
+            try:
+                # loop through all corners 
+                for (markerCorner, markerID) in zip(corners, ids):
+                    corners = markerCorner.reshape((4,2))
+                    topLeft, topRight, bottomRight, bottomLeft = corners
+
+                    # convert each of the (x, y)-coordinate pairs to integers
+                    topRight = (int(topRight[0]), int(topRight[1]))
+                    bottomRight = (int(bottomRight[0]), int(bottomRight[1]))
+                    bottomLeft = (int(bottomLeft[0]), int(bottomLeft[1]))
+                    topLeft = (int(topLeft[0]), int(topLeft[1]))
+
+                    # draw the bounding box of the ArUCo detection
+                    cv2.line(frame, topLeft, topRight, (0, 255, 0), 2)
+                    cv2.line(frame, topRight, bottomRight, (0, 255, 0), 2)
+                    cv2.line(frame, bottomRight, bottomLeft, (0, 255, 0), 2)
+                    cv2.line(frame, bottomLeft, topLeft, (0, 255, 0), 2)
+                    # compute and draw the center (x, y)-coordinates of the
+                    # ArUco marker
+                    cX = int((topLeft[0] + bottomRight[0]) / 2.0)
+                    cY = int((topLeft[1] + bottomRight[1]) / 2.0)
+                    cv2.circle(frame, (cX, cY), 4, (0, 0, 255), -1)
+                    # draw the ArUco marker ID on the frame
+                    cv2.putText(frame, f"({cX},{cY})", (topLeft[0], topLeft[1] - 15), cv2.FONT_HERSHEY_SIMPLEX, 0.5, (0, 255, 0), 2)
+            except:
+                # happens if the code doesn't find a aruco code (do nothing)
                 pass
         else:
             # print("No Contours Detected.")
