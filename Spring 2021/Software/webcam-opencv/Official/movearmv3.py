@@ -35,6 +35,9 @@ ArmIDs = {"base":0,
          "bicep":1,
          "forearm":2}
 ARM_S_MAX = 30
+ARM_SAFE_HEIGHT = 200
+ARM_HEIGHT_STEPS = 40
+
 #Windows Params
 #ARM_BAUD = 1000000  
 #ARM_PORT = 'COM3'
@@ -120,7 +123,7 @@ def set_location(xyzdict):
         thetaBicepN=guessBicepFromTriangles(Xn,Yn,Zn)
         thetaForearmN=calcForearmTheta(Zn,thetaBicepN)[0]
         tempPZ = getPZ(thetaBicepN,thetaForearmN)
-        countcycles = 0
+        #countcycles = 0
         while not(pideal-TOLERANCE)<tempPZ[0]<(pideal+TOLERANCE):
             if tempPZ[0]>(pideal+1):
                 thetaBicepN = thetaBicepN+R_INCREMENT
@@ -128,15 +131,15 @@ def set_location(xyzdict):
                 thetaBicepN = thetaBicepN-R_INCREMENT
             thetaForearmN=calcForearmTheta(Zn,thetaBicepN)[0]
             tempPZ = getPZ(thetaBicepN,thetaForearmN)
-            countcycles += 1
+            #countcycles += 1
 
         thetaBicepND = math.degrees(thetaBicepN)    
         thetaForearmND = math.degrees(thetaForearmN)
         thetaBaseND = thetaBaseN[1]
-        print('BASE ANGLE = ' + str(thetaBaseND))
-        print('BICEP ANGLE = ' + str(thetaBicepND))
-        print('FOREARM ANGLE = ' + str(thetaForearmND))
-        print('Number of Cycles For Answer = ' + str(countcycles))
+        # print('BASE ANGLE = ' + str(thetaBaseND))
+        # print('BICEP ANGLE = ' + str(thetaBicepND))
+        # print('FOREARM ANGLE = ' + str(thetaForearmND))
+        # print('Number of Cycles For Answer = ' + str(countcycles))
         # XYZtemp = getXYZ(thetaBaseN[0], thetaBicepN, thetaForearmN)
         # print('XYZ Value:'+str(XYZtemp))
 
@@ -147,10 +150,49 @@ def set_location(xyzdict):
         else:
             calcSpeedDiff(thetaBicepND, thetaForearmND)
             moveresults = motorRunWithInputs([thetaBaseND,thetaBicepND,thetaForearmND])
-            print('Arm Move Successful = ' + str(moveresults))
+            #print('Arm Move Successful = ' + str(moveresults))
     else:
         print('BASE ANGLE = ' + str(thetaBaseN[1]))
         print("Base Can't Rotate That Far, Current Limits are:"+str(BASE_L_DOWN)+"-"+str(BASE_L_UP))
+
+#takes coordinates and maps motion so that it moves to a safe height first, before lateral movement.
+#Takes dictionary of "X", "Y", "Z"
+#Returns nothing
+# 0-base,1-bicep,2-forearm
+def set_location_mapped(xyzdict):
+
+    #store relevant data
+    XYZold = get_XYZ_location()
+    Xn = xyzdict["X"]
+    Yn = xyzdict["Y"]
+    Zn = xyzdict["Z"]
+
+    #move to safe height
+    xyzdict["X"] = XYZold[0]
+    xyzdict["Y"] = XYZold[1]
+
+    ztemp = XYZold[2] + ARM_HEIGHT_STEPS/2
+    while ztemp < ARM_SAFE_HEIGHT:
+        xyzdict["Z"]= ztemp
+        set_location(xyzdict)
+        ztemp= ztemp+ARM_HEIGHT_STEPS
+    xyzdict["Z"] = ARM_SAFE_HEIGHT
+    set_location(xyzdict)
+
+    #move over target
+    xyzdict["X"] = Xn
+    xyzdict["Y"] = Yn
+    set_location(xyzdict)
+
+    #contact target
+    ztemp = ARM_SAFE_HEIGHT - ARM_HEIGHT_STEPS/2
+    while ztemp > Zn:
+        xyzdict["Z"]= ztemp
+        set_location(xyzdict)
+        ztemp= ztemp-ARM_HEIGHT_STEPS
+    xyzdict["Z"] = Zn
+    set_location(xyzdict)
+
 
 #takes camera x/y diff and turn to coodinates
 #accepts a dictionary of X, Y, Z values 
@@ -229,12 +271,12 @@ def calcSpeedDiff(ThetaBi, ThetaFo):
     BicepNew = ARM_S_MAX
     ForearmNew = ARM_S_MAX
     if ThetaBi > ThetaFo:
-        BicepNew = int((ThetaFo/ThetaBi)*ARM_S_MAX)
+        ForearmNew = int((ThetaFo/ThetaBi)*ARM_S_MAX)
     else:
-        ForearmNew = int((ThetaBi/ThetaFo)*ARM_S_MAX)
-    print("Arm Speeds:"+str(ARM_S_MAX)+","+str(BicepNew)+","+str(ForearmNew))
-    print([ARM_S_MAX,BicepNew,ForearmNew])
-    #dxlSetVelo([ARM_S_MAX,BicepNew,ForearmNew])
+        BicepNew = int((ThetaBi/ThetaFo)*ARM_S_MAX)
+    #print("Arm Speeds:"+str(ARM_S_MAX)+","+str(BicepNew)+","+str(ForearmNew))
+    #print([ARM_S_MAX,BicepNew,ForearmNew])
+    dxlSetVelo([ARM_S_MAX,BicepNew,ForearmNew])
 
 #This method gives a close approximation for the bicep angle
 # It takes the arguements of X, Y, Z
@@ -487,8 +529,8 @@ def motorRunWithInputs(angle_inputs):
                 dxl_goal_angle[device_index], 0, 360, 0, 4095)
             device_index += 1
 
-        print("The position inputs for the base, bicep, and forearm are: ", dxl_goal_inputs)
-        print("The degree inputs for the base, bicep, and forearm are: ", dxl_goal_angle)
+        #print("The position inputs for the base, bicep, and forearm are: ", dxl_goal_inputs)
+        #print("The degree inputs for the base, bicep, and forearm are: ", dxl_goal_angle)
 
         # Base Motor Procedure
         # ------------------------------------------------------------------------------------------------------------------------------------------------------
@@ -549,11 +591,11 @@ def motorRunWithInputs(angle_inputs):
         # ------------------------------------------------------------------------------------------------------------------------------------------------------
 
         #Print out details of each motor
-        device_index = 0
+        """device_index = 0
         while device_index <= 2:
             print("For Dynamixel [%03d], Status:%03d, GoalPos:%03d  GoalDeg:%03d  PresPos:%03d  PresDeg:%03d " %
                 (DXL_ID[device_index], index[device_index], dxl_goal_inputs[device_index], dxl_goal_angle[device_index], dxl_present_position[device_index], dxl_present_angle[device_index]))
-            device_index += 1
+            device_index += 1"""
 
         #Data to be sent out
         # ------------------------------------------------------------------------------------------------------------------------------------------------------
