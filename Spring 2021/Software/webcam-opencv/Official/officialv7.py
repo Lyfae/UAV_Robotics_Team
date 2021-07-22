@@ -359,9 +359,6 @@ try:
 except:
     print("Did not detect frame on opening, trying again")
     time.sleep(1)
-    corners = calibration.corner_detect(frame)
-    destination = calibration.get_destination_points(MmtoPixelRatio, 0, 0)
-    H, _= cv2.findHomography(np.float32(corners), np.float32(destination), cv2.RANSAC, 3.0)
 
 while(True):
     start = time.time()
