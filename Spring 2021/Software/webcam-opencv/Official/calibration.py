@@ -29,8 +29,8 @@ def corner_detect(frame):
     return corners
 
 def get_destination_points(scale, w_scr, h_scr):
-    w = 215 * scale + w_scr
-    h = 280 * scale + h_scr
+    w = 432 * scale + w_scr
+    h = 230 * scale + h_scr
 
     destination_corners = np.float32([(w_scr, h_scr + h - 1), (w_scr,h_scr), (w_scr + w-1, h_scr), (w_scr + w - 1, h_scr + h - 1)])
 
