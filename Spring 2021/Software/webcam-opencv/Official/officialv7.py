@@ -115,6 +115,15 @@ def findArucoMarkers(img, markerSize, totalMarkers, draw=True):
     corners, ids, rejected = cv2.aruco.detectMarkers(gray, arucoDict, parameters = arucoParam)
     return corners, ids
 
+def sendToServerAsync(connOut, data, cX, cY, QcX, QcY):
+    connOut.sendall(bytes(json.dumps(data), encoding='utf-8'))
+    data_recv = connOut.recv(8162).decode('utf-8')
+    print(f"cX = {cX}, cY = {cY}")
+    print(f"QcX = {QcX}, QcY = {QcY}")
+    print(f"Sent: {data}")
+    print(f"Recieved: {data_recv}")
+    print("Packet Successfully Sent + Recoeved!")
+
 def tkinter():
     # TKINTER DEFAULT VARIABLES
     HEIGHT = 900
@@ -672,12 +681,8 @@ while(True):
         data['command'] = 1
 
         try:
-            s.sendall(bytes(json.dumps(data), encoding='utf-8'))
-            data_recv = s.recv(8162).decode('utf-8')
-            print(f"cX = {cX}, cY = {cY}")
-            print(f"QcX = {QcX}, QcY = {QcY}")
-            print(f"Sent: {data}")
-            print(f"Recieved: {data_recv}")
+            read_thread = threading.Thread(target = sendToServerAsync, args = (s, data, cX, cY, QcX, QcY))
+            read_thread.start()    
         except:
             print("Server Not Found!")
 
