@@ -422,20 +422,20 @@ while(True):
                 # draw the ArUco marker ID on the frame
                 cv2.putText(frame, str(markerID), (topLeft[0], topLeft[1] - 15), cv2.FONT_HERSHEY_SIMPLEX, 0.5, (0, 255, 0), 2)
                 # put coordinates in list
-                coordinates[makerID] = [cX, cY]
+                coordinates[markerID] = [cX, cY]
         except:
             # happens if the code doesn't find a aruco code (do nothing)
             pass
 
         corners = coordinates
-
+        ref = frame.copy()
         for i, c in enumerate(corners):
-        x, y = c
-        cv2.circle(ref, (x,y), 3, 255, -1)
-        char = chr(65 + i)
-        # print(char, ':', c)
-        cv2.putText(frame, char, tuple(c), cv2.FONT_HERSHEY_SIMPLEX, 1, (0,0,255), 2, cv2.LINE_AA)
-        cv2.circle(frame, tuple(c), 5, (255,0,0), -1)
+            x, y = c
+            cv2.circle(ref, (x,y), 3, 255, -1)
+            char = chr(65 + i)
+            # print(char, ':', c)
+            cv2.putText(frame, char, tuple(c), cv2.FONT_HERSHEY_SIMPLEX, 1, (0,0,255), 2, cv2.LINE_AA)
+            cv2.circle(frame, tuple(c), 5, (255,0,0), -1)
 
         destination = calibration.get_destination_points(MmtoPixelRatio, 0, 0)
         H, _= cv2.findHomography(np.float32(corners), np.float32(destination), cv2.RANSAC, 3.0)
