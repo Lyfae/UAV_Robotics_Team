@@ -92,7 +92,7 @@ isSendPacketBtnPressed = False
 
 # Conversion Variables
 global MmtoPixelRatio
-MmtoPixelRatio = 1.7
+MmtoPixelRatio = 1
 global H
 
 def nothing(f):
@@ -438,7 +438,7 @@ while(True):
             cv2.circle(frame, tuple(c), 5, (255,0,0), -1)
 
         try:
-            destination = calibration.get_destination_points(MmtoPixelRatio, 0, 0)
+            destination = calibration.get_destination_points(MmtoPixelRatio, 38, 38)
             H, _= cv2.findHomography(np.float32(coordinates), np.float32(destination), cv2.RANSAC, 3.0)
             unwarp = calibration.unwarp_frame(frame, H)
             cv2.imshow('unskewed', unwarp)
