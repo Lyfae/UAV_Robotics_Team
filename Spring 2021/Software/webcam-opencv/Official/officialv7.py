@@ -230,7 +230,7 @@ def tkinter():
     homography_label = tk.Label(calibration_canv, text="Correct Distortion\nHomography Alg.", font=('courier new',12,'bold'), justify='left', bg=BGCOLOR, fg=BTNLABELCOLOR)
     homography_label.place(relx=0.35,rely=0.4,anchor='w')
 
-    rpt_label = tk.Label(testing_canv, text="Random Point Test", font=('courier new',12,'bold'), justify='left', bg=BGCOLOR, fg=BTNLABELCOLOR)
+    rpt_label = tk.Label(testing_canv, text="Home Arm", font=('courier new',12,'bold'), justify='left', bg=BGCOLOR, fg=BTNLABELCOLOR)
     rpt_label.place(relx=0.35,rely=0.25,anchor='w')
 
     send_packet_label = tk.Label(testing_canv, text="Send Test Packet", font=('courier new',12,'bold'), justify='left', bg=BGCOLOR, fg=BTNLABELCOLOR)
@@ -607,7 +607,23 @@ while(True):
 
     # Begin Random Point Test
     if isRandBtnPressed:
-        # keys = ['date', 'time', 'version', 'pX', 'pY', 'cX', 'cY', 'dX', 'dY', 'Time Elapsed', 'Run Status']
+        
+        keys = ['name','dX', 'dY', 'command']
+        data = dict.fromkeys(keys)
+        
+        data['name'] = "Camera1"
+        data['dX'] = 0
+        data['dY'] = 0
+        data['command'] = 3
+
+        try:
+            read_thread = threading.Thread(target = sendToServerAsync, args = (s, data, 0, 0, 0, 0))
+            read_thread.start()    
+        except:
+            print("Server Not Found!")
+
+        isRandBtnPressed = False
+        '''
         keys = ['name','dX', 'dY', 'command']
         data = dict.fromkeys(keys)
         
@@ -668,8 +684,9 @@ while(True):
                 print("Server Not Found!")
 
             rndpt_start = time.time()
-
+            
             isTargetReached = False
+            '''
 
     # Send a single test packet to the server WITH REAL MEASUREMENTS (Send Packet Command)
     if isSendPacketBtnPressed:
