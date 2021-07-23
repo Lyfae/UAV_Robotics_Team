@@ -667,9 +667,9 @@ while(True):
         data = dict.fromkeys(keys)
         
         data['name'] = "Camera1"
-        data['dX'] = int(cX * MmtoPixelRatio) # Converts pixels to mm (real life measurement)
-        data['dY'] = int(cY * MmtoPixelRatio) # Converts pixels to mm (real life measurement)
-        data['command'] = 5
+        data['dX'] = int((QcX - cX) * MmtoPixelRatio) # Converts pixels to mm (real life measurement)
+        data['dY'] = int((QcY - cY) * MmtoPixelRatio) # Converts pixels to mm (real life measurement)
+        data['command'] = 1
 
         try:
             s.sendall(bytes(json.dumps(data), encoding='utf-8'))
