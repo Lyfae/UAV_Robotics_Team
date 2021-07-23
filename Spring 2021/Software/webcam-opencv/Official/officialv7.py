@@ -678,7 +678,7 @@ while(True):
         
         data['name'] = "Camera1"
         data['dX'] = int(((cX - QcX) * MmtoPixelRatio)/1.6) # Converts pixels to mm (real life measurement)
-        data['dY'] = int(((QcY - cY) * MmtoPixelRatio)/1.2) # Converts pixels to mm (real life measurement)
+        data['dY'] = int(((QcY - cY) * MmtoPixelRatio)/1.5) # Converts pixels to mm (real life measurement)
         data['command'] = 1
 
         try:
