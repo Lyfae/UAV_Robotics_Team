@@ -116,6 +116,7 @@ def findArucoMarkers(img, markerSize, totalMarkers, draw=True):
     return corners, ids
 
 def sendToServerAsync(connOut, data, cX, cY, QcX, QcY):
+    print("Sending Packet...")
     connOut.sendall(bytes(json.dumps(data), encoding='utf-8'))
     data_recv = connOut.recv(8162).decode('utf-8')
     print(f"cX = {cX}, cY = {cY}")
