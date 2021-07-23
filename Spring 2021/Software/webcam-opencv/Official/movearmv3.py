@@ -143,9 +143,9 @@ def set_location(xyzdict):
         thetaBicepND = math.degrees(thetaBicepN)
         thetaForearmND = math.degrees(thetaForearmN)
         thetaBaseND = thetaBaseN[1]
-        #print('BASE ANGLE = ' + str(thetaBaseND))
-        #print('BICEP ANGLE = ' + str(thetaBicepND))
-        #print('FOREARM ANGLE = ' + str(thetaForearmND))
+        print('BASE ANGLE = ' + str(thetaBaseND))
+        print('BICEP ANGLE = ' + str(thetaBicepND))
+        print('FOREARM ANGLE = ' + str(thetaForearmND))
         #print('Number of Cycles For Answer = ' + str(countcycles))
         # XYZtemp = getXYZ(thetaBaseN[0], thetaBicepN, thetaForearmN)
         # print('XYZ Value:'+str(XYZtemp))
@@ -173,7 +173,9 @@ def set_location_mapped(xyzdict):
     Xn = xyzdict["X"]
     Yn = xyzdict["Y"]
     Zn = xyzdict["Z"]
-
+    print('Attempted X = ' + str(Xn))
+    print('Attempted Y = ' + str(Yn))
+    print('Attempted Z = ' + str(Zn))
     #move to safe height
     xyzdict["X"] = XYZold[0]
     xyzdict["Y"] = XYZold[1]

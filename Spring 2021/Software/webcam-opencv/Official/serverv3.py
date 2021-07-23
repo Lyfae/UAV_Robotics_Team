@@ -165,6 +165,9 @@ def read_async(connIn, addr):
                     state=4
                 elif cameraInput["command"]==5:
                     print("Test Packet Move.")
+                    cameraInput["Z"] = 200
+                    cameraInput["X"] = cameraInput["dX"]
+                    cameraInput["Y"] = cameraInput["dY"]
                     arm.set_location_mapped(cameraInput)
             armStatus["code"] = 2
             connIn.sendall(json.dumps(armStatus).encode('utf-8')) # encode the dict to JSON
