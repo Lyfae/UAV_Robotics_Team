@@ -35,8 +35,10 @@ ArmIDs = {"base":0,
          "bicep":1,
          "forearm":2}
 ARM_S_MAX = 30
-ARM_SAFE_HEIGHT = 220
+ARM_SAFE_HEIGHT = 90
 ARM_HEIGHT_STEPS = 40
+
+PICKUP_HEIGHT = 64
 
 #Windows Params
 #ARM_BAUD = 1000000
@@ -58,7 +60,7 @@ BASE_L_UP= 175
 BASE_L_DOWN = 5
 BICEP_L_DOWN= 45
 BICEP_L_UP = 125
-FOREARM_L_UP = 45
+FOREARM_L_UP = 52
 FOREARM_L_DOWN = -15
 
 #Arm offset angles for given motor positions
@@ -106,7 +108,7 @@ def get_XYZ_location():
     # 0-base,1-bicep,2-forearm
     angles = getAnglesCorrected()
     #angles = [90,90,90]
-    results = getXYZ(math.radians(angles[0]),math.radians(angles[1]), math.radians(angles[2]-FOREARM_INST_DIR))
+    results = getXYZ(math.radians(angles[0]),math.radians(angles[1]), math.radians(angles[2]))
     return results
 
 #takes coordinates and sends angles to motors
@@ -207,13 +209,14 @@ def set_location_mapped(xyzdict):
 #accepts a dictionary of X, Y, Z values
 #Returns a dictionary with new coordinates in overall system
 def translate_diff(xyzdiffdict):
-    Xd = xyzdiffdict["X"]
-    Yd = xyzdiffdict["Y"]
-    Zd = xyzdiffdict["Z"]
+    Xd = xyzdiffdict["dX"]
+    Yd = xyzdiffdict["dY"]
+    Zd = xyzdiffdict["dZ"]
     curLocation = get_XYZ_location()
     newdict = {"X":curLocation[0]+Xd,
             "Y":curLocation[1]+Yd,
-            "Z":curLocation[2]+Zd}
+            "Z":ARM_SAFE_HEIGHT}
+    return newdict
 
 #predefined locations for z down
 #TO DO
@@ -223,7 +226,12 @@ def drop_load():
 #predefined locations for x-y-z up
 #TO DO
 def grab_load():
-    print("grab_load not implemented")
+    curLocation = get_XYZ_location()
+    newdict = {"X":curLocation[0],
+            "Y":curLocation[1],
+            "Z":PICKUP_HEIGHT}
+    set_location(newdict)
+    print("Picked Up Target")
 
 #this method returns P and Z
 # where P is the 'roe' the projection of the distance on the x-y plane

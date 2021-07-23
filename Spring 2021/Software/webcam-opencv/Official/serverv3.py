@@ -2,19 +2,19 @@
 
 import socket
 import json
-import struct
-import time
+import sys
 from _thread import *
 import threading
 import movearmv3 as arm #Library for arm movement defined commands
 import tkinter as tk
-from datetime import datetime
 
-HOST = '192.168.0.126'  # Standard loopback interface address (localhost)
+
+HOST = '127.0.0.1'  # Standard loopback interface address (localhost)
 PORT = 8009        # Port to listen on (non-privileged ports are > 1023)
 BUFFER_SIZE = 8162 
 TIME_OUT = 5
 SENSOR_COUNT=1
+ARM_TIME_OUT = 20
 
 def init_globes():
     global armStatus
@@ -31,14 +31,9 @@ def init_globes():
     state = 3
 
 #this is for the set home location
-home = {"x":170,
-        "y":0,
-        "z":170}
-
-#this is for the set home location
-home = {"x":170,
-        "y":170,
-        "z":190}
+HOME = {"X":190,
+        "Y":0,
+        "Z":100}
 
 #GLOBAL VARIABLES
 #this is for the main visual detection controller
@@ -110,7 +105,9 @@ def tkinter(conn, addr):
 def load_data(data_recv):
     #Validate data
     global newData
-    if(armStatus['code']==2):
+    global armStatus
+    global cameraInput
+    if(armStatus["code"]==2):
         if(data_recv["name"]==cameraInput["name"]):
             cameraInput["command"] = data_recv["command"]
             cameraInput["dX"] = data_recv["dX"]
@@ -118,64 +115,70 @@ def load_data(data_recv):
             #Set New Data Flag
             newData=True
     else:
-        print(f"Data NOT loaded, ignoring")
+        print(f"Data NOT loaded, ignoring arm status " + str(armStatus["code"]))
     
-    
+def stateMachineWorker(inputDict):
+    global state
+    global newData
+    print("Data loaded, initiating command.")
+    newData = False
+    if inputDict["command"]==3:
+        print("Home command, processing.")
+        if state == 1:
+            print("Dropping load.")
+            #arm.drop_load()
+        print("Going home.")
+        arm.set_location_mapped(HOME)
+        state = 3
+    elif inputDict["command"]==1:
+        print("Move command, processing.")
+        '''if state == 3:
+            print("Grabbing load.")
+            arm.grab_load()'''
+        print("Going to differential location.")
+        new_location=arm.translate_diff(inputDict)
+        arm.set_location_mapped(new_location)
+        arm.grab_load()
+        state = 1
+    elif inputDict["command"]==2:
+        print("Dropping load.")
+        #arm.drop_load()
+        state=2 
+    elif inputDict["command"]==4:
+        print("Grabbing load.")
+        #arm.grab_load()
+        state=4
+    elif inputDict["command"]==5:
+        print("Test Packet Move.")
+        inputDict["Z"] = int(190)
+        inputDict["X"] = int(inputDict["dX"])
+        inputDict["Y"] = int(inputDict["dY"])
+        arm.set_location_mapped(inputDict)
+        state = 5    
 
 def read_async(connIn, addr): 
     print(f"[NEW CONNECTION] {addr} connected to r-w-a thread.")
     global armStatus
     global cameraInput
     global newData
-    global state
     while True:
         try:
             data_recv = connIn.recv(BUFFER_SIZE).decode('utf-8')
             data_recv = json.loads(data_recv)
             print(f"Recieved: {data_recv}, attempting load...")
             load_data(data_recv)
+            print(f"Recieved: {cameraInput}, attempting load...")
+            arm.do_init()
             if newData:
                 armStatus["code"] = 1
-                print("Data loaded, initiating command.")
-                newData = False
-                if cameraInput["command"]==3:
-                    print("Home command, processing.")
-                    if state == 1:
-                        print("Dropping load.")
-                        #arm.drop_load()
-                    print("Going home.")
-                    arm.set_location_mapped(home)
-                    state = 3
-                elif cameraInput["command"]==1:
-                    print("Move command, processing.")
-                    if state == 3:
-                        print("Grabbing load.")
-                        #arm.grab_load()
-                    new_location=arm.translate_diff(cameraInput)
-                    arm.set_location_mapped(new_location)
-                    print("Going to differential location.")
-                    state = 1
-                elif cameraInput["command"]==2:
-                    print("Dropping load.")
-                    #arm.drop_load()
-                    state=2 
-                elif cameraInput["command"]==4:
-                    print("Grabbing load.")
-                    #arm.grab_load()
-                    state=4
-                elif cameraInput["command"]==5:
-                    print("Test Packet Move.")
-                    cameraInput["Z"] = 200
-                    cameraInput["X"] = cameraInput["dX"]
-                    cameraInput["Y"] = cameraInput["dY"]
-                    arm.set_location_mapped(cameraInput)
+                worker_thread = threading.Thread(target = stateMachineWorker, args = cameraInput)
+                worker_thread.start()
+                worker_thread.join(timeout=ARM_TIME_OUT)
             armStatus["code"] = 2
             connIn.sendall(json.dumps(armStatus).encode('utf-8')) # encode the dict to JSON
         except:
             armStatus["code"] = 3
             connIn.sendall(json.dumps(armStatus).encode('utf-8')) # encode the dict to JSON
-            # print(f"Packet receive attempt to {addr} failed. Closing connection.")
-            # connIn.close()
             break
             
 s = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
@@ -194,5 +197,11 @@ while True:
         # Begin tkinter thread
         # thread_tk = threading.Thread(target = tkinter, args = (conn, addr))
         # thread_tk.start()
+    except KeyboardInterrupt:
+        if s:
+            print(f"Closing Socket")
+            s.close() 
+        print(f"Exiting")
+        sys.exit(1)
     except:
         pass
