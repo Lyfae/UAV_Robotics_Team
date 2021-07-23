@@ -422,7 +422,7 @@ while(True):
                 # draw the ArUco marker ID on the frame
                 cv2.putText(frame, str(markerID), (topLeft[0], topLeft[1] - 15), cv2.FONT_HERSHEY_SIMPLEX, 0.5, (0, 255, 0), 2)
                 # put coordinates in list
-                coordinates[markerID] = [cX, cY]
+                # coordinates[markerID] = [cX, cY]
         except:
             # happens if the code doesn't find a aruco code (do nothing)
             print("No codes found!")
