@@ -122,7 +122,7 @@ def sendToServerAsync(connOut, data, cX, cY, QcX, QcY):
     print(f"QcX = {QcX}, QcY = {QcY}")
     print(f"Sent: {data}")
     print(f"Recieved: {data_recv}")
-    print("Packet Successfully Sent + Recoeved!")
+    print("Packet Successfully Sent + Recovered!")
 
 def tkinter():
     # TKINTER DEFAULT VARIABLES
@@ -676,8 +676,8 @@ while(True):
         data = dict.fromkeys(keys)
         
         data['name'] = "Camera1"
-        data['dX'] = int((cX - QcX) * MmtoPixelRatio) # Converts pixels to mm (real life measurement)
-        data['dY'] = int((QcY - cY) * MmtoPixelRatio) # Converts pixels to mm (real life measurement)
+        data['dX'] = int(((cX - QcX) * MmtoPixelRatio)/2) # Converts pixels to mm (real life measurement)
+        data['dY'] = int(((QcY - cY) * MmtoPixelRatio)/2) # Converts pixels to mm (real life measurement)
         data['command'] = 1
 
         try:
