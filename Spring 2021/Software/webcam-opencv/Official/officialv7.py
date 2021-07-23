@@ -92,7 +92,7 @@ isSendPacketBtnPressed = False
 
 # Conversion Variables
 global MmtoPixelRatio
-MmtoPixelRatio = 1
+MmtoPixelRatio = 1.1
 global H
 
 def nothing(f):
@@ -427,7 +427,7 @@ while(True):
             # happens if the code doesn't find a aruco code (do nothing)
             print("No codes found!")
 
-        print(coordinates)
+        # print(coordinates)
         ref = frame.copy()
         for i, c in enumerate(coordinates):
             x, y = c
