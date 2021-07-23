@@ -98,10 +98,6 @@ isSendPacketBtnPressed = False
 global MmtoPixelRatio
 MmtoPixelRatio = 1.1
 global H
-global cX
-cX = 0
-global cY
-cY = 0
 
 def nothing(f):
     pass
@@ -578,11 +574,11 @@ while(True):
                     cv2.line(frame, bottomLeft, topLeft, (0, 255, 0), 2)
                     # compute and draw the center (x, y)-coordinates of the
                     # ArUco marker
-                    cX = int((topLeft[0] + bottomRight[0]) / 2.0)
-                    cY = int((topLeft[1] + bottomRight[1]) / 2.0)
-                    cv2.circle(frame, (cX, cY), 4, (0, 0, 255), -1)
+                    QcX = int((topLeft[0] + bottomRight[0]) / 2.0)
+                    QcY = int((topLeft[1] + bottomRight[1]) / 2.0)
+                    cv2.circle(frame, (QcX, QcY), 4, (0, 0, 255), -1)
                     # draw the ArUco marker ID on the frame
-                    cv2.putText(frame, f"({cX},{cY})", (topLeft[0], topLeft[1] - 15), cv2.FONT_HERSHEY_SIMPLEX, 0.5, (0, 255, 0), 2)
+                    cv2.putText(frame, f"({QcX},{QcY})", (topLeft[0], topLeft[1] - 15), cv2.FONT_HERSHEY_SIMPLEX, 0.5, (0, 255, 0), 2)
             except:
                 # happens if the code doesn't find a aruco code (do nothing)
                 pass
@@ -671,8 +667,8 @@ while(True):
         data = dict.fromkeys(keys)
         
         data['name'] = "Camera1"
-        data['dX'] = cX * MmtoPixelRatio # Converts pixels to mm (real life measurement)
-        data['dY'] = cY * MmtoPixelRatio # Converts pixels to mm (real life measurement)
+        data['dX'] = int(cX * MmtoPixelRatio) # Converts pixels to mm (real life measurement)
+        data['dY'] = int(cY * MmtoPixelRatio) # Converts pixels to mm (real life measurement)
         data['command'] = 5
 
         try:
