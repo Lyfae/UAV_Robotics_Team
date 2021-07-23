@@ -94,6 +94,14 @@ firstTimeHomography = True
 global isSendPacketBtnPressed
 isSendPacketBtnPressed = False
 
+global frameReq
+global maskReq
+global contourReq    
+    
+frameReq = False
+maskReq = False
+contourReq = False
+
 # Conversion Variables
 global MmtoPixelRatio
 MmtoPixelRatio = 1.1
@@ -127,13 +135,16 @@ def sendToServerAsync(connOut, data, cX, cY, QcX, QcY):
 
 def tkinter():
     # TKINTER DEFAULT VARIABLES
-    HEIGHT = 900
+    HEIGHT = 550
     WIDTH = 1500
     BGCOLOR = 'black'
     BTCOLOR = 'black'
     TITLECOLOR = '#E556E6'
     SUBTITLECOLOR = '#914FA6'
     BTNLABELCOLOR = 'white'
+    BTNLABELCOLORACTIVE = '#3fb559'
+    BTNLABELCOLORINACTIVE = '#cf483c'
+    REFRESH_RATE = 50
 
     # INITIALIZATION
     # Creation of the program window (root)
@@ -149,6 +160,11 @@ def tkinter():
     global dY
     global rndpt_start
     rndpt_start = 0
+
+    # REQUIREMENT VARIABLES
+    global frameReq
+    global maskReq
+    global contourReq    
 
     # ICONS (Courtesy of Icons8.com)
     camera_icon = tk.PhotoImage(file='icons/camera.png')
@@ -176,10 +192,10 @@ def tkinter():
 
     # LABEL
     title = tk.Label(main_canv, text="LabelBot2000", font=('courier new',24,'bold italic'), justify='center', bg=BGCOLOR, fg=TITLECOLOR)
-    title.place(relx=0.5,rely=0.055,anchor='center')
+    title.place(relx=0.5,rely=0.075,anchor='center')
 
     subtitle = tk.Label(main_canv, text="Remote Control", font=('courier new',20,'bold'), justify='center', bg=BGCOLOR, fg=SUBTITLECOLOR)
-    subtitle.place(relx=0.5,rely=0.095,anchor='center')
+    subtitle.place(relx=0.5,rely=0.135,anchor='center')
 
     control_title = tk.Label(control_canv, text="Control Center", font=('courier new',20,'bold'), justify='center', bg=BGCOLOR, fg=TITLECOLOR)
     control_title.place(relx=0.5,rely=0.1,anchor='center')
@@ -190,7 +206,7 @@ def tkinter():
     contour_title = tk.Label(contour_canv, text="Contour Toggle", font=('courier new',20,'bold'), justify='center', bg=BGCOLOR, fg=TITLECOLOR)
     contour_title.place(relx=0.5,rely=0.1,anchor='center')
 
-    contour_subtitle = tk.Label(contour_canv, text="Changing Detection Methods", font=('courier new',12,'bold'), justify='center', bg=BGCOLOR, fg=SUBTITLECOLOR)
+    contour_subtitle = tk.Label(contour_canv, text="Detection Methods", font=('courier new',12,'bold'), justify='center', bg=BGCOLOR, fg=SUBTITLECOLOR)
     contour_subtitle.place(relx=0.5,rely=0.145,anchor='center')
 
     calibration_title = tk.Label(calibration_canv, text="Calibration", font=('courier new',20,'bold'), justify='center', bg=BGCOLOR, fg=TITLECOLOR)
@@ -209,14 +225,14 @@ def tkinter():
     frame_label = tk.Label(control_canv, text="Display Frame", font=('courier new',12,'bold'), justify='left', bg=BGCOLOR, fg=BTNLABELCOLOR)
     frame_label.place(relx=0.35,rely=0.25,anchor='w')
 
-    rec_frame_label = tk.Label(control_canv, text="Screenshot Frame", font=('courier new',12,'bold'), justify='left', bg=BGCOLOR, fg=BTNLABELCOLOR)
-    rec_frame_label.place(relx=0.35,rely=0.4,anchor='w')
+    # rec_frame_label = tk.Label(control_canv, text="Screenshot Frame", font=('courier new',12,'bold'), justify='left', bg=BGCOLOR, fg=BTNLABELCOLOR)
+    # rec_frame_label.place(relx=0.35,rely=0.4,anchor='w')
 
-    frame_label = tk.Label(control_canv, text="Display Mask", font=('courier new',12,'bold'), justify='left', bg=BGCOLOR, fg=BTNLABELCOLOR)
-    frame_label.place(relx=0.35,rely=0.55,anchor='w')
+    mask_label = tk.Label(control_canv, text="Display Mask", font=('courier new',12,'bold'), justify='left', bg=BGCOLOR, fg=BTNLABELCOLOR)
+    mask_label.place(relx=0.35,rely=0.4,anchor='w')
 
-    rec_frame_label = tk.Label(control_canv, text="Screenshot Mask", font=('courier new',12,'bold'), justify='left', bg=BGCOLOR, fg=BTNLABELCOLOR)
-    rec_frame_label.place(relx=0.35,rely=0.7,anchor='w')
+    # rec_frame_label = tk.Label(control_canv, text="Screenshot Mask", font=('courier new',12,'bold'), justify='left', bg=BGCOLOR, fg=BTNLABELCOLOR)
+    # rec_frame_label.place(relx=0.35,rely=0.7,anchor='w')
 
     mask_alg_label = tk.Label(contour_canv, text="Detection Algorithm\nAdaptive/HSV", font=('courier new',12,'bold'), justify='left', bg=BGCOLOR, fg=BTNLABELCOLOR)
     mask_alg_label.place(relx=0.35,rely=0.25,anchor='w')
@@ -235,6 +251,15 @@ def tkinter():
 
     send_packet_label = tk.Label(testing_canv, text="Send Test Packet", font=('courier new',12,'bold'), justify='left', bg=BGCOLOR, fg=BTNLABELCOLOR)
     send_packet_label.place(relx=0.35,rely=0.4,anchor='w')
+
+    # BUTTON REQUIRED WARNING FUNCTION
+    def warning(label):
+        for x in range (0,3):
+            label['fg'] = BTNLABELCOLORINACTIVE
+            time.sleep(0.25)
+            label['fg'] = BTNLABELCOLOR
+            time.sleep(0.25)
+            print("What")
 
     # BUTTON FUNCTIONS
     def toggleFrame():
@@ -264,68 +289,89 @@ def tkinter():
     def toggleMaskAlg():
         global isMAlgBtnPressed
         global isMaskOpen
+        global maskReq
         if isMaskOpen:
             isMAlgBtnPressed = True
         else:
+            maskReq = True
             print("[WARNING]: No changes are shown. Please open mask to use this button!")
 
     def toggleContour():
         global isContourBtnPressed
         global isFrameOpen
+        global frameReq
         if isFrameOpen:
             isContourBtnPressed = True
         else:
+            frameReq = True
             print("[WARNING]: No changes are shown. Please open frame to use this button!")
 
     def toggleTrackbar():
         global isTBarBtnPressed
         global isMaskOpen
-        if isMaskOpen:
+        global isFrameOpen
+        global frameReq
+        global maskReq
+        if isMaskOpen and isFrameOpen:
             isTBarBtnPressed = True
         else:
-            print("[WARNING]: The trackbar option is currently disabled. Please open mask to use this button!")
+            maskReq = True
+            frameReq = True
+            print("[WARNING]: The trackbar option is currently disabled. Please open frame and mask to use this button!")
 
     def rndPoint():
         global isRandBtnPressed
         global isFrameOpen
         global isContourShowing
-        if isFrameOpen and isContourShowing:
+        global frameReq
+        global maskReq
+        if isFrameOpen:
             isRandBtnPressed = True
         else:
-            print("[WARNING]: Frame or Contours are not detected. Please open frame/contours before continuing.")
+            frameReq = True
+            print("[WARNING]: Frame not detected. Please open frame before continuing.")
 
     def sndPacket():
         global isRandBtnPressed
         global isFrameOpen
         global isContourShowing
         global isSendPacketBtnPressed
+        global frameReq
+        global contourReq
         if isFrameOpen and isContourShowing:
             isSendPacketBtnPressed = True
         else:
+            frameReq = True
+            contourReq = True
             print("[WARNING]: Frame or Contours are not detected. Please open frame/contours before continuing.")
 
     def calibrate():
         global isCalibrateBtnPressed
         global isFrameOpen
+        global isMaskOpen
         global isContourShowing
-        if not isMaskOpen:
+        global maskReq
+        global frameReq
+        if not isMaskOpen and isFrameOpen:
             isCalibrateBtnPressed = True
         else:
-            print("[WARNING]: Mask is OPEN!!! Please close mask before continuing.")
+            maskReq = True
+            frameReq = True
+            print("[WARNING]: Please close mask and open frame before continuing.")
 
     # BUTTON DECLARATIONS
     # Control Buttons
     display_frame = tk.Button(control_canv, image = camera_icon, command=toggleFrame, justify='center', padx=10, pady=10, bg=BTCOLOR, fg='#9e8d8f')
     display_frame.place(relx=0.2,rely=0.25,anchor='center')
     
-    sc_frame = tk.Button(control_canv, image = record_icon, command=scFrame, justify='center', padx=10, pady=10, bg=BTCOLOR, fg='#9e8d8f')
-    sc_frame.place(relx=0.2,rely=0.4,anchor='center')
+    # sc_frame = tk.Button(control_canv, image = record_icon, command=scFrame, justify='center', padx=10, pady=10, bg=BTCOLOR, fg='#9e8d8f')
+    # sc_frame.place(relx=0.2,rely=0.4,anchor='center')
 
     display_mask = tk.Button(control_canv, image = frame_icon, command=toggleMask, justify='center', padx=10, pady=10, bg=BTCOLOR, fg='#9e8d8f')
-    display_mask.place(relx=0.2,rely=0.55,anchor='center')
+    display_mask.place(relx=0.2,rely=0.4,anchor='center')
 
-    sc_mask = tk.Button(control_canv, image = record_icon, command=scMask, justify='center', padx=10, pady=10, bg=BTCOLOR, fg='#9e8d8f')
-    sc_mask.place(relx=0.2,rely=0.7,anchor='center')
+    # sc_mask = tk.Button(control_canv, image = record_icon, command=scMask, justify='center', padx=10, pady=10, bg=BTCOLOR, fg='#9e8d8f')
+    # sc_mask.place(relx=0.2,rely=0.7,anchor='center')
 
     # Contour Buttons
     change_maskalg = tk.Button(contour_canv, image = mask_icon, command=toggleMaskAlg, justify='center', padx=10, pady=10, bg=BTCOLOR, fg='#9e8d8f')
@@ -349,8 +395,50 @@ def tkinter():
     send_packet.place(relx=0.2,rely=0.4,anchor='center')
 
     # Exit Button
-    exitButton = tk.Button(main_canv, text="EXIT", font=('courier new',18,'bold'), command=exit, justify='center', padx=40, pady=10, bg='#D55C8D', fg='white')
-    exitButton.place(relx=0.5,rely=.95,anchor='center')
+    exitButton = tk.Button(main_canv, text="EXIT", font=('courier new',18,'bold'), command=exit, justify='center', padx=40, pady=10, bg=SUBTITLECOLOR, fg='white')
+    exitButton.place(relx=0.5,rely=.885,anchor='center')
+
+    # UPDATE FUNCTION
+    def updateData():
+        # Recursive function to update values.
+        global isFrameOpen
+        global isMaskOpen
+        global isContourShowing
+        global isSendPacketBtnPressed
+        global frameReq 
+        global maskReq 
+        global contourReq
+
+        if isFrameOpen: 
+            frame_label['fg'] = BTNLABELCOLORACTIVE
+            frameReq = False
+        else: frame_label['fg'] = BTNLABELCOLOR
+
+        if isMaskOpen: 
+            mask_label['fg'] = BTNLABELCOLORACTIVE
+            maskReq = False
+        else: mask_label['fg'] = BTNLABELCOLOR
+            
+
+        if isContourShowing: 
+            contour_label['fg'] = BTNLABELCOLORACTIVE
+            contourReq = False
+        else: contour_label['fg'] = BTNLABELCOLOR
+            
+        if frameReq:
+            frame_label['fg'] = BTNLABELCOLORINACTIVE
+
+        if maskReq:
+            mask_label['fg'] = BTNLABELCOLORINACTIVE
+
+        if contourReq:
+            contour_label['fg'] = BTNLABELCOLORINACTIVE
+
+
+        root.after(REFRESH_RATE, updateData)
+
+    # UPDATE / REFRESH
+    root.after(REFRESH_RATE, updateData)
 
     # LOOP
     root.mainloop()
