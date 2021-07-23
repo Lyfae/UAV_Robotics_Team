@@ -35,7 +35,7 @@ ArmIDs = {"base":0,
          "bicep":1,
          "forearm":2}
 ARM_S_MAX = 30
-ARM_SAFE_HEIGHT = 200
+ARM_SAFE_HEIGHT = 220
 ARM_HEIGHT_STEPS = 40
 
 #Windows Params
@@ -54,9 +54,9 @@ END_DEPTH=11.3
 END_BIT=7
 
 #Arm Min-Max Angles as per diagram
-BASE_L_UP=175 
+BASE_L_UP= 175 
 BASE_L_DOWN = 5
-BICEP_L_DOWN=45
+BICEP_L_DOWN= 45
 BICEP_L_UP = 125
 FOREARM_L_UP = 45
 FOREARM_L_DOWN = -15
@@ -69,6 +69,9 @@ BICEP_OFFSET = 0
 BICEP_DIRECTION = 1
 FOREARM_OFFSET = math.radians(-8)
 FOREARM_DIRECTION = 1
+
+#Arm offset angles for given motor positions
+FOREARM_INST_DIR = 90
 
 #Various Increments
 TOLERANCE = 1 #this is how close it will try and get in mm to the target location
@@ -88,10 +91,12 @@ ThetaForearmND = 0
 def do_init():
     portInitialization(ARM_PORT, ARM_BAUD, ArmIDs["base"], ArmIDs["bicep"], ArmIDs["forearm"])
     dxlSetVelo([ARM_S_MAX,ARM_S_MAX,ARM_S_MAX])
+    #print("init stuff")
 
 #Add all close out tasks here
 def do_shutdown():
     portTermination()
+    #print("shutdown stuff")
 
 #gets locations from arm
 #Takes no arguments
@@ -99,8 +104,9 @@ def do_shutdown():
 def get_XYZ_location():
     #gets current motor angles from motors as an array of 3
     # 0-base,1-bicep,2-forearm
-    angles = dxlPresAngle()
-    results = getXYZ(math.radians(angles[0]),math.radians(angles[1]), math.radians(angles[2]))
+    angles = getAnglesCorrected()
+    #angles = [90,90,90]
+    results = getXYZ(math.radians(angles[0]),math.radians(angles[1]), math.radians(angles[2]-FOREARM_INST_DIR))
     return results
 
 #takes coordinates and sends angles to motors
@@ -120,6 +126,7 @@ def set_location(xyzdict):
 
     if BASE_L_DOWN <= thetaBaseN[1] <= BASE_L_UP :
         #guessBicepFromTriangles is an optimization variable that helps reduce the number of cycles.
+        print([Xn,Yn,Zn])
         thetaBicepN=guessBicepFromTriangles(Xn,Yn,Zn)
         thetaForearmN=calcForearmTheta(Zn,thetaBicepN)[0]
         tempPZ = getPZ(thetaBicepN,thetaForearmN)
@@ -136,10 +143,10 @@ def set_location(xyzdict):
         thetaBicepND = math.degrees(thetaBicepN)    
         thetaForearmND = math.degrees(thetaForearmN)
         thetaBaseND = thetaBaseN[1]
-        # print('BASE ANGLE = ' + str(thetaBaseND))
-        # print('BICEP ANGLE = ' + str(thetaBicepND))
-        # print('FOREARM ANGLE = ' + str(thetaForearmND))
-        # print('Number of Cycles For Answer = ' + str(countcycles))
+        #print('BASE ANGLE = ' + str(thetaBaseND))
+        #print('BICEP ANGLE = ' + str(thetaBicepND))
+        #print('FOREARM ANGLE = ' + str(thetaForearmND))
+        #print('Number of Cycles For Answer = ' + str(countcycles))
         # XYZtemp = getXYZ(thetaBaseN[0], thetaBicepN, thetaForearmN)
         # print('XYZ Value:'+str(XYZtemp))
 
@@ -149,7 +156,7 @@ def set_location(xyzdict):
             print("FOREARM Can't Rotate That Far, Current Limits are:"+str(FOREARM_L_DOWN)+"-"+str(FOREARM_L_UP))
         else:
             calcSpeedDiff(thetaBicepND, thetaForearmND)
-            moveresults = motorRunWithInputs([thetaBaseND,thetaBicepND,thetaForearmND])
+            moveresults = setAnglesCorrected([thetaBaseND,thetaBicepND,thetaForearmND])
             #print('Arm Move Successful = ' + str(moveresults))
     else:
         print('BASE ANGLE = ' + str(thetaBaseN[1]))
@@ -264,7 +271,7 @@ def calcForearmTheta(Z,thetaBicep):
 # It takes the arguements of theta bicep and Theta forearm 
 # It returns nothing
 def calcSpeedDiff(ThetaBi, ThetaFo):
-    angles = dxlPresAngle()
+    angles = getAnglesCorrected()
     ThetaBi = abs(ThetaBi-angles[1])
     ThetaFo = abs(ThetaFo-angles[2])
 
@@ -272,8 +279,12 @@ def calcSpeedDiff(ThetaBi, ThetaFo):
     ForearmNew = ARM_S_MAX
     if ThetaBi > ThetaFo:
         ForearmNew = int((ThetaFo/ThetaBi)*ARM_S_MAX)
+        if ForearmNew == 0:
+            ForearmNew = 1
     else:
         BicepNew = int((ThetaBi/ThetaFo)*ARM_S_MAX)
+        if BicepNew == 0:
+            BicepNew = 1
     #print("Arm Speeds:"+str(ARM_S_MAX)+","+str(BicepNew)+","+str(ForearmNew))
     #print([ARM_S_MAX,BicepNew,ForearmNew])
     dxlSetVelo([ARM_S_MAX,BicepNew,ForearmNew])
@@ -291,6 +302,7 @@ def guessBicepFromTriangles(X,Y,Z):
     aside = FOREARM_LENGTH+END_LENGTH
     bside = BICEP_LENGTH
     cside = calcDist(Ptemp,Ztemp)
+    print([aside,bside,cside])
     thetaA = findATriangleAngle(aside,bside,cside)
     thetaRef = math.atan(Ztemp/Ptemp)
     return thetaA + refthetaCorrection*thetaRef
@@ -307,6 +319,15 @@ def calcDist(X,Y):
 def findATriangleAngle(A,B,C):
     thetaA = math.acos((B**2+C**2-A**2)/(2*B*C))
     return thetaA
+
+def getAnglesCorrected():
+    angles = dxlPresAngle()
+    angles = ([angles[0],angles[1],angles[2]-FOREARM_INST_DIR])
+    return angles
+
+def setAnglesCorrected(angles):
+    moveresults = motorRunWithInputs([angles[0],angles[1],angles[2]+FOREARM_INST_DIR])
+    return moveresults
 
 #******MOTOR DRIVE FUNCTIONS*******
 #this is where we will put hardware team functions
