@@ -6,7 +6,7 @@ import struct
 import time
 from _thread import *
 import threading
-import movearmv2 as arm #Library for arm movement defined commands
+import movearmv3 as arm #Library for arm movement defined commands
 import tkinter as tk
 from datetime import datetime
 
@@ -144,7 +144,7 @@ def read_async(connIn, addr):
                         print("Dropping load.")
                         #arm.drop_load()
                     print("Going home.")
-                    arm.set_Location(home)
+                    arm.set_location_mapped(home)
                     state = 3
                 elif cameraInput["command"]==1:
                     print("Move command, processing.")
@@ -152,7 +152,7 @@ def read_async(connIn, addr):
                         print("Grabbing load.")
                         #arm.grab_load()
                     new_location=arm.translate_diff(cameraInput)
-                    arm.set_location(new_location)
+                    arm.set_location_mapped(new_location)
                     print("Going to differential location.")
                     state = 1
                 elif cameraInput["command"]==2:
