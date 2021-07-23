@@ -428,6 +428,7 @@ while(True):
             pass
 
         corners = coordinates
+        print(corners)
         ref = frame.copy()
         for i, c in enumerate(corners):
             x, y = c
