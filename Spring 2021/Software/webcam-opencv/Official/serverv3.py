@@ -10,7 +10,7 @@ import movearmv3 as arm #Library for arm movement defined commands
 import tkinter as tk
 from datetime import datetime
 
-HOST = '127.0.0.1'  # Standard loopback interface address (localhost)
+HOST = '192.168.0.126'  # Standard loopback interface address (localhost)
 PORT = 8009        # Port to listen on (non-privileged ports are > 1023)
 BUFFER_SIZE = 8162 
 TIME_OUT = 5
@@ -163,6 +163,9 @@ def read_async(connIn, addr):
                     print("Grabbing load.")
                     #arm.grab_load()
                     state=4
+                elif cameraInput["command"]==5:
+                    print("Test Packet Move.")
+                    arm.set_location_mapped(cameraInput)
             armStatus["code"] = 2
             connIn.sendall(json.dumps(armStatus).encode('utf-8')) # encode the dict to JSON
         except:
