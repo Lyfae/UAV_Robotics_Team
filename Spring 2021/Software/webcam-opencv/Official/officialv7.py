@@ -103,7 +103,7 @@ def saveFile(image, typeI):
     filename = typeI + "_" + datetime.datetime.now().strftime("%m.%d.%Y_%I.%M.%S%p")
     cv2.imwrite(path + filename + '.jpg', image)
 
-def findArucoMarkers(img, markerSize = 4, totalMarkers=50, draw=True):
+def findArucoMarkers(img, markerSize, totalMarkers, draw=True):
     gray = cv2.cvtColor(img, cv2.COLOR_BGR2GRAY)
     key = getattr(cv2.aruco, f'DICT_{markerSize}X{markerSize}_{totalMarkers}')
     arucoDict = cv2.aruco.Dictionary_get(key)
@@ -395,7 +395,7 @@ while(True):
 
     if isCalibrateStateReached: 
         # find ArUco markers
-        corners, ids =  findArucoMarkers(frame)
+        corners, ids =  findArucoMarkers(frame, 6, 50)
         keys = ['A', 'B', 'C', 'D']
         coordinates = dict.fromkeys(keys)
         try:
@@ -536,7 +536,7 @@ while(True):
                 pass
 
             # find ArUco markers
-            corners, ids =  findArucoMarkers(frame)
+            corners, ids =  findArucoMarkers(frame, 4, 50)
 
             try:
                 # loop through all corners 
