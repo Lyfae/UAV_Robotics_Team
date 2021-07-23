@@ -41,10 +41,10 @@ global dX
 global dY
 
 # Default Variables for Color
-l_h = 164 
-l_s = 27
-l_v = 109
-u_h = 171
+l_h = 72 
+l_s = 111
+l_v = 33
+u_h = 152
 u_s = 255
 u_v = 255
 
