@@ -667,8 +667,8 @@ while(True):
         data = dict.fromkeys(keys)
         
         data['name'] = "Camera1"
-        data['dX'] = int((QcX - cX) * MmtoPixelRatio) # Converts pixels to mm (real life measurement)
-        data['dY'] = int((QcY - cY) * MmtoPixelRatio) # Converts pixels to mm (real life measurement)
+        data['dX'] = int((cX - QcX) * MmtoPixelRatio) # Converts pixels to mm (real life measurement)
+        data['dY'] = int((cY - QcY) * MmtoPixelRatio) # Converts pixels to mm (real life measurement)
         data['command'] = 1
 
         try:
