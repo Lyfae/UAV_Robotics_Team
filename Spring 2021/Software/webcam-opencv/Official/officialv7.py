@@ -675,6 +675,7 @@ while(True):
             s.sendall(bytes(json.dumps(data), encoding='utf-8'))
             data_recv = s.recv(8162).decode('utf-8')
             print(f"cX = {cX}, cY = {cY}")
+            print(f"QcX = {QcX}, QcY = {QcY}")
             print(f"Sent: {data}")
             print(f"Recieved: {data_recv}")
         except:
