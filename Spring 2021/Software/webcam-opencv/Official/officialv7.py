@@ -41,10 +41,10 @@ global dX
 global dY
 
 # Default Variables for Color
-l_h = 0 
-l_s = 38
-l_v = 132
-u_h = 255
+l_h = 164 
+l_s = 27
+l_v = 109
+u_h = 171
 u_s = 255
 u_v = 255
 
@@ -676,8 +676,8 @@ while(True):
         data = dict.fromkeys(keys)
         
         data['name'] = "Camera1"
-        data['dX'] = int(((cX - QcX) * MmtoPixelRatio)/1.9) # Converts pixels to mm (real life measurement)
-        data['dY'] = int(((QcY - cY) * MmtoPixelRatio)/1.9) # Converts pixels to mm (real life measurement)
+        data['dX'] = int(((cX - QcX) * MmtoPixelRatio)/1.8) # Converts pixels to mm (real life measurement)
+        data['dY'] = int(((QcY - cY) * MmtoPixelRatio)/1.8) # Converts pixels to mm (real life measurement)
         data['command'] = 1
 
         try:
