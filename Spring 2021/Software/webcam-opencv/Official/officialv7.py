@@ -396,7 +396,7 @@ while(True):
     if isCalibrateStateReached: 
         # find ArUco markers
         corners, ids =  findArucoMarkers(frame, 6, 50)
-        coordinates = []
+        coordinates = [[0,0],[0,0],[0,0],[0,0]]
         try:
             # loop through all corners 
             for (markerCorner, markerID) in zip(corners, ids):
