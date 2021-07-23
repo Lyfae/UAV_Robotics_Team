@@ -98,6 +98,10 @@ isSendPacketBtnPressed = False
 global MmtoPixelRatio
 MmtoPixelRatio = 1.1
 global H
+global cX
+cX = 0
+global cY
+cY = 0
 
 def nothing(f):
     pass
@@ -674,6 +678,8 @@ while(True):
         try:
             s.sendall(bytes(json.dumps(data), encoding='utf-8'))
             data_recv = s.recv(8162).decode('utf-8')
+            print(f"cX = {cX}, cY = {cY}")
+            print(f"Sent: {data}")
             print(f"Recieved: {data_recv}")
         except:
             print("Server Not Found!")
