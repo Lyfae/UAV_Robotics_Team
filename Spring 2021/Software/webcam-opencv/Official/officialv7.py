@@ -24,7 +24,11 @@ import threading
 
 import calibration
 
-HOST = '127.0.0.1'
+if len(sys.argv) != 2:
+    print("Usage: python3 officialv7.py <hostID>")
+    sys.exit(1)
+
+HOST = sys.argv[1]
 PORT = 8009
 
 s = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
@@ -665,7 +669,7 @@ while(True):
         data['name'] = "Camera1"
         data['dX'] = cX * MmtoPixelRatio # Converts pixels to mm (real life measurement)
         data['dY'] = cY * MmtoPixelRatio # Converts pixels to mm (real life measurement)
-        data['command'] = 1
+        data['command'] = 5
 
         try:
             s.sendall(bytes(json.dumps(data), encoding='utf-8'))
