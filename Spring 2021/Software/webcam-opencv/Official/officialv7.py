@@ -423,14 +423,14 @@ while(True):
                 cv2.putText(frame, str(markerID), (topLeft[0], topLeft[1] - 15), cv2.FONT_HERSHEY_SIMPLEX, 0.5, (0, 255, 0), 2)
                 # put coordinates in list
                 coordinates[markerID] = [cX, cY]
+                print(coordinates)
         except:
             # happens if the code doesn't find a aruco code (do nothing)
             pass
 
-        corners = coordinates
-        print(corners)
+        print(coordinates)
         ref = frame.copy()
-        for i, c in enumerate(corners):
+        for i, c in enumerate(coordinates):
             x, y = c
             cv2.circle(ref, (x,y), 3, 255, -1)
             char = chr(65 + i)
@@ -438,10 +438,13 @@ while(True):
             cv2.putText(frame, char, tuple(c), cv2.FONT_HERSHEY_SIMPLEX, 1, (0,0,255), 2, cv2.LINE_AA)
             cv2.circle(frame, tuple(c), 5, (255,0,0), -1)
 
-        destination = calibration.get_destination_points(MmtoPixelRatio, 0, 0)
-        H, _= cv2.findHomography(np.float32(corners), np.float32(destination), cv2.RANSAC, 3.0)
-        unwarp = calibration.unwarp_frame(frame, H)
-        cv2.imshow('unskewed', unwarp)
+        try:
+            destination = calibration.get_destination_points(MmtoPixelRatio, 0, 0)
+            H, _= cv2.findHomography(np.float32(coordinates), np.float32(destination), cv2.RANSAC, 3.0)
+            unwarp = calibration.unwarp_frame(frame, H)
+            cv2.imshow('unskewed', unwarp)
+        except:
+            print("Coordinate Array was empty!!!")
 
     # Toggle Taskbars
     if isTBarBtnPressed:
