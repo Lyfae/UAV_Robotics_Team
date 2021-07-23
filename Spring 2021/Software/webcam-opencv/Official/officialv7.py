@@ -399,7 +399,7 @@ while(True):
         coordinates = [[0,0],[0,0],[0,0],[0,0]]
         try:
             # loop through all corners 
-            for (markerCorner, markerID) in zip(corners, ids):
+            for markerCorner, markerID in zip(corners, ids):
                 corners = markerCorner.reshape((4,2))
                 topLeft, topRight, bottomRight, bottomLeft = corners
 
@@ -422,8 +422,7 @@ while(True):
                 # draw the ArUco marker ID on the frame
                 cv2.putText(frame, str(markerID), (topLeft[0], topLeft[1] - 15), cv2.FONT_HERSHEY_SIMPLEX, 0.5, (0, 255, 0), 2)
                 # put coordinates in list
-                # coordinates[markerID] = [cX, cY]
-                print("Hi")
+                coordinates[markerID] = [cX, cY]
         except:
             # happens if the code doesn't find a aruco code (do nothing)
             print("No codes found!")
