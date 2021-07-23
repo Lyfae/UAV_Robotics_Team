@@ -68,6 +68,7 @@ def unwarp_frame(frame, corners, destination, H):
     return unwarp
 
 corners = corner_detect(frame)
+print(corners)
 destination, scale = get_destination_points()
 H, _= cv2.findHomography(np.float32(corners), np.float32(destination), cv2.RANSAC, 3.0)
 print("\nHomography Matrix:\n", H)
