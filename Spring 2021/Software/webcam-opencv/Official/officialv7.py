@@ -423,7 +423,7 @@ while(True):
                 cv2.putText(frame, str(markerID), (topLeft[0], topLeft[1] - 15), cv2.FONT_HERSHEY_SIMPLEX, 0.5, (0, 255, 0), 2)
                 # put coordinates in list
                 coordinates[markerID] = [cX, cY]
-                print(coordinates)
+                print("Hi")
         except:
             # happens if the code doesn't find a aruco code (do nothing)
             pass
