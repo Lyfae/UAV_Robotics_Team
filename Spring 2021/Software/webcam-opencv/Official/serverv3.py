@@ -7,7 +7,8 @@ from _thread import *
 import threading
 import movearmv3 as arm #Library for arm movement defined commands
 import tkinter as tk
-
+import multiprocessing as multi
+import time
 
 HOST = '127.0.0.1'  # Standard loopback interface address (localhost)
 PORT = 8009        # Port to listen on (non-privileged ports are > 1023)
@@ -58,8 +59,6 @@ armStatus = {}
 
 global newData
 global state
-
-init_globes()
 
 
 def tkinter(conn, addr):
@@ -117,12 +116,13 @@ def load_data(data_recv):
     else:
         print(f"Data NOT loaded, ignoring arm status " + str(armStatus["code"]))
     
-def stateMachineWorker(inputDict):
+def stateMachineWorker():
     global state
     global newData
+    global cameraInput
     print("Data loaded, initiating command.")
     newData = False
-    if inputDict["command"]==3:
+    if cameraInput["command"]==3:
         print("Home command, processing.")
         if state == 1:
             print("Dropping load.")
@@ -130,30 +130,30 @@ def stateMachineWorker(inputDict):
         print("Going home.")
         arm.set_location_mapped(HOME)
         state = 3
-    elif inputDict["command"]==1:
+    elif cameraInput["command"]==1:
         print("Move command, processing.")
         '''if state == 3:
             print("Grabbing load.")
             arm.grab_load()'''
         print("Going to differential location.")
-        new_location=arm.translate_diff(inputDict)
+        new_location=arm.translate_diff(cameraInput)
         arm.set_location_mapped(new_location)
         arm.grab_load()
         state = 1
-    elif inputDict["command"]==2:
+    elif cameraInput["command"]==2:
         print("Dropping load.")
         #arm.drop_load()
         state=2 
-    elif inputDict["command"]==4:
+    elif cameraInput["command"]==4:
         print("Grabbing load.")
         #arm.grab_load()
         state=4
-    elif inputDict["command"]==5:
+    elif cameraInput["command"]==5:
         print("Test Packet Move.")
-        inputDict["Z"] = int(190)
-        inputDict["X"] = int(inputDict["dX"])
-        inputDict["Y"] = int(inputDict["dY"])
-        arm.set_location_mapped(inputDict)
+        cameraInput["Z"] = int(190)
+        cameraInput["X"] = int(cameraInput["dX"])
+        cameraInput["Y"] = int(cameraInput["dY"])
+        arm.set_location_mapped(cameraInput)
         state = 5    
 
 def read_async(connIn, addr): 
@@ -167,41 +167,51 @@ def read_async(connIn, addr):
             data_recv = json.loads(data_recv)
             print(f"Recieved: {data_recv}, attempting load...")
             load_data(data_recv)
-            print(f"Recieved: {cameraInput}, attempting load...")
             arm.do_init()
             if newData:
                 armStatus["code"] = 1
-                worker_thread = threading.Thread(target = stateMachineWorker, args = cameraInput)
+                worker_thread = multi.Process(target = stateMachineWorker, args = ())
                 worker_thread.start()
+                time.sleep(1)
                 worker_thread.join(timeout=ARM_TIME_OUT)
+                worker_thread.terminate()
             armStatus["code"] = 2
             connIn.sendall(json.dumps(armStatus).encode('utf-8')) # encode the dict to JSON
         except:
             armStatus["code"] = 3
             connIn.sendall(json.dumps(armStatus).encode('utf-8')) # encode the dict to JSON
             break
-            
-s = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
-s.bind((HOST, PORT)) #Bind system socket
-s.listen(SENSOR_COUNT) #Listen for up to SENSOR_COUNT connections
-s.settimeout(TIME_OUT) 
-print("Listening on %s:%s..." % (HOST, str(PORT)))
 
-while True:
-    try:
-        conn, addr = s.accept()
-        print(f"Connection from {addr} has been established!")
-        # Begin data reading thread
-        read_thread = threading.Thread(target = read_async, args = (conn, addr))
-        read_thread.start()
-        # Begin tkinter thread
-        # thread_tk = threading.Thread(target = tkinter, args = (conn, addr))
-        # thread_tk.start()
-    except KeyboardInterrupt:
-        if s:
-            print(f"Closing Socket")
-            s.close() 
-        print(f"Exiting")
-        sys.exit(1)
-    except:
-        pass
+def main():    
+    s = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
+    s.bind((HOST, PORT)) #Bind system socket
+    s.listen(SENSOR_COUNT) #Listen for up to SENSOR_COUNT connections
+    s.settimeout(TIME_OUT) 
+    print("Listening on %s:%s..." % (HOST, str(PORT)))
+    conn= 0
+    addr= 0
+    while True:
+        try:
+            conn, addr = s.accept()
+            print(f"Connection from {addr} has been established!")
+            # Begin data reading thread
+            read_thread = threading.Thread(target = read_async, args = (conn, addr))
+            read_thread.start()
+            # Begin tkinter thread
+            # thread_tk = threading.Thread(target = tkinter, args = (conn, addr))
+            # thread_tk.start()\
+        except KeyboardInterrupt: 
+            if conn:
+                print(f"Closing Client Connection")
+                conn.close() 
+            if s:
+                print(f"Closing Server Socket")
+                s.close()
+            print(f"Exiting")
+            sys.exit(1)
+        except:
+            pass
+
+if __name__ == '__main__':
+    init_globes()
+    main()
