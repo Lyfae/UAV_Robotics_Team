@@ -41,12 +41,12 @@ global dX
 global dY
 
 # Default Variables for Color
-l_h = 72 
-l_s = 111
-l_v = 33
-u_h = 152
+l_h = 8
+l_s = 0
+l_v = 0
+u_h = 19
 u_s = 255
-u_v = 255
+u_v = 153
 
 # Default Variables for Position
 pX = 0
