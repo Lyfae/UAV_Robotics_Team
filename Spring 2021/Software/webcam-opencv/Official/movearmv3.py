@@ -35,10 +35,14 @@ ArmIDs = {"base":0,
          "bicep":1,
          "forearm":2}
 ARM_S_MAX = 30
-ARM_SAFE_HEIGHT = 90
+ARM_SAFE_HEIGHT = 110
 ARM_HEIGHT_STEPS = 40
 
-PICKUP_HEIGHT = 64
+PICKUP = {"X":190,
+        "Y":0,
+        "Z":88}
+
+DROP_HEIGHT = 64
 
 #Windows Params
 #ARM_BAUD = 1000000
@@ -211,7 +215,7 @@ def set_location_mapped(xyzdict):
 def translate_diff(xyzdiffdict):
     Xd = xyzdiffdict["dX"]
     Yd = xyzdiffdict["dY"]
-    Zd = xyzdiffdict["dZ"]
+    #Zd = xyzdiffdict["dZ"]
     curLocation = get_XYZ_location()
     newdict = {"X":curLocation[0]+Xd,
             "Y":curLocation[1]+Yd,
@@ -221,17 +225,16 @@ def translate_diff(xyzdiffdict):
 #predefined locations for z down
 #TO DO
 def drop_load():
-    print("drop_load not implemented")
+    curLocation = get_XYZ_location()
+    newdict = {"X":curLocation[0],
+            "Y":curLocation[1],
+            "Z":DROP_HEIGHT}
+    set_location(newdict)
 
 #predefined locations for x-y-z up
 #TO DO
 def grab_load():
-    curLocation = get_XYZ_location()
-    newdict = {"X":curLocation[0],
-            "Y":curLocation[1],
-            "Z":PICKUP_HEIGHT}
-    set_location(newdict)
-    print("Picked Up Target")
+    set_location_mapped(PICKUP)
 
 #this method returns P and Z
 # where P is the 'roe' the projection of the distance on the x-y plane

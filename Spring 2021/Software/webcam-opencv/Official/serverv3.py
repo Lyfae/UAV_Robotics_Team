@@ -5,12 +5,12 @@ import json
 import sys
 from _thread import *
 import threading
-import movearmv3 as arm #Library for arm movement defined commands
+import movearmv4 as arm #Library for arm movement defined commands
 import tkinter as tk
 import multiprocessing as multi
 import time
 
-HOST = '127.0.0.1'  # Standard loopback interface address (localhost)
+HOST = '192.168.0.126'  # Standard loopback interface address (localhost)
 PORT = 8009        # Port to listen on (non-privileged ports are > 1023)
 BUFFER_SIZE = 8162 
 TIME_OUT = 5
@@ -126,27 +126,26 @@ def stateMachineWorker():
         print("Home command, processing.")
         if state == 1:
             print("Dropping load.")
-            #arm.drop_load()
+            arm.drop_load()
         print("Going home.")
         arm.set_location_mapped(HOME)
         state = 3
     elif cameraInput["command"]==1:
         print("Move command, processing.")
-        '''if state == 3:
-            print("Grabbing load.")
-            arm.grab_load()'''
-        print("Going to differential location.")
         new_location=arm.translate_diff(cameraInput)
+        if state == 3:
+            print("Grabbing load.")
+            arm.grab_load()
+        print("Going to differential location.")
         arm.set_location_mapped(new_location)
-        arm.grab_load()
         state = 1
     elif cameraInput["command"]==2:
         print("Dropping load.")
-        #arm.drop_load()
+        arm.drop_load()
         state=2 
     elif cameraInput["command"]==4:
         print("Grabbing load.")
-        #arm.grab_load()
+        arm.grab_load()
         state=4
     elif cameraInput["command"]==5:
         print("Test Packet Move.")
@@ -170,11 +169,12 @@ def read_async(connIn, addr):
             arm.do_init()
             if newData:
                 armStatus["code"] = 1
-                worker_thread = multi.Process(target = stateMachineWorker, args = ())
+                '''worker_thread = multi.Process(target = stateMachineWorker, args = ())
                 worker_thread.start()
                 time.sleep(1)
                 worker_thread.join(timeout=ARM_TIME_OUT)
-                worker_thread.terminate()
+                worker_thread.terminate()'''
+                stateMachineWorker()
             armStatus["code"] = 2
             connIn.sendall(json.dumps(armStatus).encode('utf-8')) # encode the dict to JSON
         except:
