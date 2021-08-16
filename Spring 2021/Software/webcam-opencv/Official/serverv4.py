@@ -5,7 +5,7 @@ import json
 import sys
 from _thread import *
 import threading
-import movearmv3 as arm #Library for arm movement defined commands
+import movearmv4 as arm #Library for arm movement defined commands
 import multiprocessing as multi
 import time
 

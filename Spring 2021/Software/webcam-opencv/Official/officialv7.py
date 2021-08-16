@@ -1,6 +1,6 @@
 # Official script [officialv6.py]
 # WORKING VERSION WITH [serverv3.py]
-VERSION = 'officialv6.py'
+VERSION = 'officialv7.py'
 
 # Import Libraries
 import numpy as np
