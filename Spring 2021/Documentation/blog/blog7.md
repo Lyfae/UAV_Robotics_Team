@@ -10,22 +10,22 @@ Hello Everyone! Lyfae here! Back with another week of updates! Due to finals and
 
 * Accomplishments: 
 
-    [x] Built an amplifier circuit to remotely control the air pump
-    [x] Built a test environment for the robot to interact with labels and packages
-    [x] Finalized CAD designs for the end effector    
-    [x] Integrated both hardware and software code 
-    [x] Robot recognized the difference between labels and packages
-    [x] Robot applies labels to packages successfully 
+    - [x] Built an amplifier circuit to remotely control the air pump
+    - [x] Built a test environment for the robot to interact with labels and packages
+    - [x] Finalized CAD designs for the end effector    
+    - [x] Integrated both hardware and software code 
+    - [x] Robot recognized the difference between labels and packages
+    - [x] Robot applies labels to packages successfully 
 
 
 * Goals: 
 
-    [ ] Create project poster and project presentation for IEEE Student Engineering Technology Challenge Poster
-    [ ] Integrate end effector into the robot
-    [ ] Test end effector by using it to pick up the labels and applying them to packages
-    [ ] Record video showcasing the project for the competition
-    [ ] Run the presentation and video over with Professor Yu and Andrew before the competition. 
-    [ ] Create informative videos - (Maybe, after the rest of the work is accomplished)
+    - [ ] Create project poster and project presentation for IEEE Student Engineering Technology Challenge Poster
+    - [ ] Integrate end effector into the robot
+    - [ ] Test end effector by using it to pick up the labels and applying them to packages
+    - [ ] Record video showcasing the project for the competition
+    - [ ] Run the presentation and video over with Professor Yu and Andrew before the competition. 
+    - [ ] Create informative videos - (Maybe, after the rest of the work is accomplished)
 
 *Helpful Links*
 
