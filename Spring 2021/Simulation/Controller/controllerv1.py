@@ -56,11 +56,11 @@ contourReq = False
 
 def tkinter():
     # TKINTER DEFAULT VARIABLES
-    HEIGHT = 550
-    WIDTH = 1500
-    BGCOLOR = 'black'
+    HEIGHT = 900
+    WIDTH = 500
+    BGCOLOR = '#003300'
     BTCOLOR = 'black'
-    TITLECOLOR = '#E556E6'
+    TITLECOLOR = '#FF0000'
     SUBTITLECOLOR = '#914FA6'
     BTNLABELCOLOR = 'white'
     BTNLABELCOLORACTIVE = '#3fb559'
@@ -88,90 +88,93 @@ def tkinter():
     global contourReq    
 
     # ICONS (Courtesy of Icons8.com)
-    camera_icon = tk.PhotoImage(file='icons/oneb.png')
-    frame_icon = tk.PhotoImage(file='icons/frame.png')
-    record_icon = tk.PhotoImage(file='icons/record.png')
-    mask_icon = tk.PhotoImage(file='icons/switch-maskalg.png')
-    contour_icon = tk.PhotoImage(file='icons/contour.png')
-    target_icon = tk.PhotoImage(file='icons/rand-point.png')
-    trackbar_icon = tk.PhotoImage(file='icons/trackbar.png')
-    testrun_icon = tk.PhotoImage(file='icons/testrun.png')
-    pinpoint_icon = tk.PhotoImage(file='icons/pinpoint.png')
+    camera_icon = tk.PhotoImage(file='icons/one.png')
+    frame_icon = tk.PhotoImage(file='icons/two.png')
+    #record_icon = tk.PhotoImage(file='icons/three.png')
+    mask_icon = tk.PhotoImage(file='icons/three.png')
+    contour_icon = tk.PhotoImage(file='icons/four.png')
+    trackbar_icon = tk.PhotoImage(file='icons/five.png')
+    target_icon = tk.PhotoImage(file='icons/six.png')
+    testrun_icon = tk.PhotoImage(file='icons/seven.png')
+    pinpoint_icon = tk.PhotoImage(file='icons/eight.png')
 
     # CANVAS
-    control_canv = tk.Canvas(main_canv, width=300, height=800, highlightthickness=0, bg=BGCOLOR)   
-    control_canv.place(x=60, y=60, anchor='nw')
+    control_canv = tk.Canvas(main_canv, width=350, height=150, highlightthickness=0, bg=BGCOLOR)   
+    control_canv.place(x=75, y=160, anchor='nw')
 
-    contour_canv = tk.Canvas(main_canv, width=300, height=800, highlightthickness=0, bg=BGCOLOR)   
-    contour_canv.place(x=420, y=60, anchor='nw')
+    contour_canv = tk.Canvas(main_canv, width=350, height=150, highlightthickness=0, bg=BGCOLOR)   
+    contour_canv.place(x=75, y=310, anchor='nw')
 
-    calibration_canv = tk.Canvas(main_canv, width=300, height=800, highlightthickness=0, bg=BGCOLOR)   
-    calibration_canv.place(x=780, y=60, anchor='nw')
+    calibration_canv = tk.Canvas(main_canv, width=350, height=150, highlightthickness=0, bg=BGCOLOR)   
+    calibration_canv.place(x=75, y=460, anchor='nw')
 
-    testing_canv = tk.Canvas(main_canv, width=300, height=800, highlightthickness=0, bg=BGCOLOR)   
-    testing_canv.place(x=1140, y=60, anchor='nw')
+    testing_canv = tk.Canvas(main_canv, width=350, height=150, highlightthickness=0, bg=BGCOLOR)   
+    testing_canv.place(x=75, y=610, anchor='nw')
 
     # LABEL
     title = tk.Label(main_canv, text="LabelBot2000", font=('courier new',24,'bold italic'), justify='center', bg=BGCOLOR, fg=TITLECOLOR)
-    title.place(relx=0.5,rely=0.075,anchor='center')
+    title.place(relx=0.5,rely=0.065,anchor='center')
 
-    subtitle = tk.Label(main_canv, text="Remote Control", font=('courier new',20,'bold'), justify='center', bg=BGCOLOR, fg=SUBTITLECOLOR)
-    subtitle.place(relx=0.5,rely=0.135,anchor='center')
+    subtitle = tk.Label(main_canv, text= "Controller", font=('courier new',20,'bold'), justify='center', bg=BGCOLOR, fg='#FF6633')
+    subtitle.place(relx=0.5,rely=0.100,anchor='center')
 
-    control_title = tk.Label(control_canv, text="Control Center", font=('courier new',20,'bold'), justify='center', bg=BGCOLOR, fg=TITLECOLOR)
-    control_title.place(relx=0.5,rely=0.1,anchor='center')
+    subtitle2 = tk.Label(main_canv, text="Click on the Buttons in Order\nto see what they do!", font=('courier new',20,'bold'), justify='center', bg=BGCOLOR, fg='#66FFFF')
+    subtitle2.place(relx=0.5,rely=0.15,anchor='center')
 
-    control_subtitle = tk.Label(control_canv, text="Frame and Mask Display", font=('courier new',12,'bold'), justify='center', bg=BGCOLOR, fg=SUBTITLECOLOR)
-    control_subtitle.place(relx=0.5,rely=0.145,anchor='center')
+    # control_title = tk.Label(control_canv, text="Control Center", font=('courier new',20,'bold'), justify='center', bg=BGCOLOR, fg=TITLECOLOR)
+    # control_title.place(relx=0.5,rely=0.1,anchor='center')
 
-    contour_title = tk.Label(contour_canv, text="Contour Toggle", font=('courier new',20,'bold'), justify='center', bg=BGCOLOR, fg=TITLECOLOR)
-    contour_title.place(relx=0.5,rely=0.1,anchor='center')
+    # control_subtitle = tk.Label(control_canv, text="Frame and Mask Display", font=('courier new',12,'bold'), justify='center', bg=BGCOLOR, fg=SUBTITLECOLOR)
+    # control_subtitle.place(relx=0.5,rely=0.145,anchor='center')
 
-    contour_subtitle = tk.Label(contour_canv, text="Detection Methods", font=('courier new',12,'bold'), justify='center', bg=BGCOLOR, fg=SUBTITLECOLOR)
-    contour_subtitle.place(relx=0.5,rely=0.145,anchor='center')
+    # contour_title = tk.Label(contour_canv, text="Contour Toggle", font=('courier new',20,'bold'), justify='center', bg=BGCOLOR, fg=TITLECOLOR)
+    # contour_title.place(relx=0.5,rely=0.1,anchor='center')
 
-    calibration_title = tk.Label(calibration_canv, text="Calibration", font=('courier new',20,'bold'), justify='center', bg=BGCOLOR, fg=TITLECOLOR)
-    calibration_title.place(relx=0.5,rely=0.1,anchor='center')
+    # contour_subtitle = tk.Label(contour_canv, text="Detection Methods", font=('courier new',12,'bold'), justify='center', bg=BGCOLOR, fg=SUBTITLECOLOR)
+    # contour_subtitle.place(relx=0.5,rely=0.145,anchor='center')
 
-    calibration_subtitle = tk.Label(calibration_canv, text="Situational Accommodation", font=('courier new',12,'bold'), justify='center', bg=BGCOLOR, fg=SUBTITLECOLOR)
-    calibration_subtitle.place(relx=0.5,rely=0.145,anchor='center')
+    # calibration_title = tk.Label(calibration_canv, text="Calibration", font=('courier new',20,'bold'), justify='center', bg=BGCOLOR, fg=TITLECOLOR)
+    # calibration_title.place(relx=0.5,rely=0.1,anchor='center')
 
-    testing_title = tk.Label(testing_canv, text="Testing", font=('courier new',20,'bold'), justify='center', bg=BGCOLOR, fg=TITLECOLOR)
-    testing_title.place(relx=0.5,rely=0.1,anchor='center')
+    # calibration_subtitle = tk.Label(calibration_canv, text="Situational Accommodation", font=('courier new',12,'bold'), justify='center', bg=BGCOLOR, fg=SUBTITLECOLOR)
+    # calibration_subtitle.place(relx=0.5,rely=0.145,anchor='center')
 
-    testing_subtitle = tk.Label(testing_canv, text="Data & Results", font=('courier new',12,'bold'), justify='center', bg=BGCOLOR, fg=SUBTITLECOLOR)
-    testing_subtitle.place(relx=0.5,rely=0.145,anchor='center')
+    # testing_title = tk.Label(testing_canv, text="Testing", font=('courier new',20,'bold'), justify='center', bg=BGCOLOR, fg=TITLECOLOR)
+    # testing_title.place(relx=0.5,rely=0.1,anchor='center')
+
+    # testing_subtitle = tk.Label(testing_canv, text="Data & Results", font=('courier new',12,'bold'), justify='center', bg=BGCOLOR, fg=SUBTITLECOLOR)
+    # testing_subtitle.place(relx=0.5,rely=0.145,anchor='center')
 
     # BUTTON LABELS
     frame_label = tk.Label(control_canv, text="Display Frame", font=('courier new',12,'bold'), justify='left', bg=BGCOLOR, fg=BTNLABELCOLOR)
-    frame_label.place(relx=0.35,rely=0.25,anchor='w')
+    frame_label.place(relx=0.3,rely=0.35,anchor='w')
 
     # rec_frame_label = tk.Label(control_canv, text="Screenshot Frame", font=('courier new',12,'bold'), justify='left', bg=BGCOLOR, fg=BTNLABELCOLOR)
     # rec_frame_label.place(relx=0.35,rely=0.4,anchor='w')
 
-    mask_label = tk.Label(control_canv, text="Display Mask", font=('courier new',12,'bold'), justify='left', bg=BGCOLOR, fg=BTNLABELCOLOR)
-    mask_label.place(relx=0.35,rely=0.4,anchor='w')
+    mask_label = tk.Label(control_canv, text="Display Mask", font=('courier new',12,'bold'), justify='right', bg=BGCOLOR, fg=BTNLABELCOLOR)
+    mask_label.place(relx=0.35,rely=0.7,anchor='w')
 
     # rec_frame_label = tk.Label(control_canv, text="Screenshot Mask", font=('courier new',12,'bold'), justify='left', bg=BGCOLOR, fg=BTNLABELCOLOR)
     # rec_frame_label.place(relx=0.35,rely=0.7,anchor='w')
 
     mask_alg_label = tk.Label(contour_canv, text="Detection Algorithm\nAdaptive/HSV", font=('courier new',12,'bold'), justify='left', bg=BGCOLOR, fg=BTNLABELCOLOR)
-    mask_alg_label.place(relx=0.35,rely=0.25,anchor='w')
+    mask_alg_label.place(relx=0.3,rely=0.35,anchor='w')
 
     contour_label = tk.Label(contour_canv, text="Toggle Contour", font=('courier new',12,'bold'), justify='left', bg=BGCOLOR, fg=BTNLABELCOLOR)
-    contour_label.place(relx=0.35,rely=0.4,anchor='w')
+    contour_label.place(relx=0.3,rely=0.7,anchor='w')
 
     calib_hsv_label = tk.Label(calibration_canv, text="HSV Trackbars", font=('courier new',12,'bold'), justify='left', bg=BGCOLOR, fg=BTNLABELCOLOR)
-    calib_hsv_label.place(relx=0.35,rely=0.25,anchor='w')
+    calib_hsv_label.place(relx=0.3,rely=0.35,anchor='w')
 
-    homography_label = tk.Label(calibration_canv, text="Correct Distortion\nHomography Alg.", font=('courier new',12,'bold'), justify='left', bg=BGCOLOR, fg=BTNLABELCOLOR)
-    homography_label.place(relx=0.35,rely=0.4,anchor='w')
+    homography_label = tk.Label(calibration_canv, text="Homography Alg.", font=('courier new',12,'bold'), justify='left', bg=BGCOLOR, fg=BTNLABELCOLOR)
+    homography_label.place(relx=0.3,rely=0.7,anchor='w')
 
     rpt_label = tk.Label(testing_canv, text="Home Arm", font=('courier new',12,'bold'), justify='left', bg=BGCOLOR, fg=BTNLABELCOLOR)
-    rpt_label.place(relx=0.35,rely=0.25,anchor='w')
+    rpt_label.place(relx=0.3,rely=0.35,anchor='w')
 
     send_packet_label = tk.Label(testing_canv, text="Send Test Packet", font=('courier new',12,'bold'), justify='left', bg=BGCOLOR, fg=BTNLABELCOLOR)
-    send_packet_label.place(relx=0.35,rely=0.4,anchor='w')
+    send_packet_label.place(relx=0.25,rely=0.7,anchor='w')
 
     # BUTTON REQUIRED WARNING FUNCTION
     def warning(label):
@@ -283,40 +286,40 @@ def tkinter():
     # BUTTON DECLARATIONS
     # Control Buttons
     display_frame = tk.Button(control_canv, image = camera_icon, command=toggleFrame, justify='center', padx=10, pady=10, bg=BTCOLOR, fg='#9e8d8f')
-    display_frame.place(relx=0.2,rely=0.25,anchor='center')
+    display_frame.place(relx=0.15,rely=0.35,anchor='center')
     
     # sc_frame = tk.Button(control_canv, image = record_icon, command=scFrame, justify='center', padx=10, pady=10, bg=BTCOLOR, fg='#9e8d8f')
     # sc_frame.place(relx=0.2,rely=0.4,anchor='center')
 
     display_mask = tk.Button(control_canv, image = frame_icon, command=toggleMask, justify='center', padx=10, pady=10, bg=BTCOLOR, fg='#9e8d8f')
-    display_mask.place(relx=0.2,rely=0.4,anchor='center')
+    display_mask.place(relx=.85,rely=0.7,anchor='center')
 
     # sc_mask = tk.Button(control_canv, image = record_icon, command=scMask, justify='center', padx=10, pady=10, bg=BTCOLOR, fg='#9e8d8f')
     # sc_mask.place(relx=0.2,rely=0.7,anchor='center')
 
     # Contour Buttons
     change_maskalg = tk.Button(contour_canv, image = mask_icon, command=toggleMaskAlg, justify='center', padx=10, pady=10, bg=BTCOLOR, fg='#9e8d8f')
-    change_maskalg.place(relx=0.2,rely=0.25,anchor='center')
+    change_maskalg.place(relx=0.15,rely=0.35,anchor='center')
 
     display_contour = tk.Button(contour_canv, image = contour_icon, command=toggleContour, justify='center', padx=10, pady=10, bg=BTCOLOR, fg='#9e8d8f')
-    display_contour.place(relx=0.2,rely=0.4,anchor='center')
+    display_contour.place(relx=0.85,rely=0.7,anchor='center')
 
     # Calibration Buttons
     display_trackbar = tk.Button(calibration_canv, image = trackbar_icon, command=toggleTrackbar, justify='center', padx=10, pady=10, bg=BTCOLOR, fg='#9e8d8f')
-    display_trackbar.place(relx=0.2,rely=0.25,anchor='center')
+    display_trackbar.place(relx=0.15,rely=0.35,anchor='center')
     
     calibratebtn = tk.Button(calibration_canv, image = target_icon, command=calibrate, justify='center', padx=10, pady=10, bg=BTCOLOR, fg='#9e8d8f')
-    calibratebtn.place(relx=0.2,rely=0.4,anchor='center')
+    calibratebtn.place(relx=0.85,rely=0.7,anchor='center')
 
     # Testing Buttons
     rand_point = tk.Button(testing_canv, image = testrun_icon, command=rndPoint, justify='center', padx=10, pady=10, bg=BTCOLOR, fg='#9e8d8f')
-    rand_point.place(relx=0.2,rely=0.25,anchor='center')
+    rand_point.place(relx=0.15,rely=0.35,anchor='center')
 
     send_packet = tk.Button(testing_canv, image = pinpoint_icon, command=sndPacket, justify='center', padx=10, pady=10, bg=BTCOLOR, fg='#9e8d8f')
-    send_packet.place(relx=0.2,rely=0.4,anchor='center')
+    send_packet.place(relx=0.85,rely=0.7,anchor='center')
 
     # Exit Button
-    exitButton = tk.Button(main_canv, text="EXIT", font=('courier new',18,'bold'), command=exit, justify='center', padx=40, pady=10, bg=SUBTITLECOLOR, fg='white')
+    exitButton = tk.Button(main_canv, text="EXIT", font=('courier new',18,'bold'), command=exit, justify='center', padx=40, pady=10, bg='red', fg='white')
     exitButton.place(relx=0.5,rely=.885,anchor='center')
 
         # UPDATE FUNCTION
@@ -364,20 +367,6 @@ def tkinter():
     # LOOP
     root.mainloop()
 
-
-# Define webcam used
-webcam = cv2.VideoCapture(0, cv2.CAP_DSHOW)
-
-# Check for compatibility. If not, force search webcam
-_, frame = webcam.read()
-webcam.set(3, 640)
-webcam.set(4, 480)
-
-try:
-    if frame == None:
-        webcam = cv2.VideoCapture(-1)
-except:
-    print("Webcam Detected First Try.")
 
 # Begin tkinter thread
 thread_tk = threading.Thread(target = tkinter)
