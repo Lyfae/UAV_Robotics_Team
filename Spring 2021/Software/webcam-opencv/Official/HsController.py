@@ -14,6 +14,7 @@ import json
 import sys
 import socket
 import tkinter as tk
+from tkinter import *
 import random
 import math
 
