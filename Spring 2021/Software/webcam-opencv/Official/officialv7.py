@@ -418,7 +418,7 @@ def tkinter():
             mask_label['fg'] = BTNLABELCOLORACTIVE
             maskReq = False
         else: mask_label['fg'] = BTNLABELCOLOR
-            
+
 
         if isContourShowing: 
             contour_label['fg'] = BTNLABELCOLORACTIVE
@@ -433,7 +433,6 @@ def tkinter():
 
         if contourReq:
             contour_label['fg'] = BTNLABELCOLORINACTIVE
-
 
         root.after(REFRESH_RATE, updateData)
 
