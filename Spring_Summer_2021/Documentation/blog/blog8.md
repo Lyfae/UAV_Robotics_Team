@@ -32,6 +32,7 @@ Hello Everyone! Lyfae here! Back with another week of updates! Our group is almo
 
 * If you would like to visit our GitHub page and see the current work that we have accomplished . . . click [Here](https://github.com/Lyfae/UAV_Robotics_Team)
 
+* If you would like to check out our IEEE Poster, click [Here](https://github.com/Lyfae/UAV_Robotics_Team/blob/main/Spring_Summer_2021/Documentation/blog/IEEE%20SETC%20Labeling%20Robot%20Poster.pdf)
 
 This is what I have for this week! See you next time!
 
