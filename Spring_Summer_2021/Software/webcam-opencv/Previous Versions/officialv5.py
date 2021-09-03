@@ -403,8 +403,11 @@ while(True):
                 pX = 0
                 pY = 0     
         elif isRandBtnPressed == True and isTargetReached == True:
-            pX = random.randint(50,600)
-            pY = random.randint(50,430)
+            # pX = random.randint(50,600) UNCOMMENT THIS OUT LATER!!!
+            # pY = random.randint(50,430)
+
+            pX = 250
+            pY = 250
 
             dX = pX - cX
             dY = pY - cY

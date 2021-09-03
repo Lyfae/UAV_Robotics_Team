@@ -31,9 +31,9 @@ def init_globes():
     state = 3
 
 #this is for the set home location
-home = {"x":170,
-        "y":0,
-        "z":170}
+home = {"X":170,
+        "Y":0,
+        "Z":170}
 
 #GLOBAL VARIABLES
 #this is for the main visual detection controller

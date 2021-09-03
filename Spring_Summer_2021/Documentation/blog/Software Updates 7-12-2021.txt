@@ -1,0 +1,21 @@
+Software Updates for week of 7/9/2021
+
+Calibration
+-----
+- Integrated image-straightening homography algorithm to correct for any camera positioning errors
+- Integrated anti-distortion features using ChArUco boards (internal camera)
+- Developed process for automatic calibration inside the GUI for both HSV and Camera properties
+
+GUI
+-----
+- Revamped GUI and expanded design to allow for more room
+- Buttons now display text that describes its function, located to the right of the button
+- Functions of the arm split into 4 regions: Control, Contour Display, Calibration, and Testing. More selection options for each will arrive in the future.
+
+Testing
+-----
+- Created a new testing method called "Send Packet" which will send a packet of data containing the real life measurement (in mm) of the location of the smallest contour on the frame.
+- Fixed bugs that previously caused the code to crash whenever it does not see a contour.
+- Improved connections to the server, will not randomly drop packets anymore and retains a secure connection for the entire time both server & client are running simultaneously.
+
+
