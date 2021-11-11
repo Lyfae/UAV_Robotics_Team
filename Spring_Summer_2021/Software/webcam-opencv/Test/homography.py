@@ -77,9 +77,9 @@ while(True):
     # Grabbing frame from webcam
     ret, frame = webcam.read()
     
-    corners = corner_detect(frame)
-    destination, scale = get_destination_points()
-    H, _= cv2.findHomography(np.float32(corners), np.float32(destination), cv2.RANSAC, 3.0)    
+    # corners = corner_detect(frame)
+    # destination, scale = get_destination_points()
+    # H, _= cv2.findHomography(np.float32(corners), np.float32(destination), cv2.RANSAC, 3.0)    
     unwarp = unwarp_frame(frame, corners, destination, H)
 
     # print(f"Using Ratio: 1mm = {scale}px")
